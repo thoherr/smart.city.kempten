@@ -105,11 +105,11 @@ ALGO_PHASECAL_LIM = 0x30
 ALGO_PHASECAL_CONFIG_TIMEOUT = 0x30
 
 
-class TimeoutError(RuntimeError):
+class VL53l0xTimeoutError(RuntimeError):
     pass
 
 
-class VL53L0X():
+class VL53L0X:
     def __init__(self, i2c, address=0x29):
         self.i2c = i2c
         self.address = address
@@ -353,7 +353,7 @@ class VL53L0X():
                 break
             utime.sleep_ms(1)
         else:
-            raise TimeoutError()
+            raise VL53l0xTimeoutError()
         self._config(
             (0x83, 0x01),
         )
@@ -381,7 +381,7 @@ class VL53L0X():
                 break
             utime.sleep_ms(1)
         else:
-            raise TimeoutError()
+            raise VL53l0xTimeoutError()
         self._register(_INTERRUPT_CLEAR, 0x01)
         self._register(_SYSRANGE_START, 0x00)
 
@@ -433,13 +433,13 @@ class VL53L0X():
                     break
                 utime.sleep_ms(1)
             else:
-                raise TimeoutError()
+                raise VL53l0xTimeoutError()
         for timeout in range(_IO_TIMEOUT):
             if self._register(_RESULT_INTERRUPT_STATUS) & 0x07:
                 break
             utime.sleep_ms(1)
         else:
-            raise TimeoutError()
+            raise VL53l0xTimeoutError()
         value = self._register(_RESULT_RANGE_STATUS + 10, struct='>H')
         self._register(_INTERRUPT_CLEAR, 0x01)
         return value
@@ -660,3 +660,6 @@ class VL53L0X():
         self._register(SYSTEM_INTERRUPT_CLEAR, 0x01)
         self._register(SYSRANGE_START, 0x00)
         return True
+
+    def value(self):
+        return self.ping()
