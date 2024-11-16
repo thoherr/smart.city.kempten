@@ -53,7 +53,8 @@ tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
 
 display = SSD1306_I2C(128, 32, i2c1)
 
-traffic = Traffic(14)
+traffic_pin = Pin(14, Pin.IN)
+traffic = Traffic(traffic_pin)
 p1 = ParkingSpace(tof, 150)
 parking = ParkingArea([p1])
 
