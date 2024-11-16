@@ -1,4 +1,8 @@
 import micropython
+
+from sensor.domain.parking.area import ParkingArea
+from sensor.domain.parking.space import ParkingSpace
+
 micropython.alloc_emergency_exception_buf(100)
 
 from machine import Pin, I2C
@@ -35,8 +39,6 @@ else:
 led = Pin("LED", Pin.OUT)
 reed = Pin(15, Pin.IN, Pin.PULL_DOWN)
 
-traffic = Traffic(14)
-
 light = GY302(i2c1)
 tof = VL53L0X(i2c1)
 
@@ -51,23 +53,30 @@ tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
 
 display = SSD1306_I2C(128, 32, i2c1)
 
+traffic = Traffic(14)
+p1 = ParkingSpace(tof, 150)
+parking = ParkingArea([p1])
+
 while True:
     traffic.check()
+    parking.check()
     light_value = "Light {:7.2f} lx".format(light.value())
     reed_value = "Reed value {:1d}".format(reed.value())
-    traffic_count = "Traffic {:1d}".format(traffic.get_count())
     tof_value = "Distance {:4d} mm".format(tof.value())
+    traffic_count = "Traffic {:1d}".format(traffic.get_count())
+    parking_lots = "Avail. Park. {:1d}".format(parking.number_of_empty_spaces())
 
     print(light_value)
     print(reed_value)
     print(tof_value)
     print(traffic_count)
+    print(parking_lots)
 
     display.fill(0)                         # fill entire screen with colour=0
     display.text(light_value, 0, 0, 1)
     #display.text(reed_value, 0, 12, 1)
     display.text(traffic_count, 0, 12, 1)
-    display.text(tof_value, 0, 24, 1)
+    display.text(parking_lots, 0, 24, 1)
     display.show()
 
     time.sleep(0.1)
