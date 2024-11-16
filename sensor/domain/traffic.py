@@ -1,5 +1,4 @@
 # Sensor for traffic count, using a PIO (e.g. reed or hall sensor)
-import micropython
 from machine import Pin
 
 class Traffic:
