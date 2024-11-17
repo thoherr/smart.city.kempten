@@ -110,7 +110,7 @@ class VL53l0xTimeoutError(RuntimeError):
 
 
 class VL53L0X:
-    def __init__(self, i2c, address=0x29):
+    def __init__(self, i2c, address=0x29, measurment_timing_budget = 40000):
         self.i2c = i2c
         self.address = address
         utime.sleep_ms(100) # give the I2C time to init
@@ -133,6 +133,8 @@ class VL53L0X:
                          "final_range_us": 0
                          }
         self.vcsel_period_type = ["VcselPeriodPreRange", "VcselPeriodFinalRange"]
+        self.measurement_timing_budget_us = measurment_timing_budget
+        self.set_measurement_timing_budget(self.measurement_timing_budget_us)
 
     def ping(self):
         self.start()
