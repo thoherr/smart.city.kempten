@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="MicroPython" name="MicroPython">
       <configuration>
-        <device name="Raspberry Pi Pico" web-repl-url="" uart-connection="true" port="/dev/tty.usbmodem1101" />
+        <device name="Raspberry Pi Pico" web-repl-url="" uart-connection="true" port="/dev/cu.usbmodem1101" />
       </configuration>
     </facet>
   </component>
