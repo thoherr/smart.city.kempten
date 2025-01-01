@@ -3,8 +3,9 @@ from sensor.domain.parking.space import ParkingSpace
 
 
 class ParkingArea:
-    def __init__(self, spaces : [ParkingSpace]):
+    def __init__(self, spaces : [ParkingSpace], name : str):
         self._spaces = spaces
+        self.name = name
 
     def check(self):
         for s in self._spaces:

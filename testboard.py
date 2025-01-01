@@ -45,7 +45,7 @@ light = GY302(i2c1)
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
-parking = ParkingArea([p0, p2])
+parking = ParkingArea([p0, p2], "Illerufer")
 
 display = SSD1306_I2C(128, 32, i2c1)
 
@@ -59,7 +59,9 @@ while True:
     reed_value = "Reed value {:1d}".format(reed.value())
     multiplexer.switch_to_channel(0)
     traffic_count = "Traffic {:1d}".format(traffic.get_count())
-    parking_lots = "Avail. Park. {:1d}".format(parking.number_of_empty_spaces())
+    number_of_empty_spaces = parking.number_of_empty_spaces()
+    number_of_spaces = parking.number_of_spaces()
+    parking_lots = "{:1d} / {:1d} Frei".format(number_of_empty_spaces, number_of_spaces)
 
     print(light_value)
     print(reed_value)
@@ -67,9 +69,8 @@ while True:
     print(parking_lots)
 
     display.fill(0)                         # fill entire screen with colour=0
-    display.text(light_value, 0, 0, 1)
-    #display.text(reed_value, 0, 12, 1)
-    display.text(traffic_count, 0, 12, 1)
+    display.text("Parkplatz", 0, 0, 1)
+    display.text(parking.name, 0, 12, 1)
     display.text(parking_lots, 0, 24, 1)
     display.show()
 
