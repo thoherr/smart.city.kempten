@@ -43,20 +43,8 @@ reed = Pin(15, Pin.IN, Pin.PULL_DOWN)
 light = GY302(i2c1)
 
 multiplexer = TCA9548A(i2c1)
-
-multiplexer.switch_to_channel(0)
-tof0 = VL53L0X(i2c1)
-
-#tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 18)
-#tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 12)
-#tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
-#tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 8)
-
-p0 = ParkingSpace(multiplexer, 0, tof0, 100)
-
-multiplexer.switch_to_channel(2)
-tof2 = VL53L0X(i2c1)
-p2 = ParkingSpace(multiplexer, 2, tof2, 100)
+p0 = ParkingSpace(multiplexer, 0, VL53L0X)
+p2 = ParkingSpace(multiplexer, 2, VL53L0X)
 parking = ParkingArea([p0, p2])
 
 display = SSD1306_I2C(128, 32, i2c1)
@@ -70,16 +58,11 @@ while True:
     light_value = "Light {:7.2f} lx".format(light.value())
     reed_value = "Reed value {:1d}".format(reed.value())
     multiplexer.switch_to_channel(0)
-    tof0value = tof0.value()
-    multiplexer.switch_to_channel(2)
-    tof2value = tof2.value()
-    tof_value = "Distance {:4d} mm/{:4d} mm".format(tof0value, tof2value)
     traffic_count = "Traffic {:1d}".format(traffic.get_count())
     parking_lots = "Avail. Park. {:1d}".format(parking.number_of_empty_spaces())
 
     print(light_value)
     print(reed_value)
-    print(tof_value)
     print(traffic_count)
     print(parking_lots)
 

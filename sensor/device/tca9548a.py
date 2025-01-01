@@ -2,7 +2,7 @@
 
 class TCA9548A:
     def __init__(self, i2c, address=0x70):
-        self._i2c = i2c
+        self.i2c = i2c
         self._address = address
 
     def switch_to_channel(self, channel : int = -1):
@@ -11,4 +11,4 @@ class TCA9548A:
         else:
             mask = 0x00
 
-        self._i2c.writeto(self._address, mask.to_bytes(1))
+        self.i2c.writeto(self._address, mask.to_bytes(1))
