@@ -11,6 +11,7 @@ import time
 from sensor.device.tca9548a import TCA9548A
 from sensor.device.vl53l0x import VL53L0X
 from sensor.device.gy302 import GY302
+from display.sh1106 import SH1106_I2C
 from display.ssd1306 import SSD1306_I2C
 from display.writer import Writer
 import display.freesans20
@@ -18,8 +19,8 @@ import display.freesans20
 
 from sensor.domain.traffic import Traffic
 
-i2c0 = I2C(0, sda=Pin(0), scl=Pin(1), freq=100000)
-i2c1 = I2C(1, sda=Pin(2), scl=Pin(3), freq=100000)
+i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
+i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
 
 print('Scan I2C Bus 0...')
 devices = i2c0.scan()
@@ -53,7 +54,7 @@ parking = ParkingArea([p0, p2], "Illerufer")
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
 
-screen2 = SSD1306_I2C(128, 32, i2c0)
+screen2 = SH1106_I2C(128, 64, i2c0)
 writer2 = Writer(screen2, display.freesans20)
 
 traffic_pin = Pin(14, Pin.IN)
@@ -88,13 +89,13 @@ while True:
     screen1.show()
 
     screen2.fill(0)
-    screen2.text("Parkplatz", 0, 0, 1)
-    screen2.text(parking.name, 0, 12, 1)
+    writer2.set_textpos(screen2,0, 0)
+    writer2.printstring("Parkplatz\n{:s}".format(parking.name))
     #screen2.text(parking_lots, 88, 0, 1)
     if number_of_empty_spaces > 0:
-        writer2.set_textpos(screen2, 0, 128 - writer1.stringlen(parking_lots_available))
+        writer2.set_textpos(screen2, 32, 128 - writer1.stringlen(parking_lots_available))
         writer2.printstring(parking_lots_available)
-    screen2.text(parking_status, 80, 24, 1)
+    screen2.text(parking_status, 80, 56, 1)
     screen2.show()
 
     time.sleep(0.25)
