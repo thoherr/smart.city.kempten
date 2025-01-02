@@ -2,7 +2,7 @@
 
 from micropython import const
 import framebuf
-
+from display.boolpalette import BoolPalette
 
 # register definitions
 SET_CONTRAST = const(0x81)
@@ -26,13 +26,19 @@ SET_CHARGE_PUMP = const(0x8D)
 # Subclassing FrameBuffer provides support for graphics primitives
 # http://docs.micropython.org/en/latest/pyboard/library/framebuf.html
 class SSD1306(framebuf.FrameBuffer):
+    @staticmethod
+    def rgb(r, g, b):  # Color compatibility
+        return int((r > 127) or (g > 127) or (b > 127))
+
     def __init__(self, width, height, external_vcc):
         self.width = width
         self.height = height
         self.external_vcc = external_vcc
         self.pages = self.height // 8
         self.buffer = bytearray(self.pages * self.width)
-        super().__init__(self.buffer, self.width, self.height, framebuf.MONO_VLSB)
+        mode = framebuf.MONO_VLSB
+        self.palette = BoolPalette(mode)  # Ensure color compatibility
+        super().__init__(self.buffer, self.width, self.height, mode)
         self.init_display()
 
     def init_display(self):
