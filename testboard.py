@@ -12,6 +12,9 @@ from sensor.device.tca9548a import TCA9548A
 from sensor.device.vl53l0x import VL53L0X
 from sensor.device.gy302 import GY302
 from display.ssd1306 import SSD1306_I2C
+from display.writer import Writer
+import display.freesans20
+
 
 from sensor.domain.traffic import Traffic
 
@@ -47,7 +50,9 @@ p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
 parking = ParkingArea([p0, p2], "Illerufer")
 
-display = SSD1306_I2C(128, 32, i2c1)
+screen = SSD1306_I2C(128, 32, i2c1)
+
+writer = Writer(screen, display.freesans20)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = Traffic(traffic_pin)
@@ -69,11 +74,14 @@ while True:
     print(traffic_count)
     print(parking_lots)
 
-    display.fill(0)                         # fill entire screen with colour=0
-    display.text("Parkplatz", 0, 0, 1)
-    display.text(parking.name, 0, 12, 1)
-    display.text(parking_lots, 88, 0, 1)
-    display.text(parking_status, 80, 24, 1)
-    display.show()
+    screen.fill(0)                         # fill entire screen with colour=0
+    screen.text("Parkplatz", 0, 0, 1)
+    screen.text(parking.name, 0, 12, 1)
+    #screen.text(parking_lots, 88, 0, 1)
+    if number_of_empty_spaces > 0:
+        writer.set_textpos(screen, 0, 108)
+        writer.printstring("{:1d}".format(number_of_empty_spaces))
+    screen.text(parking_status, 80, 24, 1)
+    screen.show()
 
     time.sleep(0.25)
