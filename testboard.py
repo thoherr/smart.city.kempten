@@ -61,7 +61,8 @@ while True:
     traffic_count = "Traffic {:1d}".format(traffic.get_count())
     number_of_empty_spaces = parking.number_of_empty_spaces()
     number_of_spaces = parking.number_of_spaces()
-    parking_lots = "{:1d} / {:1d} Frei".format(number_of_empty_spaces, number_of_spaces)
+    parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
+    parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
     print(light_value)
     print(reed_value)
@@ -71,7 +72,8 @@ while True:
     display.fill(0)                         # fill entire screen with colour=0
     display.text("Parkplatz", 0, 0, 1)
     display.text(parking.name, 0, 12, 1)
-    display.text(parking_lots, 0, 24, 1)
+    display.text(parking_lots, 88, 0, 1)
+    display.text(parking_status, 80, 24, 1)
     display.show()
 
     time.sleep(0.25)
