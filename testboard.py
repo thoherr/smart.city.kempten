@@ -15,6 +15,7 @@ from display.sh1106 import SH1106_I2C
 from display.ssd1306 import SSD1306_I2C
 from display.writer import Writer
 import display.freesans20
+import display.freesansbold40
 
 
 from sensor.domain.traffic import Traffic
@@ -56,6 +57,7 @@ writer1 = Writer(screen1, display.freesans20)
 
 screen2 = SH1106_I2C(128, 64, i2c0)
 writer2 = Writer(screen2, display.freesans20)
+writer3 = Writer(screen2, display.freesansbold40)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = Traffic(traffic_pin)
@@ -93,9 +95,10 @@ while True:
     writer2.printstring("Parkplatz\n{:s}".format(parking.name))
     #screen2.text(parking_lots, 88, 0, 1)
     if number_of_empty_spaces > 0:
-        writer2.set_textpos(screen2, 32, 128 - writer1.stringlen(parking_lots_available))
-        writer2.printstring(parking_lots_available)
-    screen2.text(parking_status, 80, 56, 1)
+        writer3.set_textpos(screen2, 0, 128 - writer3.stringlen(parking_lots_available))
+        writer3.printstring(parking_lots_available)
+    writer2.set_textpos(screen2, 44, 128 - writer2.stringlen(parking_status))
+    writer2.printstring(parking_status)
     screen2.show()
 
     time.sleep(0.25)
