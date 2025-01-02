@@ -50,9 +50,11 @@ p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
 parking = ParkingArea([p0, p2], "Illerufer")
 
-screen = SSD1306_I2C(128, 32, i2c1)
+screen1 = SSD1306_I2C(128, 32, i2c1)
+writer1 = Writer(screen1, display.freesans20)
 
-writer = Writer(screen, display.freesans20)
+screen2 = SSD1306_I2C(128, 32, i2c0)
+writer2 = Writer(screen2, display.freesans20)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = Traffic(traffic_pin)
@@ -66,6 +68,7 @@ while True:
     traffic_count = "Traffic {:1d}".format(traffic.get_count())
     number_of_empty_spaces = parking.number_of_empty_spaces()
     number_of_spaces = parking.number_of_spaces()
+    parking_lots_available = "{:1d}".format(number_of_empty_spaces)
     parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
     parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
@@ -74,14 +77,24 @@ while True:
     print(traffic_count)
     print(parking_lots)
 
-    screen.fill(0)                         # fill entire screen with colour=0
-    screen.text("Parkplatz", 0, 0, 1)
-    screen.text(parking.name, 0, 12, 1)
-    #screen.text(parking_lots, 88, 0, 1)
+    screen1.fill(0)
+    screen1.text("Parkplatz", 0, 0, 1)
+    screen1.text(parking.name, 0, 12, 1)
+    #screen1.text(parking_lots, 88, 0, 1)
     if number_of_empty_spaces > 0:
-        writer.set_textpos(screen, 0, 108)
-        writer.printstring("{:1d}".format(number_of_empty_spaces))
-    screen.text(parking_status, 80, 24, 1)
-    screen.show()
+        writer1.set_textpos(screen1, 0, 128 - writer1.stringlen(parking_lots_available))
+        writer1.printstring(parking_lots_available)
+    screen1.text(parking_status, 80, 24, 1)
+    screen1.show()
+
+    screen2.fill(0)
+    screen2.text("Parkplatz", 0, 0, 1)
+    screen2.text(parking.name, 0, 12, 1)
+    #screen2.text(parking_lots, 88, 0, 1)
+    if number_of_empty_spaces > 0:
+        writer2.set_textpos(screen2, 0, 128 - writer1.stringlen(parking_lots_available))
+        writer2.printstring(parking_lots_available)
+    screen2.text(parking_status, 80, 24, 1)
+    screen2.show()
 
     time.sleep(0.25)
