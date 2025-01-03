@@ -11,7 +11,7 @@ from traffic_light.crossing import Crossing as TrafficLightCrossing
 led = Pin("LED", Pin.OUT)
 
 l1 = TrafficLightColumn(9, 10, 11, 1)
-l2 = TrafficLightColumn(12, 13, 14, 0)
+l2 = TrafficLightColumn(14, 13, 12, 0)
 
 states = ((1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
           (2, (TrafficLightColumn.PREPARE, TrafficLightColumn.STOP)),
