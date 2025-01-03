@@ -17,8 +17,10 @@ from display.writer import Writer
 import display.freesans20
 import display.freesansbold40
 
-
 from sensor.domain.traffic import Traffic
+
+import util.memory_usage as memory_usage
+
 
 i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
 i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
@@ -50,7 +52,7 @@ light = GY302(i2c1)
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
-parking = ParkingArea([p0, p2], "Illerufer")
+parking = ParkingArea([p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2], "Illerufer")
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
@@ -100,5 +102,8 @@ while True:
     writer2.set_textpos(screen2, 44, 128 - writer2.stringlen(parking_status))
     writer2.printstring(parking_status)
     screen2.show()
+
+    print(memory_usage.df())
+    print(memory_usage.free(True))
 
     time.sleep(0.25)
