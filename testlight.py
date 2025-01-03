@@ -10,8 +10,8 @@ from traffic_light.crossing import Crossing as TrafficLightCrossing
 
 led = Pin("LED", Pin.OUT)
 
-l1 = TrafficLightColumn(18, 19, 20, 1)
-l2 = TrafficLightColumn(13, 12, 11, 0)
+l1 = TrafficLightColumn(9, 10, 11, 1)
+l2 = TrafficLightColumn(12, 13, 14, 0)
 
 states = ((1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
           (2, (TrafficLightColumn.PREPARE, TrafficLightColumn.STOP)),
@@ -23,7 +23,6 @@ states = ((1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
           (2, (TrafficLightColumn.STOP, TrafficLightColumn.CAUTION)))
 
 crossing = TrafficLightCrossing([l1, l2], states)
-time.sleep(2)
 
 while True:
     led.toggle()
