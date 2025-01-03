@@ -15,12 +15,12 @@ l2 = TrafficLightColumn(13, 12, 11, 0)
 
 states = ((1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
           (2, (TrafficLightColumn.PREPARE, TrafficLightColumn.STOP)),
-          (5, (TrafficLightColumn.GO, TrafficLightColumn.STOP)),
-          (1, (TrafficLightColumn.CAUTION, TrafficLightColumn.STOP)),
+          (10, (TrafficLightColumn.GO, TrafficLightColumn.STOP)),
+          (2, (TrafficLightColumn.CAUTION, TrafficLightColumn.STOP)),
           (1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
           (2, (TrafficLightColumn.STOP, TrafficLightColumn.PREPARE)),
-          (5, (TrafficLightColumn.STOP, TrafficLightColumn.GO)),
-          (1, (TrafficLightColumn.STOP, TrafficLightColumn.CAUTION)))
+          (10, (TrafficLightColumn.STOP, TrafficLightColumn.GO)),
+          (2, (TrafficLightColumn.STOP, TrafficLightColumn.CAUTION)))
 
 crossing = TrafficLightCrossing([l1, l2], states)
 time.sleep(2)
