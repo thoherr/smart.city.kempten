@@ -13,20 +13,18 @@ led = Pin("LED", Pin.OUT)
 l1 = TrafficLightColumn(18, 19, 20, 1)
 l2 = TrafficLightColumn(13, 12, 11, 0)
 
-states = [[TrafficLightColumn.STOP, TrafficLightColumn.GO],
-          [TrafficLightColumn.STOP, TrafficLightColumn.GO],
-          [TrafficLightColumn.STOP, TrafficLightColumn.CAUTION],
-          [TrafficLightColumn.STOP, TrafficLightColumn.STOP],
-          [TrafficLightColumn.PREPARE, TrafficLightColumn.STOP],
-          [TrafficLightColumn.GO, TrafficLightColumn.STOP],
-          [TrafficLightColumn.GO, TrafficLightColumn.STOP],
-          [TrafficLightColumn.CAUTION, TrafficLightColumn.STOP],
-          [TrafficLightColumn.STOP, TrafficLightColumn.STOP],
-          [TrafficLightColumn.STOP, TrafficLightColumn.PREPARE]]
+states = [(1, [TrafficLightColumn.STOP, TrafficLightColumn.STOP]),
+          (2, [TrafficLightColumn.PREPARE, TrafficLightColumn.STOP]),
+          (5, [TrafficLightColumn.GO, TrafficLightColumn.STOP]),
+          (1, [TrafficLightColumn.CAUTION, TrafficLightColumn.STOP]),
+          (1, [TrafficLightColumn.STOP, TrafficLightColumn.STOP]),
+          (2, [TrafficLightColumn.STOP, TrafficLightColumn.PREPARE]),
+          (5, [TrafficLightColumn.STOP, TrafficLightColumn.GO]),
+          (1, [TrafficLightColumn.STOP, TrafficLightColumn.CAUTION])]
 
 crossing = TrafficLightCrossing([l1, l2], states)
 
 while True:
     led.toggle()
-    crossing.next_state()
+    crossing.next_tick()
     time.sleep(1)
