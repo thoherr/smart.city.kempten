@@ -13,16 +13,7 @@ led = Pin("LED", Pin.OUT)
 l1 = TrafficLightColumn(9, 10, 11, 1)
 l2 = TrafficLightColumn(14, 13, 12, 0)
 
-states = ((1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
-          (2, (TrafficLightColumn.PREPARE, TrafficLightColumn.STOP)),
-          (10, (TrafficLightColumn.GO, TrafficLightColumn.STOP)),
-          (2, (TrafficLightColumn.CAUTION, TrafficLightColumn.STOP)),
-          (1, (TrafficLightColumn.STOP, TrafficLightColumn.STOP)),
-          (2, (TrafficLightColumn.STOP, TrafficLightColumn.PREPARE)),
-          (10, (TrafficLightColumn.STOP, TrafficLightColumn.GO)),
-          (2, (TrafficLightColumn.STOP, TrafficLightColumn.CAUTION)))
-
-crossing = TrafficLightCrossing([l1, l2], states)
+crossing = TrafficLightCrossing([l1, l2], TrafficLightCrossing.DEFAULT_CIRCUIT)
 
 while True:
     led.toggle()
