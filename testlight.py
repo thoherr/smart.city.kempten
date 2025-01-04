@@ -13,9 +13,18 @@ led = Pin("LED", Pin.OUT)
 l1 = TrafficLightColumn(9, 10, 11, 1)
 l2 = TrafficLightColumn(14, 13, 12, 0)
 
-crossing = TrafficLightCrossing([l1, l2], TrafficLightCrossing.DEFAULT_CIRCUIT)
+crossing = TrafficLightCrossing([l1, l2])
 
 while True:
-    led.toggle()
-    crossing.next_tick()
-    time.sleep(1)
+    for i in range(100):
+        led.toggle()
+        crossing.next_tick()
+        if i == 65:
+            crossing.turn_on(TrafficLightCrossing.OUT_OF_ORDER_CIRCUIT)
+        elif i == 75:
+            crossing.turn_off()
+        if i == 85:
+            crossing.turn_on(TrafficLightCrossing.OUT_OF_ORDER_CIRCUIT)
+        elif i == 99:
+            crossing.turn_on()
+        time.sleep(1)
