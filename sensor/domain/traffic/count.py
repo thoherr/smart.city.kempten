@@ -1,8 +1,9 @@
 # Sensor for traffic count, using a PIO (e.g. reed or hall sensor)
 
-class Traffic:
-    def __init__(self, binary_sensor):
+class TrafficCount:
+    def __init__(self, location, binary_sensor):
         self._counter : int = 0
+        self.location = location
         self._binary_sensor = binary_sensor
         self._old_value = self._binary_sensor.value()
 

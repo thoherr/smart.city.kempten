@@ -2,6 +2,7 @@ import micropython
 
 from sensor.domain.parking.area import ParkingArea
 from sensor.domain.parking.space import ParkingSpace
+from sensor.domain.traffic.count import TrafficCount
 
 micropython.alloc_emergency_exception_buf(100)
 
@@ -16,8 +17,6 @@ from display.ssd1306 import SSD1306_I2C
 from display.writer import Writer
 import display.freesans20
 import display.freesansbold40
-
-from sensor.domain.traffic import Traffic
 
 import util.memory_usage as memory_usage
 
@@ -62,7 +61,7 @@ writer2 = Writer(screen2, display.freesans20)
 writer3 = Writer(screen2, display.freesansbold40)
 
 traffic_pin = Pin(14, Pin.IN)
-traffic = Traffic(traffic_pin)
+traffic = TrafficCount("Rathausplatz", traffic_pin)
 
 while True:
     traffic.check()
@@ -70,7 +69,7 @@ while True:
     light_value = "Light {:7.2f} lx".format(light.value())
     reed_value = "Reed value {:1d}".format(reed.value())
     multiplexer.switch_to_channel(0)
-    traffic_count = "Traffic {:1d}".format(traffic.get_count())
+    traffic_count = "Traffic at {:s} {:1d}".format(traffic.location, traffic.get_count())
     number_of_empty_spaces = parking.number_of_empty_spaces()
     number_of_spaces = parking.number_of_spaces()
     parking_lots_available = "{:1d}".format(number_of_empty_spaces)
