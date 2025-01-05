@@ -14,7 +14,7 @@ import time
 from sensor.device.tca9548a import TCA9548A
 from sensor.device.vl53l0x import VL53L0X
 from sensor.device.gy302 import GY302
-from sensor.device.BME280 import BME280, BME280_OSAMPLE_8
+from sensor.device.BME280 import BME280
 from display.sh1106 import SH1106_I2C
 from display.ssd1306 import SSD1306_I2C
 from display.writer import Writer
@@ -56,7 +56,7 @@ parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, 
 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 
-environment_sensor = BME280(mode=BME280_OSAMPLE_8, i2c=i2c1)
+environment_sensor = BME280(i2c=i2c1)
 weather_sensor = Weather(environment_sensor)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
@@ -83,7 +83,7 @@ while True:
     parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
     parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
-    weather = "Temperature {:s} , Pressure {:s} hP, Humidity {:s}".format(weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
+    weather = "Temperature {:.2f} °C, Pressure {:.2f} hP, Humidity {:s}".format(weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
 
     print(waste_status)
     print(reed_value)
