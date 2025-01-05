@@ -57,7 +57,7 @@ parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 
 environment_sensor = BME280(i2c=i2c1)
-weather_sensor = Weather(environment_sensor)
+weather_sensor = Weather("Innenstadt", environment_sensor)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
@@ -83,7 +83,7 @@ while True:
     parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
     parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
-    weather = "Temperature {:.2f} °C, Pressure {:.2f} hPa, Humidity {:.2f} %".format(weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
+    weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
 
     print(waste_status)
     print(reed_value)

@@ -1,6 +1,7 @@
 
 class Weather:
-    def __init__(self, sensor):
+    def __init__(self, location, sensor):
+        self.location = location
         self._sensor = sensor
 
     def temperature(self):
