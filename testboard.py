@@ -83,7 +83,7 @@ while True:
     parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
     parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
-    weather = "Temperature {:.2f} °C, Pressure {:.2f} hP, Humidity {:s}".format(weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
+    weather = "Temperature {:.2f} °C, Pressure {:.2f} hPa, Humidity {:.2f} %".format(weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
 
     print(waste_status)
     print(reed_value)

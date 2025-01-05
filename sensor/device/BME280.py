@@ -285,4 +285,4 @@ class BME280:
     print(h)
     hi = h // 1024
     hd = h * 100 // 1024 - hi * 100
-    return "{}.{:02d}%".format(hi, hd)
+    return hi + hd / 100
