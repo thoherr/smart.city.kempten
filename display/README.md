@@ -5,3 +5,4 @@ https://github.com/peterhinch/micropython-nano-gui
 
 https://github.com/peterhinch/micropython-font-to-py
     freesans20, writer
+    freesansbold40.py (generated from font file)
