@@ -1,5 +1,6 @@
 import micropython
 
+from sensor.domain.environment.light import Light
 from sensor.domain.environment.weather import Weather
 from sensor.domain.parking.area import ParkingArea
 from sensor.domain.parking.space import ParkingSpace
@@ -56,6 +57,8 @@ parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, 
 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 
+light_sensor = Light("Fußgängerzone", multiplexer, 6, GY302)
+
 environment_sensor = BME280(i2c=i2c1)
 weather_sensor = Weather("Innenstadt", environment_sensor)
 
@@ -85,11 +88,14 @@ while True:
 
     weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
 
+    light = "Light at {:s} is {:.2f}".format(light_sensor.location, light_sensor.light())
+
     print(waste_status)
     print(reed_value)
     print(traffic_count)
     print(parking_lots)
     print(weather)
+    print(light)
 
     screen1.fill(0)
     screen1.text("Parkplatz", 0, 0, 1)
