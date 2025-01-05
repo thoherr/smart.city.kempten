@@ -3,6 +3,7 @@ import micropython
 from sensor.domain.parking.area import ParkingArea
 from sensor.domain.parking.space import ParkingSpace
 from sensor.domain.traffic.count import TrafficCount
+from sensor.domain.waste.container import WasteContainer
 
 micropython.alloc_emergency_exception_buf(100)
 
@@ -46,12 +47,12 @@ else:
 led = Pin("LED", Pin.OUT)
 reed = Pin(15, Pin.IN, Pin.PULL_DOWN)
 
-light = GY302(i2c1)
-
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
 parking = ParkingArea([p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2], "Illerufer")
+
+waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
@@ -66,7 +67,8 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 while True:
     traffic.check()
     parking.check()
-    light_value = "Light {:7.2f} lx".format(light.value())
+    waste_container.check()
+    waste_status = "Waste {:s} {:s}".format(waste_container.location, "full" if waste_container.full() else "OK")
     reed_value = "Reed value {:1d}".format(reed.value())
     multiplexer.switch_to_channel(0)
     traffic_count = "Traffic at {:s} {:1d}".format(traffic.location, traffic.get_count())
@@ -76,7 +78,7 @@ while True:
     parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
     parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
-    print(light_value)
+    print(waste_status)
     print(reed_value)
     print(traffic_count)
     print(parking_lots)
