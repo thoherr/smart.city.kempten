@@ -1,7 +1,7 @@
 # Sensor for a (single) waste container, using a light barrier
 
 class WasteContainer:
-    def __init__(self, location, multiplexer, channel, sensor_class, threshold=100):
+    def __init__(self, location : str, multiplexer, channel, sensor_class, threshold=100):
         self.location = location
         self._multiplexer = multiplexer
         self._channel = channel

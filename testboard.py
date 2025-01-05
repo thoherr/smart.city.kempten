@@ -50,7 +50,7 @@ reed = Pin(15, Pin.IN, Pin.PULL_DOWN)
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace(multiplexer, 0, VL53L0X)
 p2 = ParkingSpace(multiplexer, 2, VL53L0X)
-parking = ParkingArea([p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2], "Illerufer")
+parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2])
 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 
@@ -85,7 +85,7 @@ while True:
 
     screen1.fill(0)
     screen1.text("Parkplatz", 0, 0, 1)
-    screen1.text(parking.name, 0, 12, 1)
+    screen1.text(parking.location, 0, 12, 1)
     #screen1.text(parking_lots, 88, 0, 1)
     if number_of_empty_spaces > 0:
         writer1.set_textpos(screen1, 0, 128 - writer1.stringlen(parking_lots_available))
@@ -95,7 +95,7 @@ while True:
 
     screen2.fill(0)
     writer2.set_textpos(screen2,0, 0)
-    writer2.printstring("Parkplatz\n{:s}".format(parking.name))
+    writer2.printstring("Parkplatz\n{:s}".format(parking.location))
     #screen2.text(parking_lots, 88, 0, 1)
     if number_of_empty_spaces > 0:
         writer3.set_textpos(screen2, 0, 128 - writer3.stringlen(parking_lots_available))

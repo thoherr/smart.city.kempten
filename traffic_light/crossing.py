@@ -21,8 +21,8 @@ class Crossing:
 
     def __init__(self, light_columns, default_circuit=DEFAULT_CIRCUIT, initial_delay=2):
         self.circuit = None
-        self.current_index = None
-        self.delay = None
+        self.current_index : int = None
+        self.delay : int = None
         self.light_columns = light_columns
         self.default_circuit = default_circuit
         self.turn_on(default_circuit, initial_delay)
