@@ -56,11 +56,8 @@ p2 = ParkingSpace(multiplexer, 2, VL53L0X)
 parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2])
 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
-
 light_sensor = Light("Fußgängerzone", multiplexer, 6, GY302)
-
-environment_sensor = BME280(i2c=i2c1)
-weather_sensor = Weather("Innenstadt", environment_sensor)
+weather_sensor = Weather("Innenstadt",  multiplexer, 7, BME280)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
