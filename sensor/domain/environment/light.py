@@ -1,7 +1,7 @@
 # Sensor for the light level (in lux)
 
 class Light:
-    def __init__(self, location, sensor):
+    def __init__(self, location : str, sensor):
         self.location = location
         self._sensor = sensor
 
