@@ -1,6 +1,7 @@
 import micropython
 
 from sensor.domain.environment.light import Light
+from sensor.domain.environment.noise import Noise
 from sensor.domain.environment.weather import Weather
 from sensor.domain.parking.area import ParkingArea
 from sensor.domain.parking.space import ParkingSpace
@@ -16,6 +17,7 @@ from sensor.device.tca9548a import TCA9548A
 from sensor.device.vl53l0x import VL53L0X
 from sensor.device.gy302 import GY302
 from sensor.device.BME280 import BME280
+from sensor.device.KY037 import KY037
 from display.sh1106 import SH1106_I2C
 from display.ssd1306 import SSD1306_I2C
 from display.writer import Writer
@@ -58,6 +60,7 @@ parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, 
 waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
 light_sensor = Light("Fußgängerzone", multiplexer, 6, GY302)
 weather_sensor = Weather("Innenstadt",  multiplexer, 7, BME280)
+noise_sensor = Noise("Strassenlärm", KY037())
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, display.freesans20)
@@ -87,12 +90,15 @@ while True:
 
     light = "Light at {:s} is {:.2f}".format(light_sensor.location, light_sensor.light())
 
+    noise = "Noise at {:s} is {:.2f}".format(noise_sensor.location, noise_sensor.noise())
+
     print(waste_status)
     print(reed_value)
     print(traffic_count)
     print(parking_lots)
     print(weather)
     print(light)
+    print(noise)
 
     screen1.fill(0)
     screen1.text("Parkplatz", 0, 0, 1)
@@ -118,4 +124,4 @@ while True:
     print(memory_usage.df())
     print(memory_usage.free(True))
 
-    time.sleep(0.25)
+    time.sleep(0.5)
