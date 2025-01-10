@@ -13,7 +13,6 @@ from sensor.domain.waste.container import WasteContainer
 micropython.alloc_emergency_exception_buf(100)
 
 from machine import Pin, I2C
-import time
 
 from sensor.device.tca9548a import TCA9548A
 from sensor.device.vl53l0x import VL53L0X
