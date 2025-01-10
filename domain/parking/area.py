@@ -1,5 +1,5 @@
 # Parking area, consisting of a number of parking spaces
-from sensor.domain.parking.space import ParkingSpace
+from domain.parking.space import ParkingSpace
 
 
 class ParkingArea:

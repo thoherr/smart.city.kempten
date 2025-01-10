@@ -2,28 +2,28 @@ import asyncio
 
 import micropython
 
-from sensor.domain.environment.light import Light
-from sensor.domain.environment.noise import Noise
-from sensor.domain.environment.weather import Weather
-from sensor.domain.parking.area import ParkingArea
-from sensor.domain.parking.space import ParkingSpace
-from sensor.domain.traffic.count import TrafficCount
-from sensor.domain.waste.container import WasteContainer
+from domain.environment.light import Light
+from domain.environment.noise import Noise
+from domain.environment.weather import Weather
+from domain.parking.area import ParkingArea
+from domain.parking.space import ParkingSpace
+from domain.traffic.count import TrafficCount
+from domain.waste.container import WasteContainer
 
 micropython.alloc_emergency_exception_buf(100)
 
 from machine import Pin, I2C
 
-from sensor.device.tca9548a import TCA9548A
-from sensor.device.vl53l0x import VL53L0X
-from sensor.device.gy302 import GY302
-from sensor.device.BME280 import BME280
-from sensor.device.KY037 import KY037
-from display.sh1106 import SH1106_I2C
-from display.ssd1306 import SSD1306_I2C
-from display.writer import Writer
-import display.freesans20
-import display.freesansbold40
+from device.multiplexer.tca9548a import TCA9548A
+from device.sensor.vl53l0x import VL53L0X
+from device.sensor.gy302 import GY302
+from device.sensor.BME280 import BME280
+from device.sensor.KY037 import KY037
+from device.display.sh1106 import SH1106_I2C
+from device.display.ssd1306 import SSD1306_I2C
+from device.display.writer import Writer
+import device.display.freesans20
+import device.display.freesansbold40
 
 import util.memory_usage as memory_usage
 
@@ -32,22 +32,22 @@ i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
 i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
 
 print('Scan I2C Bus 0...')
-devices = i2c0.scan()
-if len(devices) == 0:
+i2c_devices = i2c0.scan()
+if len(i2c_devices) == 0:
     print('Kein I2C-Gerät an I2C 0 gefunden!')
 else:
-    print('I2C-Geräte gefunden:', len(devices))
-    for device in devices:
-        print('Dezimale Adresse:', device, '| Hexadezimale Adresse:', hex(device))
+    print('I2C-Geräte gefunden:', len(i2c_devices))
+    for i2c_dev in i2c_devices:
+        print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
 print('Scan I2C Bus 1...')
-devices = i2c1.scan()
-if len(devices) == 0:
+i2c_devices = i2c1.scan()
+if len(i2c_devices) == 0:
     print('Kein I2C-Gerät an I2C 1 gefunden!')
 else:
-    print('I2C-Geräte gefunden:', len(devices))
-    for device in devices:
-        print('Dezimale Adresse:', device, '| Hexadezimale Adresse:', hex(device))
+    print('I2C-Geräte gefunden:', len(i2c_devices))
+    for i2c_dev in i2c_devices:
+        print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
 
 led = Pin("LED", Pin.OUT)
@@ -64,11 +64,11 @@ ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
-writer1 = Writer(screen1, display.freesans20)
+writer1 = Writer(screen1, device.display.freesans20)
 
 screen2 = SH1106_I2C(128, 64, i2c0)
-writer2 = Writer(screen2, display.freesans20)
-writer3 = Writer(screen2, display.freesansbold40)
+writer2 = Writer(screen2, device.display.freesans20)
+writer3 = Writer(screen2, device.display.freesansbold40)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)

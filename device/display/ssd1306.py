@@ -2,7 +2,7 @@
 
 from micropython import const
 import framebuf
-from display.boolpalette import BoolPalette
+from device.display.boolpalette import BoolPalette
 
 # register definitions
 SET_CONTRAST = const(0x81)

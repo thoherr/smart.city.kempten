@@ -33,7 +33,7 @@
 #   - G  - xxxxxx   - Gnd
 #   - D7 - GPIO 13  - Din / MOSI fixed
 #   - D5 - GPIO 14  - Clk / Sck fixed
-#   - D8 - GPIO 4   - CS (optional, if the only connected device)
+#   - D8 - GPIO 4   - CS (optional, if the only connected sensor)
 #   - D2 - GPIO 5   - D/C
 #   - D1 - GPIO 2   - Res
 #
@@ -75,7 +75,7 @@
 from micropython import const
 import utime as time
 import framebuf
-from display.boolpalette import BoolPalette
+from device.display.boolpalette import BoolPalette
 
 
 # a few register definitions

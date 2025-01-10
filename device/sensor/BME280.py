@@ -49,13 +49,13 @@ BME280_REGISTER_HUMIDITY_DATA = 0xFD
 
 
 class Device:
-  """Class for communicating with an I2C device.
+  """Class for communicating with an I2C sensor.
 
   Allows reading and writing 8-bit, 16-bit, and byte array values to
-  registers on the device."""
+  registers on the sensor."""
 
   def __init__(self, address, i2c):
-    """Create an instance of the I2C device at the specified address using
+    """Create an instance of the I2C sensor at the specified address using
     the specified I2C interface object."""
     self._address = address
     self._i2c = i2c
@@ -146,7 +146,7 @@ class BME280:
             'BME280_ULTRALOWPOWER, BME280_STANDARD, BME280_HIGHRES, or '
             'BME280_ULTRAHIGHRES'.format(mode))
     self._mode = mode
-    # Create I2C device.
+    # Create I2C sensor.
     if i2c is None:
       raise ValueError('An I2C object is required.')
     self._device = Device(address, i2c)

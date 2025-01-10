@@ -5,8 +5,8 @@ micropython.alloc_emergency_exception_buf(100)
 from machine import Pin
 import time
 
-from traffic_light.column import Column as TrafficLightColumn
-from traffic_light.crossing import Crossing as TrafficLightCrossing
+from domain.traffic.light import Column as TrafficLightColumn
+from domain.traffic.light import Crossing as TrafficLightCrossing
 
 led = Pin("LED", Pin.OUT)
 

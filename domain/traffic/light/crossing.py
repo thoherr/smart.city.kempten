@@ -1,4 +1,4 @@
-from traffic_light.column import Column as Column
+from domain.traffic.light.column import Column as Column
 
 class Crossing:
     # circuit specification format:
