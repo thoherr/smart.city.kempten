@@ -22,9 +22,7 @@ class ControllerOne(ControllerBase):
     def print_debug_log(self):
         number_of_empty_spaces = self.parking.number_of_empty_spaces()
         number_of_spaces = self.parking.number_of_spaces()
-        parking_lots_available = "{:1d}".format(number_of_empty_spaces)
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
-        parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
         print(parking_lots)
 
 
