@@ -6,6 +6,8 @@ Theses display drivers and utilities are from
   - boolpalette
 
 - https://github.com/peterhinch/micropython-font-to-py
+  - font6
+  - font10
   - freesans20
   - writer
   - freesansbold40.py (generated from font file)
