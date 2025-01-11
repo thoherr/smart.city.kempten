@@ -2,7 +2,8 @@ import asyncio
 
 import micropython
 
-import util.heartbeat
+from util.heartbeat import Heartbeat
+from util.housekeeper import Housekeeper
 from domain.environment.light import Light
 from domain.environment.noise import Noise
 from domain.environment.weather import Weather
@@ -131,7 +132,8 @@ async def main_loop():
 async def main():
     print("##### main starting")
     await asyncio.gather(asyncio.create_task(ky037.read()), asyncio.create_task(main_loop()),
-                         asyncio.create_task(util.heartbeat.Heartbeat().run()))
+                         asyncio.create_task(Heartbeat().run()),
+                         asyncio.create_task(Housekeeper().run()))
 
 print("##### Testboard starting")
 asyncio.run(main())
