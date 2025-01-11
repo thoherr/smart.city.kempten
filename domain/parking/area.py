@@ -1,4 +1,6 @@
 # Parking area, consisting of a number of parking spaces
+import asyncio
+
 from domain.parking.space import ParkingSpace
 
 
@@ -7,9 +9,9 @@ class ParkingArea:
         self._spaces = spaces
         self.location = location
 
-    def check(self):
-        for s in self._spaces:
-            s.check()
+    async def run(self):
+        tasks = [asyncio.create_task(space.run()) for space in self._spaces]
+        await asyncio.gather(*tasks)
 
     def number_of_spaces(self) -> int:
         return len(self._spaces)
