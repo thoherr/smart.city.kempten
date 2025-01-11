@@ -1,6 +1,5 @@
 import asyncio
 
-import device.display.font10
 import device.display.freesans20
 import device.display.freesansbold40
 from device.display.sh1106 import SH1106_I2C
@@ -59,5 +58,5 @@ class ParkingAreaPanelSSD1306(ParkingAreaPanel):
         self._height = 64
         self._status_y = 24
         self._screen = SSD1306_I2C(self._width, self._height, i2c)
-        self._writer_small = Writer(self._screen, device.display.font10)
+        self._writer_small = Writer(self._screen, device.display.freesans20)
         self._writer_large = Writer(self._screen, device.display.freesans20)
