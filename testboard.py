@@ -131,7 +131,7 @@ async def main():
     await asyncio.gather(asyncio.create_task(ky037.read()), asyncio.create_task(main_loop()),
                          asyncio.create_task(traffic.run()),
                          asyncio.create_task(parking.run()),
-                         asyncio.create_task(Heartbeat().run()),
+                         asyncio.create_task(Heartbeat(print_timestamp=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
 print("##### Testboard starting")
