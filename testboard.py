@@ -78,7 +78,6 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 async def main_loop():
     print("----- main_loop starting")
     while True:
-        traffic.check()
         parking.check()
         waste_container.check()
         waste_status = "Waste {:s} {:s}".format(waste_container.location, "full" if waste_container.full() else "OK")
@@ -131,6 +130,7 @@ async def main_loop():
 async def main():
     print("##### main starting")
     await asyncio.gather(asyncio.create_task(ky037.read()), asyncio.create_task(main_loop()),
+                         asyncio.create_task(traffic.run()),
                          asyncio.create_task(Heartbeat().run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
