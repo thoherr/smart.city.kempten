@@ -27,8 +27,6 @@ from device.display.writer import Writer
 import device.display.freesans20
 import device.display.freesansbold40
 
-import util.memory_usage as memory_usage
-
 
 i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
 i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
@@ -51,8 +49,6 @@ else:
     for i2c_dev in i2c_devices:
         print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
-
-led = Pin("LED", Pin.OUT)
 
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace(multiplexer, 0, VL53L0X)
@@ -127,7 +123,8 @@ async def main_loop():
 
 async def main():
     print("##### main starting")
-    await asyncio.gather(asyncio.create_task(ky037.read()), asyncio.create_task(main_loop()),
+    await asyncio.gather(asyncio.create_task(ky037.read()),
+                         asyncio.create_task(main_loop()),
                          asyncio.create_task(traffic.run()),
                          asyncio.create_task(parking.run()),
                          asyncio.create_task(waste_container.run()),
