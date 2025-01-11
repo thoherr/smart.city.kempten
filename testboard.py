@@ -101,7 +101,7 @@ async def main_loop():
         print(light)
         print(noise)
 
-        await asyncio.sleep_ms(10)
+        await asyncio.sleep_ms(0)
 
         screen1.fill(0)
         screen1.text("Parkplatz", 0, 0, 1)
@@ -112,6 +112,8 @@ async def main_loop():
             writer1.printstring(parking_lots_available)
         screen1.text(parking_status, 80, 24, 1)
         screen1.show()
+
+        await asyncio.sleep_ms(0)
 
         screen2.fill(0)
         writer2.set_textpos(screen2,0, 0)
@@ -124,16 +126,13 @@ async def main_loop():
         writer2.printstring(parking_status)
         screen2.show()
 
-        print(memory_usage.df())
-        print(memory_usage.free(True))
-
         await asyncio.sleep_ms(500)
 
 async def main():
     print("##### main starting")
     await asyncio.gather(asyncio.create_task(ky037.read()), asyncio.create_task(main_loop()),
                          asyncio.create_task(Heartbeat().run()),
-                         asyncio.create_task(Housekeeper().run()))
+                         asyncio.create_task(Housekeeper(verbose=True).run()))
 
 print("##### Testboard starting")
 asyncio.run(main())
