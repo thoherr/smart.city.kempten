@@ -5,10 +5,12 @@ import device.display.freesansbold40
 from device.display.sh1106 import SH1106_I2C
 from device.display.ssd1306 import SSD1306_I2C
 from device.display.writer import Writer
+from util.actor import Actor
 
 
-class ParkingAreaPanel:
-    def __init__(self, i2c, parking_area, interval=1):
+class ParkingAreaPanel(Actor):
+    def __init__(self, i2c, parking_area, interval=1, verbose=False):
+        super().__init__("ParkingAreaPanel {:s}".format(parking_area.location), interval, verbose)
         self._screen = None
         self._writer_small = None
         self._writer_large = None
@@ -18,15 +20,15 @@ class ParkingAreaPanel:
         self._parking_area = parking_area
         self._interval = interval
 
-    async def run(self):
-        while True:
-            self.update_parking_panel()
-            await asyncio.sleep(self._interval)
+    async def work(self):
+        self.update_parking_panel()
 
     def update_parking_panel(self):
         number_of_empty_spaces = self._parking_area.number_of_empty_spaces()
         parking_lots_available = "{:1d}".format(number_of_empty_spaces)
         parking_status = "{:s}".format("FREI" if number_of_empty_spaces > 0 else "BELEGT")
+        if self._verbose:
+            self.log("{:1d} / {:1d}".format(number_of_empty_spaces, self._parking_area.number_of_spaces()))
         self._screen.fill(0)
         self._writer_small.set_textpos(self._screen, 0, 0)
         self._writer_small.printstring("Parkplatz\n{:s}".format(self._parking_area.location))
@@ -39,8 +41,8 @@ class ParkingAreaPanel:
 
 
 class ParkingAreaPanelSH1106(ParkingAreaPanel):
-    def __init__(self, i2c, parking_area, interval=1):
-        super().__init__(i2c, parking_area, interval)
+    def __init__(self, i2c, parking_area, interval=1, verbose=False):
+        super().__init__(i2c, parking_area, interval, verbose)
 
         self._width = 128
         self._height = 64
@@ -51,8 +53,8 @@ class ParkingAreaPanelSH1106(ParkingAreaPanel):
 
 
 class ParkingAreaPanelSSD1306(ParkingAreaPanel):
-    def __init__(self, i2c, parking_area, interval=1):
-        super().__init__(i2c, parking_area, interval)
+    def __init__(self, i2c, parking_area, interval=1, verbose=False):
+        super().__init__(i2c, parking_area, interval, verbose)
 
         self._width = 128
         self._height = 64

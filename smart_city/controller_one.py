@@ -19,7 +19,7 @@ class ControllerOne(ControllerBase):
         p2 = ParkingSpace(self.multiplexer, 2, VL53L0X)
         self.parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2])
         self.parking_panel_small = ParkingAreaPanelSSD1306(self.i2c1, self.parking)
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking)
+        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, verbose=True)
 
     def print_debug_log(self):
         number_of_empty_spaces = self.parking.number_of_empty_spaces()
