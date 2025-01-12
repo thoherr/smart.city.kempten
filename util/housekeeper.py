@@ -6,8 +6,8 @@ from util.actor import Actor
 
 
 class Housekeeper(Actor):
-    def __init__(self, interval=1, verbose=False):
-        super().__init__("Housekeeper", interval, verbose)
+    def __init__(self, actor_id = "Housekeeper", interval=1, verbose=False):
+        super().__init__(actor_id, interval, verbose)
         self._interval = interval
         self._verbose = verbose
 
