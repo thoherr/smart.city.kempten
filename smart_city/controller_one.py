@@ -1,12 +1,13 @@
 import asyncio
 
-from device.sensor.vl53l0x import VL53L0X
-from report.parking import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
-from util.heartbeat import Heartbeat
 from device.multiplexer.tca9548a import TCA9548A
+from device.sensor.vl53l0x import VL53L0X
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
+from report.parking import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
 from smart_city.controller_base import ControllerBase
+from util.heartbeat import Heartbeat
+from util.housekeeper import Housekeeper
 
 
 class ControllerOne(ControllerBase):
@@ -26,10 +27,9 @@ class ControllerOne(ControllerBase):
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
         print(parking_lots)
 
-
     async def create_tasks(self):
         return asyncio.gather(asyncio.create_task(Heartbeat(print_timestamp=True).run()),
-                             asyncio.create_task(self.parking.run()),
+                              asyncio.create_task(Housekeeper(verbose=True).run()),
+                              asyncio.create_task(self.parking.run()),
                               asyncio.create_task(self.parking_panel_large.run()),
                               asyncio.create_task(self.parking_panel_small.run()))
-
