@@ -1,10 +1,8 @@
 # main program for firmware app
+# this file will start the show when raspi is powered on
 # adapted from https://github.com/peterhinch/micropython-async/blob/master/v3/docs/TUTORIAL.md#224-a-typical-firmware-app
 
 import asyncio
-
-from smart_city.controller import SmartCityController
-
 
 def set_global_exception():
     def handle_exception(_self, context):
@@ -18,7 +16,7 @@ def set_global_exception():
 
 async def main():
     set_global_exception()
-    controller = SmartCityController()
+    from setup import controller
     tasks = controller.create_tasks()
     await asyncio.gather(tasks, controller.run_forever())
 
