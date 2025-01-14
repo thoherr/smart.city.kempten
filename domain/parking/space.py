@@ -15,7 +15,9 @@ class ParkingSpace:
     async def run(self):
         while True:
             self._multiplexer.switch_to_channel(self._channel)
-            self._is_empty = self._distance_sensor.value() > self._empty_threshold
+            distance = self._distance_sensor.value()
+            print("Sensor {:d} has value {:d}".format(self._channel, distance))
+            self._is_empty = (distance > self._empty_threshold)
             await asyncio.sleep(self._interval)
 
     def empty(self):
