@@ -20,12 +20,12 @@ class ControllerInnerCity(ControllerBase):
         super().__init__(**kwargs)
         self._location = "Innenstadt"
         self.multiplexer = TCA9548A(self.i2c1)
-        p1 = ParkingSpace(self.multiplexer, 0, VL53L0X, empty_threshold=50)
-        p2 = ParkingSpace(self.multiplexer, 1, VL53L0X, empty_threshold=100)
-        p3 = ParkingSpace(self.multiplexer, 2, VL53L0X, empty_threshold=65)
-        p4 = ParkingSpace(self.multiplexer, 3, VL53L0X, empty_threshold=50)
-        p5 = ParkingSpace(self.multiplexer, 4, VL53L0X, empty_threshold=50)
-        p6 = ParkingSpace(self.multiplexer, 5, VL53L0X, empty_threshold=40)
+        p1 = ParkingSpace("Rathaus 1", self.multiplexer, 0, VL53L0X, empty_threshold=50, verbose=True)
+        p2 = ParkingSpace("Rathaus 2", self.multiplexer, 1, VL53L0X, empty_threshold=100, verbose=True)
+        p3 = ParkingSpace("Rathaus 3", self.multiplexer, 2, VL53L0X, empty_threshold=65, verbose=True)
+        p4 = ParkingSpace("Rathaus 4", self.multiplexer, 3, VL53L0X, empty_threshold=50, verbose=True)
+        p5 = ParkingSpace("Rathaus 5", self.multiplexer, 4, VL53L0X, empty_threshold=50, verbose=True)
+        p6 = ParkingSpace("Rathaus 6", self.multiplexer, 5, VL53L0X, empty_threshold=40, verbose=True)
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6])
         self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, verbose=True)
 
