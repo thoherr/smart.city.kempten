@@ -12,7 +12,6 @@ class WasteContainer(Actor):
         self._multiplexer.switch_to_channel(self._channel)
         self._sensor = sensor_class(self._multiplexer.i2c)
         self._threshold = threshold
-        self._interval = interval
         self._is_full = False
 
     async def work(self):
