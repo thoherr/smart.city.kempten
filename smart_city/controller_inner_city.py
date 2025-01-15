@@ -42,11 +42,11 @@ class ControllerInnerCity(ControllerBase):
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
 
-        w1 = WasteContainer("Rathaus Müll 1", self.mux2, 0, GY302)
+        w1 = WasteContainer("Rathaus 1", self.mux2, 0, GY302)
         self.actors.append(w1)
-        w2 = WasteContainer("Rathaus Müll 2", self.mux2, 1, GY302)
+        w2 = WasteContainer("Rathaus 2", self.mux2, 1, GY302)
         self.actors.append(w2)
-        w3 = WasteContainer("Rathaus Müll 3", self.mux2, 2, GY302)
+        w3 = WasteContainer("Rathaus 3", self.mux2, 2, GY302)
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
 
