@@ -3,10 +3,9 @@ from util.actor import Actor
 
 
 class WasteContainer(Actor):
-    def __init__(self, waste_container_id, location: str, multiplexer, channel, sensor_class, threshold=100, interval=1,
+    def __init__(self, location: str, multiplexer, channel, sensor_class, threshold=100, interval=1,
                  verbose=False):
-        super().__init__("WasteContainer {:s}".format(waste_container_id), interval, verbose)
-        self.location = location
+        super().__init__(location, interval, verbose)
         self._multiplexer = multiplexer
         self._channel = channel
         self._multiplexer.switch_to_channel(self._channel)
