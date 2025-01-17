@@ -51,11 +51,11 @@ else:
 
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace("P0", multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=0)
-p2 = ParkingSpace("P2",  multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=2)
-parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2])
+p2 = ParkingSpace("P2",  i2c1, VL53L0X, multiplexer=multiplexer, channel=4)
+parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0])
 
-waste_container = WasteContainer("Müll 1", multiplexer.i2c, GY302, multiplexer=multiplexer, channel=6)
-light_sensor = Light("Fußgängerzone", multiplexer, 6, GY302)
+waste_container = WasteContainer("Müll 1", i2c1, GY302)
+light_sensor = Light("Fußgängerzone", i2c1, GY302)
 weather_sensor = Weather("Innenstadt",  multiplexer, 7, BME280)
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
@@ -79,7 +79,7 @@ async def main_loop():
         parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
         weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
-        light = "Light at {:s} is {:.2f}".format(light_sensor.location, light_sensor.light())
+        light = "Light at {:s} is {:.2f}".format(light_sensor.id, light_sensor.light())
         noise = "Noise at {:s} is {}".format(noise_sensor.location, noise_sensor.noise())
 
         print(waste_status)
@@ -110,6 +110,7 @@ async def main():
                          asyncio.create_task(traffic.run()),
                          asyncio.create_task(parking.run()),
                          asyncio.create_task(waste_container.run()),
+                         asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(Heartbeat(print_timestamp=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
