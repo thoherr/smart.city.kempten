@@ -7,6 +7,9 @@ class MultiplexedActor(Actor):
         self._multiplexer = multiplexer
         self._channel = channel
 
+    def reset_channel(self):
+        self._multiplexer.switch_to_channel(-1)
+
     def ensure_channel(self):
         if self._multiplexer is not None:
             self._multiplexer.switch_to_channel(self._channel)

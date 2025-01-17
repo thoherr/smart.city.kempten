@@ -15,8 +15,9 @@ class ParkingSpace(MultiplexedActor):
     async def work(self):
         self.ensure_channel()
         distance = self._distance_sensor.value()
+        self.reset_channel()
         if self._verbose:
-            self.log("distance = {:d}".format(self._channel, distance))
+            self.log("distance = {:d}".format(distance))
         self._is_empty = (distance > self._empty_threshold)
 
     def empty(self):

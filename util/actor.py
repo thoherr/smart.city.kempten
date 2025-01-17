@@ -3,19 +3,24 @@ import time
 
 
 class Actor:
-    def __init__(self, actor_id, interval=1, verbose=False):
+    def __init__(self, actor_id, interval=1, verbose=False, debug=False):
         self.id = actor_id
         self._interval = interval
         self._verbose = verbose
+        self._debug = debug
+        if self._verbose:
+            self.log('actor id {} initialized'.format(self.id))
 
     async def run(self):
         while True:
+            if self._debug:
+                self.log('actor id: {} calling work()'.format(self.id))
             await self.work()
             await asyncio.sleep(self._interval)
 
     async def work(self):
         if self._verbose:
-            print("base class work() called from actor {}".format(self.id))
+            self.log("base class work() called from actor {}".format(self.id))
 
     def log(self, content):
         now = time.gmtime()

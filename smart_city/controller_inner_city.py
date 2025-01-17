@@ -45,7 +45,7 @@ class ControllerInnerCity(ControllerBase):
         p7 = ParkingSpace("Rathaus 7", self.mux2.i2c, VL53L0X, multiplexer=self.mux2, channel=1,
                           empty_threshold=50, verbose=True)
         p8 = ParkingSpace("Rathaus 8", self.mux2.i2c, VL53L0X, multiplexer=self.mux2, channel=7,
-                          empty_threshold=100, verbose=True)
+                          empty_threshold=50, verbose=True)
 
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
@@ -55,11 +55,11 @@ class ControllerInnerCity(ControllerBase):
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
 
-        w1 = WasteContainer("Rathaus 1", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=0)
+        w1 = WasteContainer("Rathaus 1", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=0, verbose=True)
         self.actors.append(w1)
-        w2 = WasteContainer("Rathaus 2", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=1)
+        w2 = WasteContainer("Rathaus 2", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=1, verbose=True)
         self.actors.append(w2)
-        w3 = WasteContainer("Rathaus 3", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=2)
+        w3 = WasteContainer("Rathaus 3", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=2, verbose=True)
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
 
@@ -69,7 +69,10 @@ class ControllerInnerCity(ControllerBase):
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
         print(parking_lots)
         for waste in self.waste:
-            print("Waste {:s} {:s}".format(waste.location, "full" if waste.full() else "OK"))
+            print("Waste {:s} {:s}".format(waste.id, "full" if waste.full() else "OK"))
 
     async def create_tasks(self):
-        return asyncio.gather(self.actors)
+        print("create_tasks()")
+        tasks = []
+        for actor in self.actors:
+            tasks.append(asyncio.create_task(actor.run()))

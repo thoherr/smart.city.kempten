@@ -12,7 +12,10 @@ class WasteContainer(MultiplexedActor):
 
     async def work(self):
         self.ensure_channel()
-        self._is_full = self._sensor.value() < self._threshold
+        value = self._sensor.value()
+        if self._verbose:
+            self.log(f"Waste {self.id}: {value}")
+        self._is_full = value < self._threshold
 
     def full(self):
         return self._is_full
