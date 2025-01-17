@@ -28,13 +28,26 @@ class ControllerInnerCity(ControllerBase):
         self.actors.append(Housekeeper(verbose=True))
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
-        p1 = ParkingSpace("Rathaus 1", self.mux1, 0, VL53L0X, empty_threshold=50, verbose=True)
-        p2 = ParkingSpace("Rathaus 2", self.mux1, 1, VL53L0X, empty_threshold=100, verbose=True)
-        p3 = ParkingSpace("Rathaus 3", self.mux1, 2, VL53L0X, empty_threshold=65, verbose=True)
-        p4 = ParkingSpace("Rathaus 4", self.mux1, 3, VL53L0X, empty_threshold=50, verbose=True)
-        p5 = ParkingSpace("Rathaus 5", self.mux1, 4, VL53L0X, empty_threshold=50, verbose=True)
-        p6 = ParkingSpace("Rathaus 6", self.mux1, 5, VL53L0X, empty_threshold=40, verbose=True)
-        self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6])
+        p1 = ParkingSpace("Rathaus 1", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=0,
+                          empty_threshold=50, verbose=True)
+        p2 = ParkingSpace("Rathaus 2", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=1,
+                          empty_threshold=100, verbose=True)
+        p3 = ParkingSpace("Rathaus 3", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=2,
+                          empty_threshold=65, verbose=True)
+        p4 = ParkingSpace("Rathaus 4", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=3,
+                          empty_threshold=50, verbose=True)
+        p5 = ParkingSpace("Rathaus 5", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=4,
+                          empty_threshold=50, verbose=True)
+        p6 = ParkingSpace("Rathaus 6", self.mux1.i2c, VL53L0X, multiplexer=self.mux1, channel=5,
+                          empty_threshold=40, verbose=True)
+
+        self.mux2 = TCA9548A(self.i2c1, address=0x71)
+        p7 = ParkingSpace("Rathaus 7", self.mux2.i2c, VL53L0X, multiplexer=self.mux2, channel=1,
+                          empty_threshold=50, verbose=True)
+        p8 = ParkingSpace("Rathaus 8", self.mux2.i2c, VL53L0X, multiplexer=self.mux2, channel=7,
+                          empty_threshold=100, verbose=True)
+
+        self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
 
         self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, verbose=True)
@@ -42,11 +55,11 @@ class ControllerInnerCity(ControllerBase):
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
 
-        w1 = WasteContainer("Rathaus 1", self.mux3, 0, GY302)
+        w1 = WasteContainer("Rathaus 1", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=0)
         self.actors.append(w1)
-        w2 = WasteContainer("Rathaus 2", self.mux3, 1, GY302)
+        w2 = WasteContainer("Rathaus 2", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=1)
         self.actors.append(w2)
-        w3 = WasteContainer("Rathaus 3", self.mux3, 2, GY302)
+        w3 = WasteContainer("Rathaus 3", self.mux3.i2c, GY302, multiplexer=self.mux3, channel=2)
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
 

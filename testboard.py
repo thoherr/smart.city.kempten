@@ -21,7 +21,6 @@ from device.sensor.vl53l0x import VL53L0X
 from device.sensor.gy302 import GY302
 from device.sensor.BME280 import BME280
 from device.sensor.KY037 import KY037
-from device.display.sh1106 import SH1106_I2C
 from device.display.ssd1306 import SSD1306_I2C
 from device.display.writer import Writer
 import device.display.freesans20
@@ -51,11 +50,11 @@ else:
 
 
 multiplexer = TCA9548A(i2c1)
-p0 = ParkingSpace(multiplexer, 0, VL53L0X)
-p2 = ParkingSpace(multiplexer, 2, VL53L0X)
+p0 = ParkingSpace("P0", multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=0)
+p2 = ParkingSpace("P2",  multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=2)
 parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0, p2])
 
-waste_container = WasteContainer("Müll 1", multiplexer, 6, GY302)
+waste_container = WasteContainer("Müll 1", multiplexer.i2c, GY302, multiplexer=multiplexer, channel=6)
 light_sensor = Light("Fußgängerzone", multiplexer, 6, GY302)
 weather_sensor = Weather("Innenstadt",  multiplexer, 7, BME280)
 ky037 = KY037()
@@ -64,19 +63,15 @@ noise_sensor = Noise("Strassenlärm", ky037)
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, device.display.freesans20)
 
-screen2 = SH1106_I2C(128, 64, i2c0)
-writer2 = Writer(screen2, device.display.freesans20)
-writer3 = Writer(screen2, device.display.freesansbold40)
-
 traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
 
 async def main_loop():
     print("----- main_loop starting")
     while True:
-        waste_status = "Waste {:s} {:s}".format(waste_container.location, "full" if waste_container.full() else "OK")
+        waste_status = "Waste {:s} {:s}".format(waste_container.id, "full" if waste_container.full() else "OK")
         multiplexer.switch_to_channel(0)
-        traffic_count = "Traffic at {:s} {:1d}".format(traffic.location, traffic.get_count())
+        traffic_count = "Traffic at {:s} {:1d}".format(traffic.id, traffic.get_count())
         number_of_empty_spaces = parking.number_of_empty_spaces()
         number_of_spaces = parking.number_of_spaces()
         parking_lots_available = "{:1d}".format(number_of_empty_spaces)
@@ -105,19 +100,6 @@ async def main_loop():
             writer1.printstring(parking_lots_available)
         screen1.text(parking_status, 80, 24, 1)
         screen1.show()
-
-        await asyncio.sleep_ms(0)
-
-        screen2.fill(0)
-        writer2.set_textpos(screen2,0, 0)
-        writer2.printstring("Parkplatz\n{:s}".format(parking.location))
-        #screen2.text(parking_lots, 88, 0, 1)
-        if number_of_empty_spaces > 0:
-            writer3.set_textpos(screen2, 0, 128 - writer3.stringlen(parking_lots_available))
-            writer3.printstring(parking_lots_available)
-        writer2.set_textpos(screen2, 44, 128 - writer2.stringlen(parking_status))
-        writer2.printstring(parking_status)
-        screen2.show()
 
         await asyncio.sleep_ms(500)
 
