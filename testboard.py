@@ -2,6 +2,7 @@ import asyncio
 
 import micropython
 
+from report.parking import ParkingAreaPanelSH1106
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 from domain.environment.light import Light
@@ -51,7 +52,7 @@ else:
 
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace("P0", multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=0)
-p2 = ParkingSpace("P2",  i2c1, VL53L0X, multiplexer=multiplexer, channel=4)
+p2 = ParkingSpace("P2",  multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=4)
 parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0])
 
 waste_container = WasteContainer("Müll 1", i2c1, GY302)
@@ -62,6 +63,8 @@ noise_sensor = Noise("Strassenlärm", ky037)
 
 screen1 = SSD1306_I2C(128, 32, i2c1)
 writer1 = Writer(screen1, device.display.freesans20)
+
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=False)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
@@ -94,7 +97,6 @@ async def main_loop():
         screen1.fill(0)
         screen1.text("Parkplatz", 0, 0, 1)
         screen1.text(parking.location, 0, 12, 1)
-        #screen1.text(parking_lots, 88, 0, 1)
         if number_of_empty_spaces > 0:
             writer1.set_textpos(screen1, 0, 128 - writer1.stringlen(parking_lots_available))
             writer1.printstring(parking_lots_available)
@@ -111,6 +113,7 @@ async def main():
                          asyncio.create_task(parking.run()),
                          asyncio.create_task(waste_container.run()),
                          asyncio.create_task(light_sensor.run()),
+                         asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(Heartbeat(print_timestamp=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
