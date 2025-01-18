@@ -114,7 +114,7 @@ async def main():
                          asyncio.create_task(waste_container.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
-                         asyncio.create_task(Heartbeat(print_timestamp=True).run()),
+                         asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
 print("##### Testboard starting")

@@ -24,7 +24,7 @@ class ControllerInnerCity(ControllerBase):
 
         self.actors = []
 
-        self.actors.append(Heartbeat(print_timestamp=True))
+        self.actors.append(Heartbeat(verbose=True))
         self.actors.append(Housekeeper(verbose=False))
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
