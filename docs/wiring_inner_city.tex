@@ -1,0 +1,105 @@
+% First controller for smart.city.kempten LEGO(R) Model
+% INNER CITY
+\documentclass[border=10pt]{standalone}
+% \usepackage{tikz} 
+\usepackage{circuitikz}
+% \usetikzlibrary{chains}
+% \renewcommand*{\familydefault}{\sfdefault}
+\begin{document}
+
+\begin{circuitikz}
+ \ctikzset{multipoles/thickness=2}
+ \ctikzset{multipoles/external pins thickness=2}
+
+ \ctikzset{multipoles/dipchip/width=2}
+
+ \draw (3,0) node[dipchip,
+ num pins=24,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4 ](M1){MUX 0x70};
+
+ \draw [color=red] (M1.pin 1) -- ++(-1.5,0) node[vcc]{3V3};
+ \draw [color=black] (M1.pin 2) -- ++(-1.5,0) node[ground]{};
+ \node [right, font=\tiny] at (M1.bpin 1) {VIN};
+ \node [right, font=\tiny] at (M1.bpin 2) {GND};
+ \node [right, font=\tiny] at (M1.bpin 3) {SDA};
+ \node [right, font=\tiny] at (M1.bpin 4) {SCL};
+ \node [right, font=\tiny] at (M1.bpin 9) {SD0};
+ \node [right, font=\tiny] at (M1.bpin 10) {SC0};
+ \node [right, font=\tiny] at (M1.bpin 11) {SD1};
+ \node [right, font=\tiny] at (M1.bpin 12) {SC1};
+ \node [left, font=\tiny] at (M1.bpin 13) {SD2};
+ \node [left, font=\tiny] at (M1.bpin 14) {SC2};
+ \node [left, font=\tiny] at (M1.bpin 15) {SD3};
+ \node [left, font=\tiny] at (M1.bpin 16) {SC3};
+ \node [left, font=\tiny] at (M1.bpin 17) {SD4};
+ \node [left, font=\tiny] at (M1.bpin 18) {SC4};
+ \node [left, font=\tiny] at (M1.bpin 19) {SD5};
+ \node [left, font=\tiny] at (M1.bpin 20) {SC5};
+ \node [left, font=\tiny] at (M1.bpin 21) {SD6};
+ \node [left, font=\tiny] at (M1.bpin 22) {SC6};
+ \node [left, font=\tiny] at (M1.bpin 23) {SD7};
+ \node [left, font=\tiny] at (M1.bpin 24) {SC7};
+
+ \ctikzset{multipoles/dipchip/width=0.8}
+
+\foreach \x in {6,...,1} {
+ \draw (8.5-\x*1.5,-5) node[dipchip,
+ num pins=4,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4,
+ rotate=90](P_\x){$P_\x$};
+ \node [below, font=\tiny] at (P_\x.pin 4) {SDA};
+ \node [below, font=\tiny] at (P_\x.pin 3) {SCL};
+ }
+
+\draw [color=orange] (P_6.pin 4) |- (M1.pin 9) -- (M1.pin 9){};
+\draw [color=blue] (P_6.pin 3) |- (M1.pin 10) -- (M1.pin 10){};
+
+\draw [color=orange] (P_5.pin 4) |- (M1.pin 11) -- (M1.pin 11){};
+\draw [color=blue] (P_5.pin 3) |- (M1.pin 12) -- (M1.pin 12){};
+
+\draw [color=orange] (P_4.pin 4) |- ++(0,0.8) -| ++(2.25,0) |- (M1.pin 13) -- (M1.pin 13){};
+\draw [color=blue] (P_4.pin 3)  |- ++(0,0.7) -| ++(1.8,0)|- (M1.pin 14) -- (M1.pin 14){};
+
+\draw [color=orange] (P_3.pin 4) |- ++(0,0.5) -| ++(1,0) |- (M1.pin 15) -- (M1.pin 15){};
+\draw [color=blue] (P_3.pin 3)  |- ++(0,0.4) -| ++(0.55,0)|- (M1.pin 16) -- (M1.pin 16){};
+
+\draw [color=orange] (P_2.pin 4) |- (M1.pin 17) -- (M1.pin 17){};
+\draw [color=blue] (P_2.pin 3) |- (M1.pin 18) -- (M1.pin 18){};
+
+\draw [color=orange] (P_1.pin 4) |- (M1.pin 19) -- (M1.pin 19){};
+\draw [color=blue] (P_1.pin 3) |- (M1.pin 20) -- (M1.pin 20){};
+
+
+ \ctikzset{multipoles/dipchip/width=3}
+
+ \draw (12,1) node[dipchip,
+ num pins=40,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4 ](P){PICO W};
+
+ \draw (P.pin 38) -- ++(1.5,0) node[ground]{};
+ \draw (P.pin 40) -- ++(1.5,0) node[vcc]{USB Power};
+ \draw [color=red] (P.pin 36) -- ++(0.5,0) node[vcc]{3V3};
+ \node [right, font=\tiny] at (P.bpin 1) {I2C0 SDA};
+ \node [right, font=\tiny] at (P.bpin 2) {I2C0 SCL};
+ \node [right, font=\tiny] at (P.bpin 4) {I2C1 SDA};
+ \node [right, font=\tiny] at (P.bpin 5) {I2C1 SCL};
+ \node [left, font=\tiny] at (P.bpin 40) {VBUS};
+ \node [left, font=\tiny] at (P.bpin 39) {VSYS};
+ \node [left, font=\tiny] at (P.bpin 38) {GND};
+ \node [left, font=\tiny] at (P.bpin 36) {3V3};
+
+\draw [color=orange] (M1.pin 3) -- ++(-0.5,0) |- (P.pin 4) -- (P.pin 4){};
+\draw [color=blue] (M1.pin 4) -- ++(-0.6,0) |- (P.pin 5) -- (P.pin 5){};
+
+\end{circuitikz}
+
+\end{document}
