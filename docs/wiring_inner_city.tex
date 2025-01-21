@@ -8,6 +8,18 @@
  \ctikzset{multipoles/thickness=2}
  \ctikzset{multipoles/external pins thickness=2}
 
+\ctikzset{multipoles/dipchip/width=3}
+ \draw (5,6) node[dipchip,
+ num pins=8,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4](display){Display};
+ \draw [color=red] (display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
+ \draw [color=black] (display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
+ \node [left, font=\tiny] at (display.pin 8) {SDA};
+ \node [left, font=\tiny] at (display.pin 7) {SCL};
+
 \newcommand\multiplexer[4]{
  \ctikzset{multipoles/dipchip/width=2}
  \draw (#3,#4) node[dipchip,
@@ -135,6 +147,9 @@
 \node [left, font=\tiny] at (P.pin 39) {VSYS};
 \node [left, font=\tiny] at (P.pin 38) {GND};
 \node [left, font=\tiny] at (P.pin 36) {3V3};
+
+\draw [color=orange] (display.pin 8) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
+\draw [color=blue] (display.pin 7) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
 
 \draw [color=orange] (M1.pin 3) -- ++(-0.5,0) |- (P.pin 4) -- (P.pin 4){};
 \draw [color=blue] (M1.pin 4) -- ++(-0.7,0) |- (P.pin 5) -- (P.pin 5){};
