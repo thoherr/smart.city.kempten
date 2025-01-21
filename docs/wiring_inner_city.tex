@@ -17,8 +17,8 @@
  external pins width=0.0,
  external pad fraction=4](#1){#2};
 
- \draw [color=red] (#1.pin 1) -- ++(-1.5,0) node[vcc]{3V3};
- \draw [color=black] (#1.pin 2) -- ++(-1.5,0) node[ground]{};
+ \draw [color=red] (#1.pin 1) -- ++(-1.5,0) node[vcc, font=\small]{3V3};
+ \draw [color=black] (#1.pin 2) -- ++(-1.5,0) node[ground, font=\small]{};
  \node [right, font=\tiny] at (#1.pin 1) {VIN};
  \node [right, font=\tiny] at (#1.pin 2) {GND};
  \node [right, font=\tiny] at (#1.pin 3) {SDA};
@@ -102,8 +102,8 @@
  \draw (-2.75+\x*1.5,-18) -- ++(0.25,0) |- (-2.75+\x*1.5,-19.25);
  }
 
-\draw [color=red] (-5.5,-19) node[vcc]{USB Power} to[R=1.5\si{\kilo\ohm}] ++(3,0) -- ++(4.5,0); 
-\draw (-2.5, -19.25) -- ++(5.5,0) node[ground]{};
+\draw [color=red] (-5.5,-19) node[vcc, font=\small]{USB Power} to[R=1.5\si{\kilo\ohm}, font=\small] ++(3,0) -- ++(4.5,0); 
+\draw (-2.5, -19.25) -- ++(5.5,0) node[ground, font=\small]{};
 
 
 \draw [color=orange] (W_1.pin 4) |- ++(0,0.4) -| ++(-0.55,0) |- (M3.pin 9) -- (M3.pin 9){};
@@ -124,9 +124,9 @@
  external pins width=0.0,
  external pad fraction=4 ](P){PICO W};
 
-\draw (P.pin 38) -- ++(1.5,0) node[ground]{};
-\draw [color=red] (P.pin 40) -- ++(1.5,0) node[vcc]{USB Power};
-\draw [color=red] (P.pin 36) -- ++(0.5,0) node[vcc]{3V3};
+\draw (P.pin 38) -- ++(1.5,0) node[ground, font=\small]{};
+\draw [color=red] (P.pin 40) -- ++(1.5,0) node[vcc, font=\small]{USB Power};
+\draw [color=red] (P.pin 36) -- ++(0.5,0) node[vcc, font=\small]{3V3};
 \node [right, font=\tiny] at (P.pin 1) {I2C0 SDA};
 \node [right, font=\tiny] at (P.pin 2) {I2C0 SCL};
 \node [right, font=\tiny] at (P.pin 4) {I2C1 SDA};
