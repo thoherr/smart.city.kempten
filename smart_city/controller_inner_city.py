@@ -11,7 +11,7 @@ from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.waste.container import WasteContainer
-from report.parking import ParkingAreaPanelSH1106
+from report.parking_area_panel import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper

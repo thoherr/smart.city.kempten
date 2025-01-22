@@ -4,7 +4,7 @@ import micropython
 
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
-from report.parking import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
+from report.parking_area_panel import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 from domain.environment.light import Light
