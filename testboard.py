@@ -2,6 +2,8 @@ import asyncio
 
 import micropython
 
+from device.i2c_sensor import I2cSensor
+from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from report.parking import ParkingAreaPanelSH1106
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
@@ -17,11 +19,11 @@ micropython.alloc_emergency_exception_buf(100)
 
 from machine import Pin, I2C
 
-from device.multiplexer.tca9548a import TCA9548A
-from device.sensor.vl53l0x import VL53L0X
-from device.sensor.gy302 import GY302
-from device.sensor.BME280 import BME280
-from device.sensor.KY037 import KY037
+from device.driver.tca9548a import TCA9548A
+from device.driver.vl53l0x import VL53L0X
+from device.driver.gy302 import GY302
+from device.driver.BME280 import BME280
+from device.driver.KY037 import KY037
 from device.display.ssd1306 import SSD1306_I2C
 from device.display.writer import Writer
 import device.display.freesans20
@@ -51,13 +53,13 @@ else:
 
 
 multiplexer = TCA9548A(i2c1)
-p0 = ParkingSpace("P0", multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=0)
-p2 = ParkingSpace("P2",  multiplexer.i2c, VL53L0X, multiplexer=multiplexer, channel=4)
-parking = ParkingArea("Illerufer", [p0, p2, p0, p2, p0, p2, p0, p2, p0, p2, p0])
+p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
+p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
+parking = ParkingArea("Illerufer", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 
-waste_container = WasteContainer("Müll 1", i2c1, GY302)
-light_sensor = Light("Fußgängerzone", i2c1, GY302)
-weather_sensor = Weather("Innenstadt",  multiplexer, 7, BME280)
+waste_container = WasteContainer("Müll 1", I2cSensor("Müll 1", GY302, i2c1))
+light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
+weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7))
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
@@ -72,9 +74,9 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 async def main_loop():
     print("----- main_loop starting")
     while True:
-        waste_status = "Waste {:s} {:s}".format(waste_container.id, "full" if waste_container.full() else "OK")
+        waste_status = "Waste {:s} {:s}".format(waste_container.actor_id, "full" if waste_container.full() else "OK")
         multiplexer.switch_to_channel(0)
-        traffic_count = "Traffic at {:s} {:1d}".format(traffic.id, traffic.get_count())
+        traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.get_count())
         number_of_empty_spaces = parking.number_of_empty_spaces()
         number_of_spaces = parking.number_of_spaces()
         parking_lots_available = "{:1d}".format(number_of_empty_spaces)
@@ -82,7 +84,7 @@ async def main_loop():
         parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
         weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
-        light = "Light at {:s} is {:.2f}".format(light_sensor.id, light_sensor.light())
+        light = "Light at {:s} is {:.2f}".format(light_sensor.actor_id, light_sensor.light())
         noise = "Noise at {:s} is {}".format(noise_sensor.location, noise_sensor.noise())
 
         print(waste_status)
@@ -92,7 +94,7 @@ async def main_loop():
         print(light)
         print(noise)
 
-        await asyncio.sleep_ms(0)
+        await asyncio.sleep(0)
 
         screen1.fill(0)
         screen1.text("Parkplatz", 0, 0, 1)
@@ -103,7 +105,7 @@ async def main_loop():
         screen1.text(parking_status, 80, 24, 1)
         screen1.show()
 
-        await asyncio.sleep_ms(500)
+        await asyncio.sleep(0.5)
 
 async def main():
     print("##### main starting")

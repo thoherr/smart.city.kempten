@@ -1,20 +1,19 @@
 
 class Weather:
-    def __init__(self, location : str,  multiplexer, channel, sensor_class):
+    def __init__(self, location : str,  sensor):
         self.location = location
-        self._multiplexer = multiplexer
-        self._channel = channel
-        self._multiplexer.switch_to_channel(self._channel)
-        self._sensor = sensor_class(i2c=self._multiplexer.i2c)
+        self._sensor = sensor
+
+# TODO: Delegate the three value functions to our one and only BME280 (or whatever)
 
     def temperature(self):
-        self._multiplexer.switch_to_channel(self._channel)
-        return self._sensor.temperature
+        self._sensor.ensure_channel()
+        return self._sensor.get_device().temperature
 
     def pressure(self):
-        self._multiplexer.switch_to_channel(self._channel)
-        return self._sensor.pressure
+        self._sensor.ensure_channel()
+        return self._sensor.get_device().pressure
 
     def humidity(self):
-        self._multiplexer.switch_to_channel(self._channel)
-        return self._sensor.humidity
+        self._sensor.ensure_channel()
+        return self._sensor.get_device().humidity

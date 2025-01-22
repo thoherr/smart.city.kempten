@@ -33,7 +33,7 @@
 #   - G  - xxxxxx   - Gnd
 #   - D7 - GPIO 13  - Din / MOSI fixed
 #   - D5 - GPIO 14  - Clk / Sck fixed
-#   - D8 - GPIO 4   - CS (optional, if the only connected sensor)
+#   - D8 - GPIO 4   - CS (optional, if the only connected driver)
 #   - D2 - GPIO 5   - D/C
 #   - D1 - GPIO 2   - Res
 #

@@ -1,21 +1,17 @@
-# Sensor for a (single) parking space, using a distance sensor
-from util.multiplexed_sensor import MultiplexedSensor
+# Sensor for a (single) parking space, using a distance driver
+from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+from util.actor import Actor
 
 
-class ParkingSpace(MultiplexedSensor):
-    def __init__(self, parking_space_id, i2c, distance_sensor_class, multiplexer=None, channel : int=-1,
-                 empty_threshold=100, interval=1, verbose=False):
-        super().__init__("ParkingSpace {:s}".format(parking_space_id), multiplexer, channel, interval, verbose)
-        self.ensure_channel()
-        self._distance_sensor = distance_sensor_class(i2c)
+class ParkingSpace(Actor):
+    def __init__(self, parking_space_id, sensor, empty_threshold=100, interval=1, verbose=False):
+        Actor.__init__(self, parking_space_id, interval=interval, verbose=verbose)
+        self._sensor = sensor
         self._empty_threshold = empty_threshold
-        self._interval = interval
         self._is_empty = True
 
     async def work(self):
-        self.ensure_channel()
-        distance = self._distance_sensor.value()
-        self.reset_channel()
+        distance = self._sensor.value()
         if self._verbose:
             self.log("distance = {:d}".format(distance))
         self._is_empty = (distance > self._empty_threshold)

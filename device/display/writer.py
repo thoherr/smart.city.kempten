@@ -5,7 +5,7 @@
 # V0.5.0 Sep 2021 Color now requires firmware >= 1.17.
 # V0.4.3 Aug 2021 Support for fast blit to color displays (PR7682).
 # V0.4.0 Jan 2021 Improved handling of word wrap and line clip. Upside-down
-# rendering no longer supported: delegate to sensor driver.
+# rendering no longer supported: delegate to driver driver.
 # V0.3.5 Sept 2020 Fast rendering option for color displays
 
 # Released under the MIT License (MIT). See LICENSE.
@@ -42,7 +42,7 @@ def _get_id(device):
 # Basic Writer class for monochrome displays
 class Writer():
 
-    state = {}  # Holds a display state for each sensor
+    state = {}  # Holds a display state for each driver
 
     @staticmethod
     def set_textpos(device, row=None, col=None):
@@ -118,7 +118,7 @@ class Writer():
         return self.row_clip, self.col_clip, self.wrap
 
     @property
-    def height(self):  # Property for consistency with sensor
+    def height(self):  # Property for consistency with driver
         return self.font.height()
 
     def printstring(self, string, invert=False):
@@ -269,7 +269,7 @@ class CWriter(Writer):
 
     def __init__(self, device, font, fgcolor=None, bgcolor=None, verbose=True):
         if not hasattr(device, 'palette'):
-            raise OSError('Incompatible sensor driver.')
+            raise OSError('Incompatible driver driver.')
         if implementation[1] < (1, 17, 0):
             raise OSError('Firmware must be >= 1.17.')
 

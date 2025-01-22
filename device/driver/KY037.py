@@ -1,7 +1,7 @@
 import asyncio
 from machine import ADC
 
-# HINT: The sensor has to be calibrated, so that the left LED is OFF in silence and
+# HINT: The driver has to be calibrated, so that the left LED is OFF in silence and
 #       begins to flicker at some noise. In order to pick up the noise, measurement
 #       runs in background at a time slice of about one second. Otherwise, the
 #       value is more or less random. The value range is quite small, e.g.

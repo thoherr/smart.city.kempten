@@ -49,13 +49,13 @@ BME280_REGISTER_HUMIDITY_DATA = 0xFD
 
 
 class Device:
-  """Class for communicating with an I2C sensor.
+  """Class for communicating with an I2C driver.
 
   Allows reading and writing 8-bit, 16-bit, and byte array values to
-  registers on the sensor."""
+  registers on the driver."""
 
   def __init__(self, address, i2c):
-    """Create an instance of the I2C sensor at the specified address using
+    """Create an instance of the I2C driver at the specified address using
     the specified I2C interface object."""
     self._address = address
     self._i2c = i2c
@@ -146,7 +146,7 @@ class BME280:
             'BME280_ULTRALOWPOWER, BME280_STANDARD, BME280_HIGHRES, or '
             'BME280_ULTRAHIGHRES'.format(mode))
     self._mode = mode
-    # Create I2C sensor.
+    # Create I2C driver.
     if i2c is None:
       raise ValueError('An I2C object is required.')
     self._device = Device(address, i2c)
@@ -186,7 +186,7 @@ class BME280:
         self._device.readU8(BME280_REGISTER_DIG_H5) >> 4 & 0x0F)
 
   def read_raw_temp(self):
-    """Reads the raw (uncompensated) temperature from the sensor."""
+    """Reads the raw (uncompensated) temperature from the driver."""
     meas = self._mode
     self._device.write8(BME280_REGISTER_CONTROL_HUM, meas)
     meas = self._mode << 5 | self._mode << 2 | 1
@@ -203,7 +203,7 @@ class BME280:
     return raw
 
   def read_raw_pressure(self):
-    """Reads the raw (uncompensated) pressure level from the sensor."""
+    """Reads the raw (uncompensated) pressure level from the driver."""
     """Assumes that the temperature has already been read """
     """i.e. that enough delay has been provided"""
     msb = self._device.readU8(BME280_REGISTER_PRESSURE_DATA)

@@ -1,20 +1,18 @@
 # Sensor for a (single) waste container, using a light barrier
-from util.multiplexed_sensor import MultiplexedSensor
+from util.actor import Actor
 
 
-class WasteContainer(MultiplexedSensor):
-    def __init__(self, location: str, i2c, sensor_class, multiplexer=None, channel : int=-1, threshold=100,
-                 interval=1, verbose=False):
-        super().__init__(location, multiplexer, channel, interval, verbose)
-        self._sensor = sensor_class(i2c)
+class WasteContainer(Actor):
+    def __init__(self, actor_id: str, sensor, threshold=100, interval=1, verbose=False):
+        Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
+        self._sensor = sensor
         self._threshold = threshold
         self._is_full = False
 
     async def work(self):
-        self.ensure_channel()
         value = self._sensor.value()
         if self._verbose:
-            self.log(f"Waste {self.id}: {value}")
+            self.log(f"Waste {self.actor_id}: {value}")
         self._is_full = value < self._threshold
 
     def full(self):

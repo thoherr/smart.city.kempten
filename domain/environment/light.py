@@ -1,17 +1,16 @@
 # Sensor for the light level (in lux)
-from util.multiplexed_sensor import MultiplexedSensor
+from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+from util.actor import Actor
 
 
-class Light(MultiplexedSensor):
-    def __init__(self, actor_id : str, i2c, sensor_class, multiplexer=None, channel : int=-1, interval=1, verbose=False):
-        super().__init__("LightSensor {:s}".format(actor_id), multiplexer, channel, interval, verbose)
-        self.ensure_channel()
-        self._sensor = sensor_class(i2c)
-        self._value = 0
+class Light(Actor):
+    def __init__(self, actor_id : str, sensor, interval=1, verbose=False):
+        Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
+        self._sensor = sensor
+        self._light = 0
 
     async def work(self):
-        self.ensure_channel()
-        self._value = self._sensor.value()
+        self._light = self._sensor.value()
 
     def light(self):
-        return self._value
+        return self._light

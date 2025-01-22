@@ -1,4 +1,4 @@
-# Sensor for traffic count, using a PIO (e.g. reed or hall sensor)
+# Sensor for traffic count, using a PIO (e.g. reed or hall driver)
 
 from util.actor import Actor
 
