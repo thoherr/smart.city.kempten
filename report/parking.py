@@ -94,7 +94,7 @@ class ParkingAreaPanelSSD1306(ParkingAreaPanel):
         super().__init__(i2c, parking_area, interval, verbose)
 
         self._width = 128
-        self._height = 64
+        self._height = 32
         self._status_y = 24
         self._screen = SSD1306_I2C(self._width, self._height, i2c)
         self._writer_small = Writer(self._screen, device.display.freesans20)
