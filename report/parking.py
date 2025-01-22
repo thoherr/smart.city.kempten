@@ -1,5 +1,3 @@
-import asyncio
-
 import device.display.freesans20
 import device.display.freesansbold40
 from device.display.sh1106 import SH1106_I2C
@@ -48,7 +46,6 @@ class ParkingAreaPanel(Actor):
 
     def display_graphic_panel(self, parking_lots_available):
         self._screen.fill(0)
-        old_wrap = self._writer_large.wrap
         self._writer_large.set_textpos(self._screen, 32, 16)
         self._writer_large.printstring(parking_lots_available)
         for i in range(self._parking_area.number_of_spaces()):
@@ -56,8 +53,6 @@ class ParkingAreaPanel(Actor):
         self._screen.show()
 
     def draw_slot(self, slot_number, empty):
-        if slot_number > 7:
-            return
         if slot_number <= 5:
             i = slot_number
             h_offset = 16
@@ -72,6 +67,8 @@ class ParkingAreaPanel(Actor):
             v_offset_1 = 63
             v_offset_2 = 50
             v_size = 13
+        else:
+            return
         self._screen.hline(h_offset+h_size*i, v_offset_1, h_size, 0xffffff)
         self._screen.vline(h_offset+h_size*i, v_offset_2, v_size, 0xffffff)
         self._screen.vline(h_offset+h_size*(i+1), v_offset_2, v_size, 0xffffff)
