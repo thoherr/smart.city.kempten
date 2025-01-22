@@ -4,7 +4,7 @@ import micropython
 
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
-from report.parking import ParkingAreaPanelSH1106
+from report.parking import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 from domain.environment.light import Light
@@ -55,7 +55,7 @@ else:
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
 p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
-parking = ParkingArea("Illerufer", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
+parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 
 waste_container = WasteContainer("Müll 1", I2cSensor("Müll 1", GY302, i2c1))
 light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
@@ -63,9 +63,7 @@ weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, 
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
-screen1 = SSD1306_I2C(128, 32, i2c1)
-writer1 = Writer(screen1, device.display.freesans20)
-
+parking_panel_small = ParkingAreaPanelSSD1306(i2c1, parking)
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=False)
 
 traffic_pin = Pin(14, Pin.IN)
@@ -94,17 +92,6 @@ async def main_loop():
         print(light)
         print(noise)
 
-        await asyncio.sleep(0)
-
-        screen1.fill(0)
-        screen1.text("Parkplatz", 0, 0, 1)
-        screen1.text(parking.location, 0, 12, 1)
-        if number_of_empty_spaces > 0:
-            writer1.set_textpos(screen1, 0, 128 - writer1.stringlen(parking_lots_available))
-            writer1.printstring(parking_lots_available)
-        screen1.text(parking_status, 80, 24, 1)
-        screen1.show()
-
         await asyncio.sleep(0.5)
 
 async def main():
@@ -116,6 +103,7 @@ async def main():
                          asyncio.create_task(waste_container.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
+                         asyncio.create_task(parking_panel_small.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 
