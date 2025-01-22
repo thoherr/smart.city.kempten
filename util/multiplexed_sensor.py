@@ -1,7 +1,7 @@
 from util.actor import Actor
 
 
-class MultiplexedActor(Actor):
+class MultiplexedSensor(Actor):
     def __init__(self, actor_id, multiplexer=None, channel : int=-1, interval=1, verbose=False):
         super().__init__(actor_id, interval, verbose)
         self._multiplexer = multiplexer

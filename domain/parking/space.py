@@ -1,8 +1,8 @@
 # Sensor for a (single) parking space, using a distance sensor
-from util.multiplexed_actor import MultiplexedActor
+from util.multiplexed_sensor import MultiplexedSensor
 
 
-class ParkingSpace(MultiplexedActor):
+class ParkingSpace(MultiplexedSensor):
     def __init__(self, parking_space_id, i2c, distance_sensor_class, multiplexer=None, channel : int=-1,
                  empty_threshold=100, interval=1, verbose=False):
         super().__init__("ParkingSpace {:s}".format(parking_space_id), multiplexer, channel, interval, verbose)

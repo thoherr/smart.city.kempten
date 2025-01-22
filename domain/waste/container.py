@@ -1,8 +1,8 @@
 # Sensor for a (single) waste container, using a light barrier
-from util.multiplexed_actor import MultiplexedActor
+from util.multiplexed_sensor import MultiplexedSensor
 
 
-class WasteContainer(MultiplexedActor):
+class WasteContainer(MultiplexedSensor):
     def __init__(self, location: str, i2c, sensor_class, multiplexer=None, channel : int=-1, threshold=100,
                  interval=1, verbose=False):
         super().__init__(location, multiplexer, channel, interval, verbose)
