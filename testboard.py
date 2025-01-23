@@ -67,8 +67,8 @@ weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, 
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
-parking_panel_small = ParkingAreaPanelSSD1306(i2c1, parking)
-parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=False)
+parking_panel_small = ParkingAreaPanelSSD1306(i2c1, parking, verbose=True)
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=True)
 
 traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
