@@ -4,6 +4,7 @@ import micropython
 
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+from report.dashboard_upload import DashboardUpload
 from report.parking_area_panel import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
@@ -57,6 +58,9 @@ p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
 p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
 parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 
+dashboard_upload_1 = DashboardUpload(p0.actor_id, "myDashboard", p0, verbose=True)
+dashboard_upload_2 = DashboardUpload(p4.actor_id, "myDashboard", p4, verbose=True)
+
 waste_container = WasteContainer("Müll 1", I2cSensor("Müll 1", GY302, i2c1))
 light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
 weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7))
@@ -77,9 +81,7 @@ async def main_loop():
         traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.get_count())
         number_of_empty_spaces = parking.number_of_empty_spaces()
         number_of_spaces = parking.number_of_spaces()
-        parking_lots_available = "{:1d}".format(number_of_empty_spaces)
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
-        parking_status = "{:6s}".format("  FREI" if number_of_empty_spaces > 0 else "BELEGT")
 
         weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
         light = "Light at {:s} is {:.2f}".format(light_sensor.actor_id, light_sensor.light())
@@ -104,6 +106,8 @@ async def main():
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(parking_panel_small.run()),
+                         asyncio.create_task(dashboard_upload_1.run()),
+                         asyncio.create_task(dashboard_upload_2.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 

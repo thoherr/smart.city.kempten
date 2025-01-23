@@ -5,7 +5,7 @@ from util.actor import Actor
 
 class ParkingSpace(Actor):
     def __init__(self, parking_space_id, sensor, empty_threshold=100, interval=1, verbose=False):
-        Actor.__init__(self, parking_space_id, interval=interval, verbose=verbose)
+        super().__init__(parking_space_id, interval=interval, verbose=verbose)
         self._sensor = sensor
         self._empty_threshold = empty_threshold
         self._is_empty = True
