@@ -1,6 +1,6 @@
-# This is the first Raspi of or MOC of the City of Kempten
-# It implements the Innenstadt, around the Rathaus, with a Parking Area (including display),
-# three waste containers and two traffic lights
+# This is the first Raspi of our MOC of the City of Kempten
+# It implements the first controller at Innenstadt, around the Rathaus, with a Parking Area (including display)
+# and three waste containers
 
 import asyncio
 
@@ -17,7 +17,7 @@ from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 
 
-class ControllerInnerCity(ControllerBase):
+class ControllerInnerCityOne(ControllerBase):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
