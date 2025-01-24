@@ -25,10 +25,6 @@ from device.driver.vl53l0x import VL53L0X
 from device.driver.gy302 import GY302
 from device.driver.BME280 import BME280
 from device.driver.KY037 import KY037
-from device.display.ssd1306 import SSD1306_I2C
-from device.display.writer import Writer
-import device.display.freesans20
-import device.display.freesansbold40
 
 
 i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
