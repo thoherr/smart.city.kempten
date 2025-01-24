@@ -1,6 +1,8 @@
 from domain.traffic.light.column import Column as Column
+from util.actor import Actor
 
-class Crossing:
+
+class Crossing(Actor):
     # circuit specification format:
     # this is a list of tuples containing the number of ticks for each phase
     # and a list of column status in this phase
@@ -19,10 +21,11 @@ class Crossing:
     OUT_OF_ORDER_CIRCUIT = ((1, (Column.CAUTION, Column.CAUTION)),
                             (1, (Column.OFF, Column.OFF)))
 
-    def __init__(self, light_columns, default_circuit=DEFAULT_CIRCUIT, initial_delay=2):
+    def __init__(self, actor_id, light_columns, default_circuit=DEFAULT_CIRCUIT, initial_delay=2):
+        super().__init__(actor_id)
         self.circuit = None
-        self.current_index : int = None
-        self.delay : int = None
+        self.current_index : int = 0
+        self.delay : int = 0
         self.light_columns = light_columns
         self.default_circuit = default_circuit
         self.turn_on(default_circuit, initial_delay)
@@ -53,3 +56,6 @@ class Crossing:
     def _update_light_columns(self):
         for light_column in self.light_columns:
             light_column.change_to(self.circuit[self.current_index][1][light_column.direction])
+
+    async def work(self):
+        self.next_tick()
