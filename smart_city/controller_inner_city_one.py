@@ -43,9 +43,9 @@ class ControllerInnerCityOne(ControllerBase):
                           empty_threshold=40, verbose=False)
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
-        p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor("Rathaus P7", VL53L0X, multiplexer=self.mux1, channel=7),
+        p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor("Rathaus P7", VL53L0X, multiplexer=self.mux2, channel=7),
                           empty_threshold=50, verbose=False)
-        p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor("Rathaus P8", VL53L0X, multiplexer=self.mux1, channel=1),
+        p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor("Rathaus P8", VL53L0X, multiplexer=self.mux2, channel=1),
                           empty_threshold=50, verbose=False)
 
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
