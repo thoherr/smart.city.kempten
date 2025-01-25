@@ -4,7 +4,7 @@ from util.actor import Actor
 
 
 class TrafficCount(Actor):
-    def __init__(self, actor_id: str, gpio_pin, interval=0.2, verbose=False):
+    def __init__(self, actor_id: str, gpio_pin, interval=0.05, verbose=False):
         super().__init__(actor_id, interval, verbose)
         self._counter: int = 0
         self._gpio_pin = gpio_pin
