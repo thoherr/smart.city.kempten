@@ -3,6 +3,7 @@
 # adapted from https://github.com/peterhinch/micropython-async/blob/master/v3/docs/TUTORIAL.md#224-a-typical-firmware-app
 
 import asyncio
+import rp2
 
 def set_global_exception():
     def handle_exception(_self, context):
@@ -21,7 +22,8 @@ async def main():
     await asyncio.gather(tasks, controller.run_forever())
 
 
-try:
-    asyncio.run(main())
-finally:
-    asyncio.new_event_loop()  # Clear retained state
+if rp2.bootsel_button() == 0:
+    try:
+        asyncio.run(main())
+    finally:
+        asyncio.new_event_loop()  # Clear retained state
