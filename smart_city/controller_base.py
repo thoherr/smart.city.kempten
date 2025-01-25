@@ -25,14 +25,14 @@ class ControllerBase(object):
         if len(self.i2c0_devices) == 0:
             print('Kein I2C-Gerät an I2C 0 gefunden!')
         else:
-            print('I2C-Geräte gefunden:', len(i2c1_devices))
+            print('I2C-Geräte gefunden:', len(self.i2c1_devices))
             for i2c_dev in self.i2c0_devices:
                 print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
         if len(self.i2c1_devices) == 0:
             print('Kein I2C-Gerät an I2C 1 gefunden!')
         else:
-            print('I2C-Geräte gefunden:', len(i2c1_devices))
+            print('I2C-Geräte gefunden:', len(self.i2c1_devices))
             for i2c_dev in self.i2c1_devices:
                 print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
