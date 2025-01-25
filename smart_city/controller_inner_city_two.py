@@ -42,9 +42,9 @@ class ControllerInnerCityTwo(ControllerBase):
         self.actors.append(out_traffic)
 
         if 0x3C in self.i2c0_devices:
-            self.init_traffic_count_panel(self.i2c0, [in_traffic, out_traffic])
+            self.init_traffic_count_panel(self.i2c0, [out_traffic, in_traffic])
         if 0x3C in self.i2c1_devices:
-            self.init_traffic_count_panel(self.i2c1, [in_traffic, out_traffic])
+            self.init_traffic_count_panel(self.i2c1, [out_traffic, in_traffic])
 
     def init_traffic_count_panel(self, i2c, traffic_counters):
         traffic_count_panel = TrafficCountPanel("traffic", i2c, traffic_counters, verbose=True)
