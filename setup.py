@@ -18,4 +18,4 @@ elif setup_controller_number.controller_number == 3:
 else:
     raise ValueError('controller_number must be 1, 2 or 3')
 
-controller = SmartCityController(debug=True)
+controller = SmartCityController()

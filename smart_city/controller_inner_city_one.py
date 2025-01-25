@@ -26,27 +26,27 @@ class ControllerInnerCityOne(ControllerBase):
         self.actors = []
 
         self.actors.append(Heartbeat(verbose=True))
-        self.actors.append(Housekeeper(verbose=False))
+        self.actors.append(Housekeeper(verbose=True))
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Rathaus 1", MultiplexedI2cSensor("Rathaus P1", VL53L0X, multiplexer=self.mux1, channel=5),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=40, verbose=True)
         p2 = ParkingSpace("Rathaus 2", MultiplexedI2cSensor("Rathaus P2", VL53L0X, multiplexer=self.mux1, channel=4),
-                          empty_threshold=100, verbose=False)
+                          empty_threshold=50, verbose=True)
         p3 = ParkingSpace("Rathaus 3", MultiplexedI2cSensor("Rathaus P3", VL53L0X, multiplexer=self.mux1, channel=3),
-                          empty_threshold=65, verbose=False)
+                          empty_threshold=50, verbose=True)
         p4 = ParkingSpace("Rathaus 4", MultiplexedI2cSensor("Rathaus P4", VL53L0X, multiplexer=self.mux1, channel=2),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=60, verbose=True)
         p5 = ParkingSpace("Rathaus 5", MultiplexedI2cSensor("Rathaus P5", VL53L0X, multiplexer=self.mux1, channel=1),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=100, verbose=True)
         p6 = ParkingSpace("Rathaus 6", MultiplexedI2cSensor("Rathaus P6", VL53L0X, multiplexer=self.mux1, channel=0),
-                          empty_threshold=40, verbose=False)
+                          empty_threshold=50, verbose=True)
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
         p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor("Rathaus P7", VL53L0X, multiplexer=self.mux2, channel=7),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=65, verbose=True)
         p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor("Rathaus P8", VL53L0X, multiplexer=self.mux2, channel=1),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=50, verbose=True)
 
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
@@ -56,21 +56,16 @@ class ControllerInnerCityOne(ControllerBase):
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
 
-        w1 = WasteContainer("Rathaus 1", MultiplexedI2cSensor("Rathaus Müll 1", GY302, multiplexer=self.mux3, channel=0), verbose=True)
+        w1 = WasteContainer("Rathaus 1", MultiplexedI2cSensor("Rathaus Müll 1", GY302, multiplexer=self.mux3, channel=0))
         self.actors.append(w1)
-        w2 = WasteContainer("Rathaus 2", MultiplexedI2cSensor("Rathaus Müll 2", GY302, multiplexer=self.mux3, channel=1), verbose=True)
+        w2 = WasteContainer("Rathaus 2", MultiplexedI2cSensor("Rathaus Müll 2", GY302, multiplexer=self.mux3, channel=1))
         self.actors.append(w2)
-        w3 = WasteContainer("Rathaus 3", MultiplexedI2cSensor("Rathaus Müll 3", GY302, multiplexer=self.mux3, channel=2), verbose=True)
+        w3 = WasteContainer("Rathaus 3", MultiplexedI2cSensor("Rathaus Müll 3", GY302, multiplexer=self.mux3, channel=2))
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
 
     def print_debug_log(self):
-        number_of_empty_spaces = self.parking.number_of_empty_spaces()
-        number_of_spaces = self.parking.number_of_spaces()
-        parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
-        print(parking_lots)
-        for waste in self.waste:
-            print("Waste {:s} {:s}".format(waste.actor_id, "full" if waste.full() else "OK"))
+        pass
 
     async def create_tasks(self):
         print("create_tasks()")
