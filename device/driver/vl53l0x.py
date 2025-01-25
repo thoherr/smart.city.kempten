@@ -182,6 +182,7 @@ class VL53L0X:
             (0xff, 0x01),
             (0x00, 0x00),
         )
+        # noinspection PyAttributeOutsideInit
         self._stop_variable = self._register(0x91)
         self._config(
             (0x00, 0x01),

@@ -1,4 +1,4 @@
-Theses display drivers and utilities are from
+These display drivers and utilities are from
 
 - https://github.com/peterhinch/micropython-nano-gui
   - sh1106

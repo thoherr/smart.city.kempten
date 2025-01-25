@@ -1,5 +1,4 @@
 # Sensor for the light level (in lux)
-from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from util.actor import Actor
 
 

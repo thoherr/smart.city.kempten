@@ -1,4 +1,3 @@
-import asyncio
 import gc
 
 from util import memory_usage

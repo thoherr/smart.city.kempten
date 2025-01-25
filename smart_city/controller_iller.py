@@ -45,9 +45,6 @@ class ControllerIller(ControllerBase):
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, verbose=False)
-        self.actors.append(self.parking_panel_large)
-
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
 
         w1 = WasteContainer("Illerufer 1", MultiplexedI2cSensor("Illerufer Müll 1", GY302, multiplexer=self.mux3, channel=0), verbose=True)
@@ -57,6 +54,10 @@ class ControllerIller(ControllerBase):
         w3 = WasteContainer("Illerufer 3", MultiplexedI2cSensor("Illerufer Müll 3", GY302, multiplexer=self.mux3, channel=2), verbose=True)
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
+
+        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
+        self.actors.append(self.parking_panel_large)
+
 
     def print_debug_log(self):
         number_of_empty_spaces = self.parking.number_of_empty_spaces()

@@ -1,5 +1,4 @@
 # Sensor for a (single) parking space, using a distance driver
-from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from util.actor import Actor
 
 
