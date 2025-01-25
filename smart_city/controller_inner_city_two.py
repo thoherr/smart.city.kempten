@@ -4,6 +4,10 @@
 
 import asyncio
 
+from machine import Pin
+
+from domain.traffic.count import TrafficCount
+from report.traffic_count_panel import TrafficCountPanel
 from smart_city.controller_base import ControllerBase
 from domain.traffic.light.column import Column as TrafficLightColumn
 from domain.traffic.light.crossing import Crossing as TrafficLightCrossing
@@ -32,6 +36,19 @@ class ControllerInnerCityTwo(ControllerBase):
 
         self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4]))
 
+        in_traffic = TrafficCount("Rathaus einwärts", Pin(27, Pin.IN))
+        self.actors.append(in_traffic)
+        out_traffic = TrafficCount("Rathaus auswärts", Pin(26, Pin.IN))
+        self.actors.append(out_traffic)
+
+        if 0x3C in self.i2c0_devices:
+            self.init_traffic_count_panel(self.i2c0, [in_traffic, out_traffic])
+        if 0x3C in self.i2c1_devices:
+            self.init_traffic_count_panel(self.i2c1, [in_traffic, out_traffic])
+
+    def init_traffic_count_panel(self, i2c, traffic_counters):
+        traffic_count_panel = TrafficCountPanel("traffic", i2c, traffic_counters, verbose=True)
+        self.actors.append(traffic_count_panel)
 
     def print_debug_log(self):
         pass
