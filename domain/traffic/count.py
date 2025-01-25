@@ -4,14 +4,14 @@ from util.actor import Actor
 
 
 class TrafficCount(Actor):
-    def __init__(self, location: str, binary_sensor, interval=0.2, verbose=False):
-        super().__init__(location, interval, verbose)
+    def __init__(self, actor_id: str, gpio_pin, interval=0.2, verbose=False):
+        super().__init__(actor_id, interval, verbose)
         self._counter: int = 0
-        self._binary_sensor = binary_sensor
-        self._old_value = self._binary_sensor.value()
+        self._gpio_pin = gpio_pin
+        self._old_value = self._gpio_pin.value()
 
     async def work(self):
-        new_value = self._binary_sensor.value()
+        new_value = self._gpio_pin.value()
         if new_value != self._old_value:
             self._counter += (new_value == 1)  # only count rising value
             self._old_value = new_value
