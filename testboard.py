@@ -27,7 +27,6 @@ from device.driver.gy302 import GY302
 from device.driver.BME280 import BME280
 from device.driver.KY037 import KY037
 
-
 i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
 i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
 
@@ -49,7 +48,6 @@ else:
     for i2c_dev in i2c_devices:
         print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
-
 multiplexer = TCA9548A(i2c1)
 p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
 p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
@@ -58,9 +56,12 @@ parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 dashboard_upload_1 = DashboardUpload(p0.actor_id, "myDashboard", p0, verbose=True)
 dashboard_upload_2 = DashboardUpload(p4.actor_id, "myDashboard", p4, verbose=True)
 
-waste_container = WasteContainer("Müll 1", I2cSensor("Müll 1", GY302, i2c1))
+waste_sensor = I2cSensor("Müll", GY302, i2c1)
+waste_container_1 = WasteContainer("Müll 1", waste_sensor)
+waste_container_2 = WasteContainer("Müll 2", waste_sensor)
+waste_container_3 = WasteContainer("Müll 3", waste_sensor)
 light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
-weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7))
+weather_sensor = Weather("Innenstadt", MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7))
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
@@ -68,19 +69,27 @@ traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
 
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
-parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=True)
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, [waste_container_1, waste_container_2, waste_container_3],
+                                             verbose=True)
+
 
 async def main_loop():
     print("----- main_loop starting")
     while True:
-        waste_status = "Waste {:s} {:s}".format(waste_container.actor_id, "full" if waste_container.full() else "OK")
+        waste_status = "{:s} {:s}, {:s} {:s}, {:s} {:s}".format(waste_container_1.actor_id,
+                                                                "full" if waste_container_1.full() else "OK",
+                                                                waste_container_2.actor_id,
+                                                                "full" if waste_container_2.full() else "OK",
+                                                                waste_container_3.actor_id,
+                                                                "full" if waste_container_3.full() else "OK")
         multiplexer.switch_to_channel(0)
         traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.value())
         number_of_empty_spaces = parking.number_of_empty_spaces()
         number_of_spaces = parking.number_of_spaces()
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
 
-        weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
+        weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(
+            weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
         light = "Light at {:s} is {:.2f}".format(light_sensor.actor_id, light_sensor.light())
         noise = "Noise at {:s} is {}".format(noise_sensor.location, noise_sensor.noise())
 
@@ -93,13 +102,16 @@ async def main_loop():
 
         await asyncio.sleep(0.5)
 
+
 async def main():
     print("##### main starting")
     await asyncio.gather(asyncio.create_task(ky037.read()),
                          asyncio.create_task(main_loop()),
                          asyncio.create_task(traffic.run()),
                          asyncio.create_task(parking.run()),
-                         asyncio.create_task(waste_container.run()),
+                         asyncio.create_task(waste_container_1.run()),
+                         asyncio.create_task(waste_container_2.run()),
+                         asyncio.create_task(waste_container_3.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(traffic_count_panel.run()),
@@ -107,6 +119,7 @@ async def main():
                          asyncio.create_task(dashboard_upload_2.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
+
 
 print("##### Testboard starting")
 asyncio.run(main())

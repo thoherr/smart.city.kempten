@@ -51,9 +51,6 @@ class ControllerInnerCityOne(ControllerBase):
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, verbose=False)
-        self.actors.append(self.parking_panel_large)
-
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
 
         w1 = WasteContainer("Rathaus 1", MultiplexedI2cSensor("Rathaus Müll 1", GY302, multiplexer=self.mux3, channel=0))
@@ -63,6 +60,9 @@ class ControllerInnerCityOne(ControllerBase):
         w3 = WasteContainer("Rathaus 3", MultiplexedI2cSensor("Rathaus Müll 3", GY302, multiplexer=self.mux3, channel=2))
         self.actors.append(w3)
         self.waste = [w1, w2, w3]
+
+        self.parking_and_waste_infopanel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
+        self.actors.append(self.parking_and_waste_infopanel)
 
     def print_debug_log(self):
         pass
