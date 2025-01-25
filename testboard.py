@@ -5,7 +5,8 @@ import micropython
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from report.dashboard_upload import DashboardUpload
-from report.parking_area_panel import ParkingAreaPanelSH1106, ParkingAreaPanelSSD1306
+from report.parking_area_panel import ParkingAreaPanelSH1106
+from report.traffic_count_panel import TrafficCountPanel
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 from domain.environment.light import Light
@@ -63,18 +64,18 @@ weather_sensor = Weather("Innenstadt",  MultiplexedI2cSensor("Weather", BME280, 
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
-parking_panel_small = ParkingAreaPanelSSD1306(i2c1, parking, verbose=True)
-parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=True)
-
 traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
+
+traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, verbose=True)
 
 async def main_loop():
     print("----- main_loop starting")
     while True:
         waste_status = "Waste {:s} {:s}".format(waste_container.actor_id, "full" if waste_container.full() else "OK")
         multiplexer.switch_to_channel(0)
-        traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.get_count())
+        traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.value())
         number_of_empty_spaces = parking.number_of_empty_spaces()
         number_of_spaces = parking.number_of_spaces()
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
@@ -101,7 +102,7 @@ async def main():
                          asyncio.create_task(waste_container.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
-                         asyncio.create_task(parking_panel_small.run()),
+                         asyncio.create_task(traffic_count_panel.run()),
                          asyncio.create_task(dashboard_upload_1.run()),
                          asyncio.create_task(dashboard_upload_2.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),

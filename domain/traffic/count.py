@@ -16,5 +16,5 @@ class TrafficCount(Actor):
             self._counter += (new_value == 1)  # only count rising value
             self._old_value = new_value
 
-    def get_count(self):
+    def value(self):
         return self._counter
