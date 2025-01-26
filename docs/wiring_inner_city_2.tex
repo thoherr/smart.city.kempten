@@ -9,6 +9,16 @@
  \ctikzset{multipoles/external pins thickness=2}
 
 \ctikzset{multipoles/dipchip/width=3}
+ \draw (5,6.25) node[dipchip,
+ num pins=4,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4](display){Display};
+ \draw [color=red] (display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
+ \draw [color=black] (display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
+ \node [left, font=\tiny] at (display.pin 4) {SDA};
+ \node [left, font=\tiny] at (display.pin 3) {SCL};
 
 \draw (12,1) node[dipchip,
  num pins=40,
@@ -25,18 +35,21 @@
 \node [right, font=\tiny] at (P.pin 2) {I2C0 SCL};
 \node [right, font=\tiny] at (P.pin 4) {I2C1 SDA};
 \node [right, font=\tiny] at (P.pin 5) {I2C1 SCL};
-\node [right, font=\tiny] at (P.pin 12) {GP9 (red)};
+\node [right, font=\tiny] at (P.pin 12) {GP9};
 \node [right, font=\tiny] at (P.pin 13) {GND};
-\node [right, font=\tiny] at (P.pin 14) {GP10 (yellow)};
-\node [right, font=\tiny] at (P.pin 15) {GP11 (green)};
-\node [right, font=\tiny] at (P.pin 16) {GP12 (green)};
-\node [right, font=\tiny] at (P.pin 17) {GP13 (yellow)};
+\node [right, font=\tiny] at (P.pin 14) {GP10};
+\node [right, font=\tiny] at (P.pin 15) {GP11};
+\node [right, font=\tiny] at (P.pin 16) {GP12};
+\node [right, font=\tiny] at (P.pin 17) {GP13};
 \node [right, font=\tiny] at (P.pin 18) {GND};
-\node [right, font=\tiny] at (P.pin 19) {GP14 (red)};
+\node [right, font=\tiny] at (P.pin 19) {GP14};
 
-\node [left, font=\tiny] at (P.pin 39) {VSYS};
-\node [left, font=\tiny] at (P.pin 38) {GND};
+\node [left, font=\tiny] at (P.pin 31) {GP26};
+\node [left, font=\tiny] at (P.pin 32) {GP27};
+
 \node [left, font=\tiny] at (P.pin 36) {3V3};
+\node [left, font=\tiny] at (P.pin 38) {GND};
+\node [left, font=\tiny] at (P.pin 39) {VSYS};
 \node [left, font=\tiny] at (P.pin 40) {VBUS};
 
 \foreach \column in {1,...,4} {
@@ -77,6 +90,33 @@
     \draw (-3.25+\column*2.5,-7-\light*1.5) to[empty led] (-2.75+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
     }
 }
+
+\draw [color=orange] (display.pin 4) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
+\draw [color=blue] (display.pin 3) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
+
+\newcommand\hallsensor[3]{
+ \ctikzset{multipoles/dipchip/width=0.8}
+ \draw (#1,#2) node[dipchip,
+ num pins=4,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4,
+ rotate=90](#3){$#3$};
+ \node [below, font=\tiny] at (#3.pin 4) {D};
+ \node [below, font=\tiny] at (#3.pin 3) {A};
+ %\node [above, font=\tiny] at (#3.pin 2) {GND};
+ %\node [above, font=\tiny] at (#3.pin 1) {VCC};
+}
+
+
+\foreach \x in {1,...,2} {
+ \hallsensor{20-\x*1.5}{0}{TC_\x}
+ }
+
+
+\draw [color=blue] (TC_1.pin 4) |-  (P.pin 32){};
+\draw [color=blue] (TC_2.pin 4) |- (P.pin 31){};
 
 \end{circuitikz}
 
