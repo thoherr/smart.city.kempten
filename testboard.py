@@ -16,6 +16,8 @@ from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.traffic.count import TrafficCount
 from domain.waste.container import WasteContainer
+from util.mqtt import connect_mqtt
+from util.wlan import initialize_wlan
 
 micropython.alloc_emergency_exception_buf(100)
 
@@ -53,9 +55,6 @@ p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
 p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
 parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 
-dashboard_upload_1 = DashboardUpload(p0.actor_id, "myDashboard", p0, verbose=True)
-dashboard_upload_2 = DashboardUpload(p4.actor_id, "myDashboard", p4, verbose=True)
-
 waste_sensor = I2cSensor("Müll", GY302, i2c1)
 waste_container_1 = WasteContainer("Müll 1", waste_sensor)
 waste_container_2 = WasteContainer("Müll 2", waste_sensor)
@@ -72,6 +71,13 @@ traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], ver
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, [waste_container_1, waste_container_2, waste_container_3],
                                              verbose=True)
 
+import setup_wlan_config as wlan_config
+
+if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
+    print("##### WLAN setup complete")
+
+mqtt_client = connect_mqtt()
+traffic_count_upload = DashboardUpload("traffic/cityhall", mqtt_client, traffic)
 
 async def main_loop():
     print("----- main_loop starting")
@@ -115,8 +121,7 @@ async def main():
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(traffic_count_panel.run()),
-                         asyncio.create_task(dashboard_upload_1.run()),
-                         asyncio.create_task(dashboard_upload_2.run()),
+                         asyncio.create_task(traffic_count_upload.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 

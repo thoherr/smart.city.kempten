@@ -21,5 +21,5 @@ class DashboardUpload(Actor):
         if self._verbose:
             self.log("Uploading dashboard data for sensor %s" % self._sensor)
         topic = self.actor_id
-        msg = json.dumps({"self._current_value": self._current_value})
+        msg = json.dumps({"value": self._current_value})
         self._value_published = self._mqtt_client.publish(topic, msg, retain=False, qos=0)
