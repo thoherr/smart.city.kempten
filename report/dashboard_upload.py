@@ -9,11 +9,10 @@ class DashboardUpload(Actor):
         self._mqtt_client = mqtt_client
         self._sensor = sensor
         self._current_value = None
-        self._value_published = False
 
     async def work(self):
         new_value = self._sensor.value()
-        if new_value != self._current_value or not self._value_published:
+        if new_value != self._current_value:
             self._current_value = new_value
             self.publish_value()
 
@@ -22,4 +21,4 @@ class DashboardUpload(Actor):
             self.log("Uploading dashboard data for sensor %s" % self._sensor)
         topic = self.actor_id
         msg = json.dumps({"value": self._current_value})
-        self._value_published = self._mqtt_client.publish(topic, msg, retain=False, qos=0)
+        self._mqtt_client.publish(topic, msg, retain=False, qos=0)
