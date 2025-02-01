@@ -9,20 +9,20 @@ class Actor:
         self._verbose = verbose
         self._debug = debug
         if self._verbose:
-            self.log('actor id {} initialized'.format(self.actor_id))
+            self.log(f"actor id {self.actor_id} initialized")
 
     async def run(self):
         while True:
             if self._debug:
-                self.log('actor id: {} calling work()'.format(self.actor_id))
+                self.log(f"actor id: {self.actor_id} calling work()")
             await self.work()
             await asyncio.sleep(self._interval)
 
     async def work(self):
         if self._verbose:
-            self.log("base class work() called from actor {}".format(self.actor_id))
+            self.log(f"base class work() called from actor {self.actor_id}")
 
     def log(self, content):
         now = time.gmtime()
-        print("{:4d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d} - {:s} - {:s}".format(now[0], now[1], now[2], now[3], now[4],
-                                                                              now[5], self.actor_id, content))
+        print(f"{now[0]:4d}-{now[1]:02d}-{now[2]:02d} {now[3]:02d}:{now[4]:02d}:{now[5]:02d} -"
+              f" {self.actor_id:s} - {content:s}")
