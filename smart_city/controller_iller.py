@@ -30,17 +30,17 @@ class ControllerIller(ControllerBase):
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Illerufer 1", MultiplexedI2cSensor("Illerufer P1", VL53L0X, multiplexer=self.mux1, channel=5),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=110, verbose=True)
         p2 = ParkingSpace("Illerufer 2", MultiplexedI2cSensor("Illerufer P2", VL53L0X, multiplexer=self.mux1, channel=4),
-                          empty_threshold=100, verbose=False)
+                          empty_threshold=50, verbose=True)
         p3 = ParkingSpace("Illerufer 3", MultiplexedI2cSensor("Illerufer P3", VL53L0X, multiplexer=self.mux1, channel=3),
-                          empty_threshold=65, verbose=False)
+                          empty_threshold=68, verbose=True)
         p4 = ParkingSpace("Illerufer 4", MultiplexedI2cSensor("Illerufer P4", VL53L0X, multiplexer=self.mux1, channel=2),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=55, verbose=True)
         p5 = ParkingSpace("Illerufer 5", MultiplexedI2cSensor("Illerufer P5", VL53L0X, multiplexer=self.mux1, channel=1),
-                          empty_threshold=50, verbose=False)
+                          empty_threshold=50, verbose=True)
         p6 = ParkingSpace("Illerufer 6", MultiplexedI2cSensor("Illerufer P6", VL53L0X, multiplexer=self.mux1, channel=0),
-                          empty_threshold=40, verbose=False)
+                          empty_threshold=60, verbose=True)
 
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
