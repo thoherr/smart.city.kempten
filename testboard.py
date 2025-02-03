@@ -60,7 +60,8 @@ waste_container_1 = WasteContainer("Müll 1", waste_sensor)
 waste_container_2 = WasteContainer("Müll 2", waste_sensor)
 waste_container_3 = WasteContainer("Müll 3", waste_sensor)
 light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
-weather_sensor = Weather("Innenstadt", MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7))
+weather_sensor = Weather("Innenstadt",
+                         MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7), interval=5)
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
@@ -68,7 +69,8 @@ traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
 
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
-parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, [waste_container_1, waste_container_2, waste_container_3],
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking,
+                                             [waste_container_1, waste_container_2, waste_container_3],
                                              verbose=True)
 
 import setup_wlan_config as wlan_config
@@ -77,7 +79,14 @@ if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
     print("##### WLAN setup complete")
 
 mqtt_client = connect_mqtt()
-traffic_count_upload = DashboardUpload("traffic/cityhall", mqtt_client, traffic)
+traffic_count_upload = DashboardUpload("Upload traffic/cityhall", mqtt_client, "traffic/cityhall", traffic.value)
+temperature_upload = DashboardUpload("Upload weather/temperature", mqtt_client, "weather/temperature",
+                                     weather_sensor.temperature, interval=5)
+pressure_upload = DashboardUpload("Upload weather/pressure", mqtt_client, "weather/pressure",
+                                  weather_sensor.pressure, interval=5)
+humidity_upload = DashboardUpload("Upload weather/humidity", mqtt_client, "weather/humidity",
+                                  weather_sensor.humidity, interval=5)
+
 
 async def main_loop():
     print("----- main_loop starting")
@@ -95,7 +104,7 @@ async def main_loop():
         parking_lots = "{:1d} / {:1d}".format(number_of_empty_spaces, number_of_spaces)
 
         weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(
-            weather_sensor.location, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
+            weather_sensor.actor_id, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
         light = "Light at {:s} is {:.2f}".format(light_sensor.actor_id, light_sensor.light())
         noise = "Noise at {:s} is {}".format(noise_sensor.location, noise_sensor.noise())
 
@@ -122,6 +131,10 @@ async def main():
                          asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(traffic_count_panel.run()),
                          asyncio.create_task(traffic_count_upload.run()),
+                         asyncio.create_task(weather_sensor.run()),
+                         asyncio.create_task(temperature_upload.run()),
+                         asyncio.create_task(humidity_upload.run()),
+                         asyncio.create_task(pressure_upload.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 

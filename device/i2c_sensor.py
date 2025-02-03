@@ -6,6 +6,12 @@ class I2cSensor(Sensor):
         super().__init__(location)
         self._device = device_class(i2c=i2c)
 
+    def reset_channel(self):
+        pass
+
+    def ensure_channel(self):
+        pass
+
     def value(self):
         return self._device.value()
 
