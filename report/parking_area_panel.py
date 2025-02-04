@@ -7,6 +7,8 @@ import device.display.freesansbold40
 from device.display.sh1106 import SH1106_I2C
 from device.display.ssd1306 import SSD1306_I2C
 from device.display.writer import Writer
+from domain.parking.area import ParkingArea
+from domain.waste.area import WasteArea
 from util.actor import Actor
 
 
@@ -85,9 +87,9 @@ class ParkingAreaPanelSH1106(ParkingAreaPanel):
     graphics_cycles = 2
     waste_cycles = 2
 
-    def __init__(self, i2c, parking_area, waste_containers, interval=1, verbose=False):
+    def __init__(self, i2c, parking_area : ParkingArea, waste_area : WasteArea, interval=1, verbose=False):
         super().__init__(i2c, parking_area, interval, verbose)
-        self._waste_containers = waste_containers
+        self._waste_containers = waste_area.containers
 
         self._width = 128
         self._height = 64

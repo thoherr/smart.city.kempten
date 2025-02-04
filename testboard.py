@@ -71,9 +71,7 @@ traffic_pin = Pin(14, Pin.IN)
 traffic = TrafficCount("Rathausplatz", traffic_pin)
 
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
-parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking,
-                                             [waste_container_1, waste_container_2, waste_container_3],
-                                             verbose=True)
+parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, waste, verbose=True)
 
 import setup_wlan_config as wlan_config
 
@@ -94,7 +92,7 @@ pressure_upload = MqttUpload("weather/pressure", mqtt_client,
 humidity_upload = MqttUpload("weather/humidity", mqtt_client,
                              f"{mqtt_config.mqtt_topic_root}/weather/humidity",
                              weather_sensor.humidity, interval=5)
-waste_upload = MqttUpload("sck_waste_1", mqtt_client,
+waste_upload = MqttUpload("sck_smart_waste_1", mqtt_client,
                           f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_1",
                           waste.waste_status, interval=5)
 
@@ -136,9 +134,7 @@ async def main():
                          asyncio.create_task(main_loop()),
                          asyncio.create_task(traffic.run()),
                          asyncio.create_task(parking.run()),
-                         asyncio.create_task(waste_container_1.run()),
-                         asyncio.create_task(waste_container_2.run()),
-                         asyncio.create_task(waste_container_3.run()),
+                         asyncio.create_task(waste.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
                          asyncio.create_task(traffic_count_panel.run()),
