@@ -1,4 +1,5 @@
-from time import sleep
+from utime import sleep
+from ntptime import settime
 
 import network
 
@@ -25,4 +26,5 @@ def initialize_wlan(ssid, password, verbose=False):
             print('Connection successful!')
             network_info = wlan.ifconfig()
             print('IP address:', network_info[0])
+        settime()
         return True

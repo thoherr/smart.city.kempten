@@ -1,5 +1,5 @@
 import asyncio
-import time
+import utime
 
 
 class Actor:
@@ -23,6 +23,6 @@ class Actor:
             self.log(f"base class work() called from actor {self.actor_id}")
 
     def log(self, content):
-        now = time.gmtime()
+        now = utime.gmtime()
         print(f"{now[0]:4d}-{now[1]:02d}-{now[2]:02d} {now[3]:02d}:{now[4]:02d}:{now[5]:02d} -"
               f" {self.actor_id:s} - {content:s}")

@@ -4,7 +4,8 @@ import micropython
 
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
-from report.dashboard_upload import DashboardUpload
+from domain.waste.area import WasteArea
+from report.mqtt_upload import MqttUpload
 from report.parking_area_panel import ParkingAreaPanelSH1106
 from report.traffic_count_panel import TrafficCountPanel
 from util.heartbeat import Heartbeat
@@ -59,6 +60,7 @@ waste_sensor = I2cSensor("Müll", GY302, i2c1)
 waste_container_1 = WasteContainer("Müll 1", waste_sensor)
 waste_container_2 = WasteContainer("Müll 2", waste_sensor)
 waste_container_3 = WasteContainer("Müll 3", waste_sensor)
+waste = WasteArea("Müll", [waste_container_1, waste_container_2, waste_container_3])
 light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
 weather_sensor = Weather("Innenstadt",
                          MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7), interval=5)
@@ -78,25 +80,35 @@ import setup_wlan_config as wlan_config
 if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
     print("##### WLAN setup complete")
 
+import setup_mqtt_config as mqtt_config
+
 mqtt_client = connect_mqtt()
-traffic_count_upload = DashboardUpload("Upload traffic/cityhall", mqtt_client, "traffic/cityhall", traffic.value)
-temperature_upload = DashboardUpload("Upload weather/temperature", mqtt_client, "weather/temperature",
-                                     weather_sensor.temperature, interval=5)
-pressure_upload = DashboardUpload("Upload weather/pressure", mqtt_client, "weather/pressure",
-                                  weather_sensor.pressure, interval=5)
-humidity_upload = DashboardUpload("Upload weather/humidity", mqtt_client, "weather/humidity",
-                                  weather_sensor.humidity, interval=5)
+traffic_count_upload = MqttUpload("traffic/cityhall", mqtt_client,
+                                  f"{mqtt_config.mqtt_topic_root}/traffic/cityhall", traffic.value)
+temperature_upload = MqttUpload("weather/temperature", mqtt_client,
+                                f"{mqtt_config.mqtt_topic_root}/weather/temperature",
+                                weather_sensor.temperature, interval=5)
+pressure_upload = MqttUpload("weather/pressure", mqtt_client,
+                             f"{mqtt_config.mqtt_topic_root}/weather/pressure",
+                             weather_sensor.pressure, interval=5)
+humidity_upload = MqttUpload("weather/humidity", mqtt_client,
+                             f"{mqtt_config.mqtt_topic_root}/weather/humidity",
+                             weather_sensor.humidity, interval=5)
+waste_upload = MqttUpload("sck_waste_1", mqtt_client,
+                          f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_1",
+                          waste.waste_status, interval=5)
 
 
 async def main_loop():
     print("----- main_loop starting")
     while True:
-        waste_status = "{:s} {:s}, {:s} {:s}, {:s} {:s}".format(waste_container_1.actor_id,
-                                                                "full" if waste_container_1.full() else "OK",
-                                                                waste_container_2.actor_id,
-                                                                "full" if waste_container_2.full() else "OK",
-                                                                waste_container_3.actor_id,
-                                                                "full" if waste_container_3.full() else "OK")
+#        waste_status = "{:s} {:s}, {:s} {:s}, {:s} {:s}".format(waste_container_1.actor_id,
+#                                                                "full" if waste_container_1.full() else "OK",
+#                                                                waste_container_2.actor_id,
+#                                                                "full" if waste_container_2.full() else "OK",
+#                                                                waste_container_3.actor_id,
+#                                                                "full" if waste_container_3.full() else "OK")
+        waste_status = f"{waste.waste_status()}"
         multiplexer.switch_to_channel(0)
         traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.value())
         number_of_empty_spaces = parking.number_of_empty_spaces()
@@ -135,6 +147,7 @@ async def main():
                          asyncio.create_task(temperature_upload.run()),
                          asyncio.create_task(humidity_upload.run()),
                          asyncio.create_task(pressure_upload.run()),
+                         asyncio.create_task(waste_upload.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
 

@@ -9,7 +9,7 @@ def connect_mqtt():
                             user=mqtt_config.mqtt_username,
                             password=mqtt_config.mqtt_password,
                             keepalive=7200,
-                            ssl=False)
+                            ssl=mqtt_config.mqtt_ssl)
         client.connect()
         return client
     except Exception as e:
