@@ -30,6 +30,15 @@ from device.driver.gy302 import GY302
 from device.driver.BME280 import BME280
 from device.driver.KY037 import KY037
 
+import setup_wlan_config as wlan_config
+import setup_mqtt_config as mqtt_config
+print("##### WLAN and MQTT setup")
+if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
+    print("##### WLAN setup complete")
+mqtt_client = connect_mqtt()
+if mqtt_client:
+    print("##### MQTT setup complete")
+
 i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
 i2c1 = I2C(1, sda=Pin(2), scl=Pin(3))
 
@@ -73,14 +82,6 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, waste, verbose=True)
 
-import setup_wlan_config as wlan_config
-
-if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
-    print("##### WLAN setup complete")
-
-import setup_mqtt_config as mqtt_config
-
-mqtt_client = connect_mqtt()
 traffic_count_upload = MqttUpload("traffic/cityhall", mqtt_client,
                                   f"{mqtt_config.mqtt_topic_root}/traffic/cityhall", traffic.value)
 temperature_upload = MqttUpload("weather/temperature", mqtt_client,
