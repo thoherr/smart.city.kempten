@@ -5,10 +5,10 @@
 from machine import Pin
 
 from domain.traffic.count import TrafficCount
-from report.traffic_count_panel import TrafficCountPanel
-from smart_city.controller_base import ControllerBase
 from domain.traffic.light.column import Column as TrafficLightColumn
 from domain.traffic.light.crossing import Crossing as TrafficLightCrossing
+from report.traffic_count_panel import TrafficCountPanel
+from smart_city.controller_base import ControllerBase
 
 
 class ControllerInnerCityTwo(ControllerBase):

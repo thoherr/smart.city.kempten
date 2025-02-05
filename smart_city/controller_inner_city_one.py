@@ -2,22 +2,21 @@
 # It implements the first controller at Innenstadt, around the Rathaus, with a Parking Area (including display)
 # and three waste containers
 
-from report.mqtt_upload import MqttUpload
-from util.mqtt import connect_mqtt
-from util.wlan import initialize_wlan
-import setup_wlan_config as wlan_config
 import setup_mqtt_config as mqtt_config
-
-from device.driver.tca9548a import TCA9548A
+import setup_wlan_config as wlan_config
 from device.driver.gy302 import GY302
+from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
+from report.mqtt_upload import MqttUpload
 from report.parking_area_panel import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
+from util.mqtt import connect_mqtt
+from util.wlan import initialize_wlan
 
 
 class ControllerInnerCityOne(ControllerBase):

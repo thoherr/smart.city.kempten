@@ -2,8 +2,8 @@
 # It implements the Illerufer (second base plate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
 
-from device.driver.tca9548a import TCA9548A
 from device.driver.gy302 import GY302
+from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from domain.parking.area import ParkingArea
