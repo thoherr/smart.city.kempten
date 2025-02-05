@@ -2,10 +2,12 @@
 Testing graphics on TFT display with ST7735 controller connected to Raspberry Pi Pico
 '''
 
+import time
+
+from machine import SPI, Pin
+
 from device.display.st7735 import TFT
 from device.display.st7735 import petme128font, seriffont, sysfont, terminalfont
-from machine import SPI, Pin
-import time
 
 
 def tftprinttest(fonts, il):

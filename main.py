@@ -3,7 +3,9 @@
 # adapted from https://github.com/peterhinch/micropython-async/blob/master/v3/docs/TUTORIAL.md#224-a-typical-firmware-app
 
 import asyncio
+
 import rp2
+
 
 def set_global_exception():
     def handle_exception(_self, context):

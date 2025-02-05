@@ -1,5 +1,6 @@
-import micropython
 import asyncio
+
+import micropython
 
 micropython.alloc_emergency_exception_buf(100)
 
@@ -17,6 +18,7 @@ l2 = TrafficLightColumn(14, 13, 12, 0)
 
 crossing = TrafficLightCrossing("Testcrossing", [l1, l2])
 
+
 async def main_loop():
     print("----- main_loop starting")
     i = 0
@@ -31,11 +33,13 @@ async def main_loop():
             crossing.turn_on()
             i = 0
 
+
 async def main():
     print("##### main starting")
     await asyncio.gather(asyncio.create_task(crossing.run()),
                          asyncio.create_task(Heartbeat(verbose=True).run()),
                          asyncio.create_task(Housekeeper(verbose=True).run()))
+
 
 print("##### Testlight starting")
 asyncio.run(main())

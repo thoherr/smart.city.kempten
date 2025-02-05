@@ -4,19 +4,19 @@ import micropython
 
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
-from domain.waste.area import WasteArea
-from report.mqtt_upload import MqttUpload
-from report.parking_area_panel import ParkingAreaPanelSH1106
-from report.traffic_count_panel import TrafficCountPanel
-from util.heartbeat import Heartbeat
-from util.housekeeper import Housekeeper
 from domain.environment.light import Light
 from domain.environment.noise import Noise
 from domain.environment.weather import Weather
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.traffic.count import TrafficCount
+from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
+from report.mqtt_upload import MqttUpload
+from report.parking_area_panel import ParkingAreaPanelSH1106
+from report.traffic_count_panel import TrafficCountPanel
+from util.heartbeat import Heartbeat
+from util.housekeeper import Housekeeper
 from util.mqtt import connect_mqtt
 from util.wlan import initialize_wlan
 
@@ -32,6 +32,7 @@ from device.driver.KY037 import KY037
 
 import setup_wlan_config as wlan_config
 import setup_mqtt_config as mqtt_config
+
 print("##### WLAN and MQTT setup")
 if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
     print("##### WLAN setup complete")
@@ -101,12 +102,12 @@ waste_upload = MqttUpload("sck_smart_waste_1", mqtt_client,
 async def main_loop():
     print("----- main_loop starting")
     while True:
-#        waste_status = "{:s} {:s}, {:s} {:s}, {:s} {:s}".format(waste_container_1.actor_id,
-#                                                                "full" if waste_container_1.full() else "OK",
-#                                                                waste_container_2.actor_id,
-#                                                                "full" if waste_container_2.full() else "OK",
-#                                                                waste_container_3.actor_id,
-#                                                                "full" if waste_container_3.full() else "OK")
+        #        waste_status = "{:s} {:s}, {:s} {:s}, {:s} {:s}".format(waste_container_1.actor_id,
+        #                                                                "full" if waste_container_1.full() else "OK",
+        #                                                                waste_container_2.actor_id,
+        #                                                                "full" if waste_container_2.full() else "OK",
+        #                                                                waste_container_3.actor_id,
+        #                                                                "full" if waste_container_3.full() else "OK")
         waste_status = f"{waste.waste_status()}"
         multiplexer.switch_to_channel(0)
         traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.value())
