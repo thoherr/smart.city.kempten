@@ -2,8 +2,6 @@
 # It implements the first controller at Innenstadt, around the Rathaus, with a Parking Area (including display)
 # and three waste containers
 
-import asyncio
-
 from report.mqtt_upload import MqttUpload
 from util.mqtt import connect_mqtt
 from util.wlan import initialize_wlan
@@ -20,8 +18,6 @@ from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.parking_area_panel import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
-from util.heartbeat import Heartbeat
-from util.housekeeper import Housekeeper
 
 
 class ControllerInnerCityOne(ControllerBase):
@@ -29,11 +25,6 @@ class ControllerInnerCityOne(ControllerBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._location = "Innenstadt"
-
-        self.actors = []
-
-        self.actors.append(Heartbeat(verbose=True))
-        self.actors.append(Housekeeper(verbose=True))
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Rathaus 1", MultiplexedI2cSensor("Rathaus P1", VL53L0X, multiplexer=self.mux1, channel=5),
@@ -83,12 +74,3 @@ class ControllerInnerCityOne(ControllerBase):
                                        self.waste.waste_status, interval=5)
 
         self.actors.append(self.waste_upload)
-
-    def print_debug_log(self):
-        pass
-
-    async def create_tasks(self):
-        print("create_tasks()")
-        tasks = []
-        for actor in self.actors:
-            tasks.append(asyncio.create_task(actor.run()))
