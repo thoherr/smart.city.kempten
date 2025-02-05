@@ -28,6 +28,6 @@ class TrafficCountPanel(Actor):
         self._writer.printstring("<-- {:d}".format(west))
         east_text = "{:d} -->".format(east)
         self._writer.set_textpos(self._screen, 12,
-                                           self._width - self._writer.stringlen(east_text))
+                                 self._width - self._writer.stringlen(east_text))
         self._writer.printstring(east_text)
         self._screen.show()

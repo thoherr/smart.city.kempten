@@ -1,7 +1,7 @@
 from array import array
 
-import device.display.font6
 import device.display.font10
+import device.display.font6
 import device.display.freesans20
 import device.display.freesansbold40
 from device.display.sh1106 import SH1106_I2C
@@ -87,7 +87,7 @@ class ParkingAreaPanelSH1106(ParkingAreaPanel):
     graphics_cycles = 2
     waste_cycles = 2
 
-    def __init__(self, i2c, parking_area : ParkingArea, waste_area : WasteArea, interval=1, verbose=False):
+    def __init__(self, i2c, parking_area: ParkingArea, waste_area: WasteArea, interval=1, verbose=False):
         super().__init__(i2c, parking_area, interval, verbose)
         self._waste_containers = waste_area.containers
 

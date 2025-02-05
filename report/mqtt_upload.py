@@ -1,11 +1,13 @@
 import json
+
 import utime
 
-from util.actor import Actor
 from report.umqtt.robust import MQTTClient
+from util.actor import Actor
+
 
 class MqttUpload(Actor):
-    def __init__(self, actor_id, mqtt_client : MQTTClient, topic, value_method, interval=2, verbose=False):
+    def __init__(self, actor_id, mqtt_client: MQTTClient, topic, value_method, interval=2, verbose=False):
         super().__init__(actor_id, interval=interval, verbose=verbose)
         self._mqtt_client = mqtt_client
         self._topic = topic
