@@ -1,7 +1,6 @@
-from utime import sleep
-from ntptime import settime
-
 import network
+from ntptime import settime
+from utime import sleep
 
 
 def initialize_wlan(ssid, password, verbose=False):
