@@ -72,11 +72,11 @@
 # display.text('Testing 1', 0, 0, 1)
 # display.show()
 
-from micropython import const
-import utime as time
 import framebuf
-from device.display.boolpalette import BoolPalette
+import utime as time
+from micropython import const
 
+from device.display.boolpalette import BoolPalette
 
 # a few register definitions
 _SET_CONTRAST = const(0x81)
@@ -87,6 +87,7 @@ _SET_SEG_REMAP = const(0xA0)
 _LOW_COLUMN_ADDRESS = const(0x00)
 _HIGH_COLUMN_ADDRESS = const(0x10)
 _SET_PAGE_ADDRESS = const(0xB0)
+
 
 # Subclassing FrameBuffer provides support for graphics primitives
 # http://docs.micropython.org/en/latest/pyboard/library/framebuf.html
@@ -178,7 +179,7 @@ class SH1106(framebuf.FrameBuffer):
                 self.write_cmd(_SET_PAGE_ADDRESS | page)
                 self.write_cmd(_LOW_COLUMN_ADDRESS | 2)
                 self.write_cmd(_HIGH_COLUMN_ADDRESS | 0)
-                self.write_data(db[(w * page) : (w * page + w)])
+                self.write_data(db[(w * page): (w * page + w)])
         self.pages_to_update = 0
 
     def pixel(self, x, y, color=None):
@@ -250,15 +251,15 @@ class SH1106(framebuf.FrameBuffer):
 
 class SH1106_I2C(SH1106):
     def __init__(
-        self,
-        width,
-        height,
-        i2c,
-        res=None,
-        addr=0x3C,
-        rotate=0,
-        external_vcc=False,
-        delay=0,
+            self,
+            width,
+            height,
+            i2c,
+            res=None,
+            addr=0x3C,
+            rotate=0,
+            external_vcc=False,
+            delay=0,
     ):
         self.i2c = i2c
         self.addr = addr
@@ -283,16 +284,16 @@ class SH1106_I2C(SH1106):
 
 class SH1106_SPI(SH1106):
     def __init__(
-        self,
-        width,
-        height,
-        spi,
-        dc,
-        res=None,
-        cs=None,
-        rotate=0,
-        external_vcc=False,
-        delay=0,
+            self,
+            width,
+            height,
+            spi,
+            dc,
+            res=None,
+            cs=None,
+            rotate=0,
+            external_vcc=False,
+            delay=0,
     ):
         dc.init(dc.OUT, value=0)
         if res is not None:

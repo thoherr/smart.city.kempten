@@ -2,7 +2,7 @@ from device.i2c_sensor import I2cSensor
 
 
 class MultiplexedI2cSensor(I2cSensor):
-    def __init__(self, location : str, device_class, multiplexer, channel : int):
+    def __init__(self, location: str, device_class, multiplexer, channel: int):
         self._multiplexer = multiplexer
         self._channel = channel
         self.ensure_channel()

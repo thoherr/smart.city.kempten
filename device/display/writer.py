@@ -21,27 +21,30 @@
 # 10 pixel high font, timings were 1.76ms/396μs, gain 4.36 (arial10).
 
 
+from sys import implementation
+
 import framebuf
 from uctypes import bytearray_at, addressof
-from sys import implementation
 
 __version__ = (0, 5, 1)
 
 fast_mode = True  # Does nothing. Kept to avoid breaking code.
+
 
 class DisplayState():
     def __init__(self):
         self.text_row = 0
         self.text_col = 0
 
+
 def _get_id(device):
     if not isinstance(device, framebuf.FrameBuffer):
         raise ValueError('Device must be derived from FrameBuffer.')
     return id(device)
 
+
 # Basic Writer class for monochrome displays
 class Writer():
-
     state = {}  # Holds a display state for each driver
 
     @staticmethod
@@ -58,7 +61,7 @@ class Writer():
             if col < 0 or col >= device.width:
                 raise ValueError('col is out of range')
             s.text_col = col
-        return s.text_row,  s.text_col
+        return s.text_row, s.text_col
 
     def __init__(self, device, font, verbose=True):
         self.devid = _get_id(device)
@@ -142,7 +145,7 @@ class Writer():
             if pos > 0:
                 rstr = string[pos + 1:]
                 string = lstr
-                
+
         for char in string:
             self._printchar(char, invert)
         if rstr is not None:
@@ -176,7 +179,7 @@ class Writer():
         mc = 0  # Max non-blank column
         data = glyph[(wd - 1) // 8]  # Last byte of row 0
         for row in range(ht):  # Glyph row
-            for col in range(wd -1, -1, -1):  # Glyph column
+            for col in range(wd - 1, -1, -1):  # Glyph column
                 gbyte, gbit = divmod(col, 8)
                 if gbit == 0:  # Next glyph byte
                     data = glyph[row * gbytes + gbyte]
@@ -227,7 +230,7 @@ class Writer():
         self.char_height = char_height
         self.char_width = char_width
         self.clip_width = char_width if np is None else np
-        
+
     # Method using blitting. Efficient rendering for monochrome displays.
     # Tested on SSD1306. Invert is for black-on-white rendering.
     def _printchar(self, char, invert=False, recurse=False):
@@ -251,6 +254,7 @@ class Writer():
 
     def setcolor(self, *_):
         return self.fgcolor, self.bgcolor
+
 
 # Writer for colour displays.
 class CWriter(Writer):

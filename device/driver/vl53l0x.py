@@ -1,6 +1,7 @@
-from micropython import const
 import ustruct
 import utime
+from micropython import const
+
 # from machine import Timer
 # import time
 
@@ -110,10 +111,10 @@ class VL53l0xTimeoutError(RuntimeError):
 
 
 class VL53L0X:
-    def __init__(self, i2c, address=0x29, measurment_timing_budget = 40000):
+    def __init__(self, i2c, address=0x29, measurment_timing_budget=40000):
         self.i2c = i2c
         self.address = address
-        utime.sleep_ms(100) # give the I2C time to init
+        utime.sleep_ms(100)  # give the I2C time to init
         self.init()
         self._started = False
         self.measurement_timing_budget_us = 0
@@ -486,7 +487,8 @@ class VL53L0X:
 
             new_msrc_timeout_mclks = self.timeout_microseconds_to_Mclks(self.timeouts["msrc_dss_tcc_us"],
                                                                         period_pclks)
-            self._register(MSRC_CONFIG_TIMEOUT_MACROP, 255 if new_msrc_timeout_mclks > 256 else (new_msrc_timeout_mclks - 1))
+            self._register(MSRC_CONFIG_TIMEOUT_MACROP,
+                           255 if new_msrc_timeout_mclks > 256 else (new_msrc_timeout_mclks - 1))
         elif type == self.vcsel_period_type[1]:
             if period_pclks == 8:
                 self._register(FINAL_RANGE_CONFIG_VALID_PHASE_HIGH, 0x10)
@@ -525,7 +527,8 @@ class VL53L0X:
 
             self._register(FINAL_RANGE_CONFIG_VCSEL_PERIOD, vcsel_period_reg)
 
-            new_final_range_timeout_mclks = self.timeout_microseconds_to_Mclks(self.timeouts["final_range_us"], period_pclks)
+            new_final_range_timeout_mclks = self.timeout_microseconds_to_Mclks(self.timeouts["final_range_us"],
+                                                                               period_pclks)
 
             if self.enables["pre_range"]:
                 new_final_range_timeout_mclks += 1
@@ -626,7 +629,7 @@ class VL53L0X:
         if self.enables["tcc"]:
             used_budget_us += self.timeouts["msrc_dss_tcc_us"] + tcc_overhead
         if self.enables["dss"]:
-            used_budget_us += 2* self.timeouts["msrc_dss_tcc_us"] + dss_overhead
+            used_budget_us += 2 * self.timeouts["msrc_dss_tcc_us"] + dss_overhead
         if self.enables["msrc"]:
             used_budget_us += self.timeouts["msrc_dss_tcc_us"] + msrc_overhead
         if self.enables["pre_range"]:
@@ -637,7 +640,8 @@ class VL53L0X:
             if used_budget_us > budget_us:
                 return False
             final_range_timeout_us = budget_us - used_budget_us
-            final_range_timeout_mclks = self.timeout_microseconds_to_Mclks(final_range_timeout_us, self.timeouts["final_range_vcsel_period_pclks"])
+            final_range_timeout_mclks = self.timeout_microseconds_to_Mclks(final_range_timeout_us, self.timeouts[
+                "final_range_vcsel_period_pclks"])
 
             if self.enables["pre_range"]:
                 final_range_timeout_mclks += self.timeouts["pre_range_mclks"]
@@ -646,11 +650,11 @@ class VL53L0X:
         return True
 
     def perform_single_ref_calibration(self, vhv_init_byte):
-        
+
         # Pico MicroPython doesn't have a Chrono class, so the line below is commented out
         # chrono = Timer.Chrono()
-        
-        self._register(SYSRANGE_START, 0x01|vhv_init_byte)
+
+        self._register(SYSRANGE_START, 0x01 | vhv_init_byte)
 
         # Instead of using the chrono class, I'll just capture the current time
         chrono_start = utime.ticks_ms()

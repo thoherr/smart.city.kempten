@@ -5,7 +5,7 @@ class TCA9548A:
         self.i2c = i2c
         self._address = address
 
-    def switch_to_channel(self, channel : int = -1):
+    def switch_to_channel(self, channel: int = -1):
         if 0 <= channel <= 7:
             mask = 0x01 << channel
         else:
