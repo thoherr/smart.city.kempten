@@ -24,8 +24,8 @@ class Crossing(Actor):
     def __init__(self, actor_id, light_columns, default_circuit=DEFAULT_CIRCUIT, initial_delay=2):
         super().__init__(actor_id)
         self.circuit = None
-        self.current_index : int = 0
-        self.delay : int = 0
+        self.current_index: int = 0
+        self.delay: int = 0
         self.light_columns = light_columns
         self.default_circuit = default_circuit
         self.turn_on(default_circuit, initial_delay)

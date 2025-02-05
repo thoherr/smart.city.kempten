@@ -5,7 +5,7 @@ from domain.waste.container import WasteContainer
 
 
 class WasteArea:
-    def __init__(self, id : str, containers : [WasteContainer]):
+    def __init__(self, id: str, containers: [WasteContainer]):
         self.id = id
         self.containers = containers
 
@@ -16,5 +16,5 @@ class WasteArea:
     def waste_status(self):
         status = {}
         for i, container in enumerate(self.containers):
-            status[f"Tonne_{i+1}"] = 1 if container.full() else 0
+            status[f"Tonne_{i + 1}"] = 1 if container.full() else 0
         return status

@@ -1,8 +1,8 @@
 import machine
 from micropython import const
 
-class Column:
 
+class Column:
     OFF = const(0)
     STOP = const(1)
     PREPARE = const(2)
@@ -51,4 +51,3 @@ class Column:
         self.red.off()
         self.yellow.on()
         self.green.off()
-

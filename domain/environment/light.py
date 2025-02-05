@@ -3,7 +3,7 @@ from util.actor import Actor
 
 
 class Light(Actor):
-    def __init__(self, actor_id : str, sensor, interval=1, verbose=False):
+    def __init__(self, actor_id: str, sensor, interval=1, verbose=False):
         Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
         self._sensor = sensor
         self._light = 0

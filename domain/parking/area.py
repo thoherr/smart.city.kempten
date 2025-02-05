@@ -5,7 +5,7 @@ from domain.parking.space import ParkingSpace
 
 
 class ParkingArea:
-    def __init__(self, location : str, spaces : [ParkingSpace]):
+    def __init__(self, location: str, spaces: [ParkingSpace]):
         self.spaces = spaces
         self.location = location
 
