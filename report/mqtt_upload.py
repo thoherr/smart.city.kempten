@@ -15,7 +15,8 @@ class MqttUpload(Actor):
         self._current_value = None
 
     async def work(self):
-        self.log(f"Updating dashboard for {self.actor_id}")
+        if self._verbose:
+            self.log(f"Updating dashboard for {self.actor_id}")
         new_value = self._value_method()
         if new_value != self._current_value:
             self._current_value = new_value
@@ -25,7 +26,7 @@ class MqttUpload(Actor):
         if self._verbose:
             self.log(f"Uploading dashboard data for sensor {self.actor_id}")
         now = utime.gmtime()
-        timestamp = f"{now[0]:4d}-{now[1]:02d}-{now[2]:02d}T{now[3]:02d}:{now[4]:02d}:{now[5]:02d}"
+        timestamp = f"{now[0]:4d}-{now[1]:02d}-{now[2]:02d}T{now[3]:02d}:{now[4]:02d}:{now[5]:02d}Z"
         msg = json.dumps({"id": self.actor_id,
                           "timestamp": timestamp,
                           "payload": self._current_value})

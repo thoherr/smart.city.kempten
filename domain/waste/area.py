@@ -13,8 +13,8 @@ class WasteArea:
         tasks = [asyncio.create_task(container.run()) for container in self.containers]
         await asyncio.gather(*tasks)
 
-    def waste_status(self):
+    def status(self):
         status = {}
         for i, container in enumerate(self.containers):
-            status[f"Tonne_{i + 1}"] = 1 if container.full() else 0
+            status[f"tonne_{i + 1}"] = 1 if container.full() else 0
         return status

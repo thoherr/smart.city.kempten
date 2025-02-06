@@ -10,6 +10,7 @@ from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
+from report.mqtt_upload import MqttUpload
 from report.parking_area_panel import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 
@@ -20,10 +21,10 @@ class ControllerIller(ControllerBase):
         super().__init__(**kwargs)
         self._location = "Illerufer"
 
-        parking = self._init_parking()
-        waste = self._init_waste()
+        self._init_parking()
+        self._init_waste()
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, parking, waste, verbose=False)
+        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, waste, verbose=False)
         self.actors.append(self.parking_panel_large)
 
     def _init_waste(self):
@@ -40,8 +41,12 @@ class ControllerIller(ControllerBase):
                             MultiplexedI2cSensor("Illerufer Müll 3", GY302, multiplexer=self.mux3, channel=2),
                             verbose=True)
         self.actors.append(w3)
-        waste = WasteArea("Iller", [w1, w2, w3])
-        return waste
+        self.waste = WasteArea("Iller", [w1, w2, w3])
+
+        self.waste_upload = MqttUpload("sck_smart_waste_2", self.mqtt_client,
+                                       f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_2",
+                                       self.waste.status, interval=3, verbose=True)
+        self.actors.append(self.waste_upload)
 
     def _init_parking(self):
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
@@ -63,6 +68,10 @@ class ControllerIller(ControllerBase):
         p6 = ParkingSpace("Illerufer 6",
                           MultiplexedI2cSensor("Illerufer P6", VL53L0X, multiplexer=self.mux1, channel=0),
                           empty_threshold=60, verbose=True)
-        parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
-        self.actors.append(parking)
-        return parking
+        self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
+        self.actors.append(self.parking)
+
+        self.parking_upload = MqttUpload("sck_parkraum_2", self.mqtt_client,
+                                         f"{mqtt_config.mqtt_topic_root}/parkraum/sck_parkraum_2",
+                                         self.parking.status, interval=3, verbose=True)
+        self.actors.append(self.parking_upload)

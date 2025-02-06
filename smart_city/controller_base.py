@@ -1,4 +1,5 @@
 import asyncio
+import gc
 
 from machine import Pin, I2C
 
@@ -24,10 +25,12 @@ def print_i2c_info(i2c_id, i2c):
 class ControllerBase(object):
     def __init__(self, debug=False, do_wlan_init=True, do_mqtt_init=True, **_kwargs):
         self.debug = debug
+        self.mqtt_client = None
 
         if do_wlan_init:
             self.init_wlan()
             if do_mqtt_init:
+                gc.collect()
                 self.init_mqtt()
 
         self.i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
@@ -44,8 +47,8 @@ class ControllerBase(object):
         self.actors.append(Housekeeper(verbose=True))
 
     def init_mqtt(self):
-        mqtt_client = connect_mqtt()
-        if mqtt_client and self.debug:
+        self.mqtt_client = connect_mqtt()
+        if self.mqtt_client and self.debug:
             print("##### MQTT setup complete")
 
     def init_wlan(self):

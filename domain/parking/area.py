@@ -18,3 +18,9 @@ class ParkingArea:
 
     def number_of_empty_spaces(self) -> int:
         return len([s for s in self.spaces if s.empty()])
+
+    def status(self):
+        status = {}
+        for i, space in enumerate(self.spaces):
+            status[f"stellplatz_{i + 1}"] = 0 if space.empty() else 1
+        return status
