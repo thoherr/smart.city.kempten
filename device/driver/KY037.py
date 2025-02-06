@@ -1,7 +1,5 @@
 import asyncio
-
 from machine import ADC
-
 
 # HINT: The driver has to be calibrated, so that the left LED is OFF in silence and
 #       begins to flicker at some noise. In order to pick up the noise, measurement

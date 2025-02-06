@@ -7,13 +7,12 @@
 
 import framebuf
 
-
 class BoolPalette(framebuf.FrameBuffer):
 
     def __init__(self, mode):
         buf = bytearray(4)  # OK for <= 16 bit color
         super().__init__(buf, 2, 1, mode)
-
+    
     def fg(self, color):  # Set foreground color
         self.pixel(1, 0, color)
 
