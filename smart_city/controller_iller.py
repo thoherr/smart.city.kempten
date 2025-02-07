@@ -2,6 +2,7 @@
 # It implements the Illerufer (second base plate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
 
+import setup_mqtt_config as mqtt_config
 from device.driver.gy302 import GY302
 from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
@@ -24,7 +25,7 @@ class ControllerIller(ControllerBase):
         self._init_parking()
         self._init_waste()
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, waste, verbose=False)
+        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
         self.actors.append(self.parking_panel_large)
 
     def _init_waste(self):
