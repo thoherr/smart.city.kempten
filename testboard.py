@@ -1,5 +1,6 @@
 import asyncio
 
+import gc
 import micropython
 
 from device.i2c_sensor import I2cSensor
@@ -36,6 +37,7 @@ import setup_mqtt_config as mqtt_config
 print("##### WLAN and MQTT setup")
 if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
     print("##### WLAN setup complete")
+gc.enable()
 mqtt_client = connect_mqtt()
 if mqtt_client:
     print("##### MQTT setup complete")
@@ -96,7 +98,7 @@ humidity_upload = MqttUpload("weather/humidity", mqtt_client,
                              weather_sensor.humidity, interval=5)
 waste_upload = MqttUpload("sck_smart_waste_1", mqtt_client,
                           f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_1",
-                          waste.waste_status, interval=5)
+                          waste.status, interval=5)
 
 
 async def main_loop():
@@ -108,7 +110,7 @@ async def main_loop():
         #                                                                "full" if waste_container_2.full() else "OK",
         #                                                                waste_container_3.actor_id,
         #                                                                "full" if waste_container_3.full() else "OK")
-        waste_status = f"{waste.waste_status()}"
+        waste_status = f"{waste.status()}"
         multiplexer.switch_to_channel(0)
         traffic_count = "Traffic at {:s} {:1d}".format(traffic.actor_id, traffic.value())
         number_of_empty_spaces = parking.number_of_empty_spaces()
