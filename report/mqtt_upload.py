@@ -8,11 +8,12 @@ from util.actor import Actor
 
 class MqttUpload:
 
-    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, verbose=False):
+    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, qos: int = 0, verbose=False):
         self._mqtt_topic = mqtt_topic
         self._verbose = verbose
         self._topic = f"{mqtt_config.mqtt_topic_root}/{self._mqtt_topic}"
         self._mqtt_client = mqtt_client
+        self._qos = qos
 
     def post_data(self, data):
         now = utime.gmtime()
@@ -20,7 +21,7 @@ class MqttUpload:
         msg = json.dumps({"id": self._mqtt_topic,
                           "timestamp": timestamp,
                           "payload": data})
-        self._mqtt_client.publish(self._topic, msg, retain=False, qos=0)
+        self._mqtt_client.publish(self._topic, msg, retain=False, qos=self._qos)
 
 
 class MqttUploadActor(MqttUpload, Actor):

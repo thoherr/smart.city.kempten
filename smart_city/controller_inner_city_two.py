@@ -28,7 +28,7 @@ class ControllerInnerCityTwo(ControllerBase):
 
         self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4]))
 
-        mqtt_traffic_1 = MqttUpload("verkehr/sck_verkehr_1", self.mqtt_client, verbose=True)
+        mqtt_traffic_1 = MqttUpload("verkehr/sck_verkehr_1", self.mqtt_client, qos=0, verbose=True)
 
         in_traffic_1 = TrafficCount("RH 1 einwärts", "eingehend", Pin(27, Pin.IN), mqtt_traffic_1, verbose=True)
         self.actors.append(in_traffic_1)
