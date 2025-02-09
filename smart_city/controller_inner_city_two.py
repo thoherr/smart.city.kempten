@@ -27,11 +27,22 @@ class ControllerInnerCityTwo(ControllerBase):
 
         self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4]))
 
-        in_traffic = TrafficCount("Rathaus einwärts", Pin(27, Pin.IN))
-        self.actors.append(in_traffic)
-        out_traffic = TrafficCount("Rathaus auswärts", Pin(26, Pin.IN))
-        self.actors.append(out_traffic)
+        in_traffic_1 = TrafficCount("Rathaus einwärts", Pin(27, Pin.IN))
+        self.actors.append(in_traffic_1)
+        out_traffic_1 = TrafficCount("Rathaus auswärts", Pin(26, Pin.IN))
+        self.actors.append(out_traffic_1)
 
-        counters = [out_traffic, in_traffic]
-        traffic_count_panel = TrafficCountPanel("traffic", self.i2c0, counters, verbose=True)
+        counters_1 = [out_traffic_1, in_traffic_1]
+        traffic_count_panel = TrafficCountPanel("traffic", self.i2c0, counters_1, verbose=True)
         self.actors.append(traffic_count_panel)
+
+        in_traffic_2 = TrafficCount("Rathaus einwärts", Pin(4, Pin.IN))
+        self.actors.append(in_traffic_2)
+        out_traffic_2 = TrafficCount("Rathaus auswärts", Pin(5, Pin.IN))
+        self.actors.append(out_traffic_2)
+
+        in_traffic_3 = TrafficCount("Rathaus einwärts", Pin(4, Pin.IN))
+        self.actors.append(in_traffic_3)
+        out_traffic_3 = TrafficCount("Rathaus auswärts", Pin(5, Pin.IN))
+        self.actors.append(out_traffic_3)
+
