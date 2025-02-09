@@ -11,7 +11,7 @@ from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.mqtt_upload import MqttUpload
-from report.parking_area_panel import ParkingAreaPanelSH1106
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 
 

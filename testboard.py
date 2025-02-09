@@ -14,7 +14,7 @@ from domain.traffic.count import TrafficCount
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.mqtt_upload import MqttUpload
-from report.parking_area_panel import ParkingAreaPanelSH1106
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from report.traffic_count_panel import TrafficCountPanel
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
@@ -32,7 +32,6 @@ from device.driver.BME280 import BME280
 from device.driver.KY037 import KY037
 
 import setup_wlan_config as wlan_config
-import setup_mqtt_config as mqtt_config
 
 print("##### WLAN and MQTT setup")
 if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):

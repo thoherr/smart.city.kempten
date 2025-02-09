@@ -1,5 +1,5 @@
 # This is the third Raspi of our MOC of the City of Kempten
-# It implements the Illerufer (second base plate), nearby the river, with a Parking Area (including display),
+# It implements the Illerufer (second baseplate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
 
 from device.driver.gy302 import GY302
@@ -11,7 +11,7 @@ from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.mqtt_upload import MqttUpload
-from report.parking_area_panel import ParkingAreaPanelSH1106
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 
 
