@@ -13,6 +13,8 @@ class TrafficCount(Actor):
     async def work(self):
         new_value = self._gpio_pin.value()
         if new_value != self._old_value:
+            if self._verbose:
+                self.log(f"new value: {new_value}")
             self._counter += (new_value == 1)  # only count rising value
             self._old_value = new_value
 

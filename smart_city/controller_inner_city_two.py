@@ -27,22 +27,22 @@ class ControllerInnerCityTwo(ControllerBase):
 
         self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4]))
 
-        in_traffic_1 = TrafficCount("Rathaus einwärts", Pin(27, Pin.IN))
+        in_traffic_1 = TrafficCount("RH 1 einwärts", Pin(27, Pin.IN), verbose=True)
         self.actors.append(in_traffic_1)
-        out_traffic_1 = TrafficCount("Rathaus auswärts", Pin(26, Pin.IN))
+        out_traffic_1 = TrafficCount("RH 1 auswärts", Pin(26, Pin.IN), verbose=True)
         self.actors.append(out_traffic_1)
 
         counters_1 = [out_traffic_1, in_traffic_1]
         traffic_count_panel = TrafficCountPanel("traffic", self.i2c0, counters_1, verbose=True)
         self.actors.append(traffic_count_panel)
 
-        in_traffic_2 = TrafficCount("Rathaus einwärts", Pin(4, Pin.IN))
+        in_traffic_2 = TrafficCount("RH 2 einwärts", Pin(4, Pin.IN), verbose=True)
         self.actors.append(in_traffic_2)
-        out_traffic_2 = TrafficCount("Rathaus auswärts", Pin(5, Pin.IN))
+        out_traffic_2 = TrafficCount("RH 2 auswärts", Pin(5, Pin.IN), verbose=True)
         self.actors.append(out_traffic_2)
 
-        in_traffic_3 = TrafficCount("Rathaus einwärts", Pin(4, Pin.IN))
+        in_traffic_3 = TrafficCount("RH 3 einwärts", Pin(6, Pin.IN), verbose=True)
         self.actors.append(in_traffic_3)
-        out_traffic_3 = TrafficCount("Rathaus auswärts", Pin(5, Pin.IN))
+        out_traffic_3 = TrafficCount("RH 3 auswärts", Pin(7, Pin.IN), verbose=True)
         self.actors.append(out_traffic_3)
 
