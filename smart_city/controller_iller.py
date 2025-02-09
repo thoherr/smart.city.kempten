@@ -10,7 +10,7 @@ from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
-from report.mqtt_upload import MqttUpload
+from report.mqtt_upload import MqttUploadActor
 from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 
@@ -43,8 +43,8 @@ class ControllerIller(ControllerBase):
         self.actors.append(w3)
         self.waste = WasteArea("Iller", [w1, w2, w3])
 
-        self.waste_upload = MqttUpload("smart_waste/sck_smart_waste_2", self.mqtt_client, self.waste.status, interval=3,
-                                       verbose=True)
+        self.waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_2", self.mqtt_client, self.waste.status, interval=3,
+                                            verbose=True)
         self.actors.append(self.waste_upload)
 
     def _init_parking(self):
@@ -70,6 +70,6 @@ class ControllerIller(ControllerBase):
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
-        self.parking_upload = MqttUpload("parkraum/sck_parkraum_2", self.mqtt_client, self.parking.status, interval=3,
-                                         verbose=True)
+        self.parking_upload = MqttUploadActor("parkraum/sck_parkraum_2", self.mqtt_client, self.parking.status, interval=3,
+                                              verbose=True)
         self.actors.append(self.parking_upload)

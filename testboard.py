@@ -13,7 +13,7 @@ from domain.parking.space import ParkingSpace
 from domain.traffic.count import TrafficCount
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
-from report.mqtt_upload import MqttUpload
+from report.mqtt_upload import MqttUploadActor
 from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from report.traffic_count_panel import TrafficCountPanel
 from util.heartbeat import Heartbeat
@@ -84,11 +84,11 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, waste, verbose=True)
 
-traffic_count_upload = MqttUpload("traffic/cityhall", mqtt_client, traffic.value)
-temperature_upload = MqttUpload("weather/temperature", mqtt_client, weather_sensor.temperature, interval=5)
-pressure_upload = MqttUpload("weather/pressure", mqtt_client, weather_sensor.pressure, interval=5)
-humidity_upload = MqttUpload("weather/humidity", mqtt_client, weather_sensor.humidity, interval=5)
-waste_upload = MqttUpload("smart_waste/sck_smart_waste_1", mqtt_client, waste.status, interval=5)
+traffic_count_upload = MqttUploadActor("traffic/cityhall", mqtt_client, traffic.value)
+temperature_upload = MqttUploadActor("weather/temperature", mqtt_client, weather_sensor.temperature, interval=5)
+pressure_upload = MqttUploadActor("weather/pressure", mqtt_client, weather_sensor.pressure, interval=5)
+humidity_upload = MqttUploadActor("weather/humidity", mqtt_client, weather_sensor.humidity, interval=5)
+waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_1", mqtt_client, waste.status, interval=5)
 
 
 async def main_loop():
