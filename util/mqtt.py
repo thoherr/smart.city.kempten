@@ -1,7 +1,7 @@
 import ssl
 
 import setup_mqtt_config as mqtt_config
-from report.umqtt.simple import MQTTClient
+from report.umqtt.robust import MQTTClient
 
 
 def connect_mqtt():
