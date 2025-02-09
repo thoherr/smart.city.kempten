@@ -2,7 +2,6 @@
 # It implements the first controller at Innenstadt, around the Rathaus, with a Parking Area (including display)
 # and three waste containers
 
-import setup_mqtt_config as mqtt_config
 from device.driver.gy302 import GY302
 from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
@@ -45,9 +44,8 @@ class ControllerInnerCityOne(ControllerBase):
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
 
-        self.parking_upload = MqttUpload("sck_parkraum_1", self.mqtt_client,
-                                       f"{mqtt_config.mqtt_topic_root}/parkraum/sck_parkraum_1",
-                                       self.parking.status, interval=3, verbose=True)
+        self.parking_upload = MqttUpload("parkraum/sck_parkraum_1", self.mqtt_client, self.parking.status, interval=3,
+                                         verbose=True)
         self.actors.append(self.parking_upload)
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
@@ -66,7 +64,6 @@ class ControllerInnerCityOne(ControllerBase):
         self.parking_and_waste_infopanel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
         self.actors.append(self.parking_and_waste_infopanel)
 
-        self.waste_upload = MqttUpload("sck_smart_waste_1", self.mqtt_client,
-                                       f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_1",
-                                       self.waste.status, interval=3, verbose=True)
+        self.waste_upload = MqttUpload("smart_waste/sck_smart_waste_1", self.mqtt_client, self.waste.status, interval=3,
+                                       verbose=True)
         self.actors.append(self.waste_upload)

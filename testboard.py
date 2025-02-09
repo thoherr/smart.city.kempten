@@ -85,20 +85,11 @@ traffic = TrafficCount("Rathausplatz", traffic_pin)
 traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, waste, verbose=True)
 
-traffic_count_upload = MqttUpload("traffic/cityhall", mqtt_client,
-                                  f"{mqtt_config.mqtt_topic_root}/traffic/cityhall", traffic.value)
-temperature_upload = MqttUpload("weather/temperature", mqtt_client,
-                                f"{mqtt_config.mqtt_topic_root}/weather/temperature",
-                                weather_sensor.temperature, interval=5)
-pressure_upload = MqttUpload("weather/pressure", mqtt_client,
-                             f"{mqtt_config.mqtt_topic_root}/weather/pressure",
-                             weather_sensor.pressure, interval=5)
-humidity_upload = MqttUpload("weather/humidity", mqtt_client,
-                             f"{mqtt_config.mqtt_topic_root}/weather/humidity",
-                             weather_sensor.humidity, interval=5)
-waste_upload = MqttUpload("sck_smart_waste_1", mqtt_client,
-                          f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_1",
-                          waste.status, interval=5)
+traffic_count_upload = MqttUpload("traffic/cityhall", mqtt_client, traffic.value)
+temperature_upload = MqttUpload("weather/temperature", mqtt_client, weather_sensor.temperature, interval=5)
+pressure_upload = MqttUpload("weather/pressure", mqtt_client, weather_sensor.pressure, interval=5)
+humidity_upload = MqttUpload("weather/humidity", mqtt_client, weather_sensor.humidity, interval=5)
+waste_upload = MqttUpload("smart_waste/sck_smart_waste_1", mqtt_client, waste.status, interval=5)
 
 
 async def main_loop():

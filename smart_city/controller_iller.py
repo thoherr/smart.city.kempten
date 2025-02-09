@@ -2,7 +2,6 @@
 # It implements the Illerufer (second base plate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
 
-import setup_mqtt_config as mqtt_config
 from device.driver.gy302 import GY302
 from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
@@ -44,9 +43,8 @@ class ControllerIller(ControllerBase):
         self.actors.append(w3)
         self.waste = WasteArea("Iller", [w1, w2, w3])
 
-        self.waste_upload = MqttUpload("sck_smart_waste_2", self.mqtt_client,
-                                       f"{mqtt_config.mqtt_topic_root}/smart_waste/sck_smart_waste_2",
-                                       self.waste.status, interval=3, verbose=True)
+        self.waste_upload = MqttUpload("smart_waste/sck_smart_waste_2", self.mqtt_client, self.waste.status, interval=3,
+                                       verbose=True)
         self.actors.append(self.waste_upload)
 
     def _init_parking(self):
@@ -72,7 +70,6 @@ class ControllerIller(ControllerBase):
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
-        self.parking_upload = MqttUpload("sck_parkraum_2", self.mqtt_client,
-                                         f"{mqtt_config.mqtt_topic_root}/parkraum/sck_parkraum_2",
-                                         self.parking.status, interval=3, verbose=True)
+        self.parking_upload = MqttUpload("parkraum/sck_parkraum_2", self.mqtt_client, self.parking.status, interval=3,
+                                         verbose=True)
         self.actors.append(self.parking_upload)
