@@ -10,4 +10,6 @@ These display drivers and utilities are from
   - font10
   - freesans20
   - writer
+  - freesans35.py (generated from font file)
+  - freesansbold35.py (generated from font file)
   - freesansbold40.py (generated from font file)
