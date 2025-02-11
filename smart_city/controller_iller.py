@@ -24,21 +24,21 @@ class ControllerIller(ControllerBase):
         self._init_parking()
         self._init_waste()
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
-        self.actors.append(self.parking_panel_large)
+#        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
+#        self.actors.append(self.parking_panel_large)
 
     def _init_waste(self):
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
         w1 = WasteContainer("Illerufer 1",
-                            MultiplexedI2cSensor("Illerufer Müll 1", GY302, multiplexer=self.mux3, channel=0),
+                            MultiplexedI2cSensor("Illerufer Müll 1", GY302, multiplexer=self.mux3, channel=3),
                             verbose=True)
         self.actors.append(w1)
         w2 = WasteContainer("Illerufer 2",
-                            MultiplexedI2cSensor("Illerufer Müll 2", GY302, multiplexer=self.mux3, channel=1),
+                            MultiplexedI2cSensor("Illerufer Müll 2", GY302, multiplexer=self.mux3, channel=2),
                             verbose=True)
         self.actors.append(w2)
         w3 = WasteContainer("Illerufer 3",
-                            MultiplexedI2cSensor("Illerufer Müll 3", GY302, multiplexer=self.mux3, channel=2),
+                            MultiplexedI2cSensor("Illerufer Müll 3", GY302, multiplexer=self.mux3, channel=1),
                             verbose=True)
         self.actors.append(w3)
         self.waste = WasteArea("Iller", [w1, w2, w3])
