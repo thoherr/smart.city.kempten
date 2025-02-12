@@ -78,7 +78,7 @@ class ControllerIller(ControllerBase):
         self.actors.append(self.parking_upload)
 
     def _init_traffic(self):
-        mqtt_traffic_4 = MqttUpload("verkehr/sck_verkehr_4", self.mqtt_client, qos=1, verbose=True)
+        mqtt_traffic_4 = MqttUpload("verkehr/sck_verkehr_4", self.mqtt_client, verbose=True)
 
         in_traffic_4 = TrafficCount("RH 4 einwärts", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4, verbose=True)
         self.actors.append(in_traffic_4)

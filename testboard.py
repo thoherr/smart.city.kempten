@@ -3,6 +3,12 @@ import asyncio
 import gc
 import micropython
 
+from setup_mqtt_config import config
+from util.mqtt_as import MQTTClient
+
+micropython.alloc_emergency_exception_buf(100)
+
+from util.housekeeper import Housekeeper
 from device.i2c_sensor import I2cSensor
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 from domain.environment.light import Light
@@ -14,14 +20,14 @@ from domain.traffic.count import TrafficCount
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.mqtt_upload import MqttUploadActor
-from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
-from report.traffic_count_panel import TrafficCountPanel
-from util.heartbeat import Heartbeat
-from util.housekeeper import Housekeeper
-from util.mqtt import connect_mqtt
-from util.wlan import initialize_wlan
 
-micropython.alloc_emergency_exception_buf(100)
+gc.collect()
+
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
+
+gc.collect()
+
+from util.heartbeat import Heartbeat
 
 from machine import Pin, I2C
 
@@ -31,13 +37,14 @@ from device.driver.gy302 import GY302
 from device.driver.BME280 import BME280
 from device.driver.KY037 import KY037
 
-import setup_wlan_config as wlan_config
-
-print("##### WLAN and MQTT setup")
-if initialize_wlan(wlan_config.wlan_ssid, wlan_config.wlan_password):
-    print("##### WLAN setup complete")
 gc.enable()
-mqtt_client = connect_mqtt()
+mqtt_client = None
+try:
+    mqtt_client = MQTTClient(config)
+    mqtt_client.connect()
+except Exception as e:
+    print('Error connecting to MQTT:', e)
+    raise
 if mqtt_client:
     print("##### MQTT setup complete")
 
@@ -63,9 +70,10 @@ else:
         print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
 multiplexer = TCA9548A(i2c1)
-p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
-p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
-parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
+#p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
+#p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
+#parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
+parking = ParkingArea("Rathaus", [])
 
 waste_sensor = I2cSensor("Müll", GY302, i2c1)
 waste_container_1 = WasteContainer("Müll 1", waste_sensor)
@@ -79,9 +87,8 @@ ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
 traffic_pin = Pin(14, Pin.IN)
-traffic = TrafficCount("Rathausplatz", traffic_pin)
+traffic = TrafficCount("Rathausplatz", "incoming", traffic_pin)
 
-traffic_count_panel = TrafficCountPanel("traffic", i2c1, [traffic, traffic], verbose=True)
 parking_panel_large = ParkingAreaPanelSH1106(i2c0, parking, waste, verbose=True)
 
 traffic_count_upload = MqttUploadActor("traffic/cityhall", mqtt_client, traffic.value)
@@ -131,7 +138,6 @@ async def main():
                          asyncio.create_task(waste.run()),
                          asyncio.create_task(light_sensor.run()),
                          asyncio.create_task(parking_panel_large.run()),
-                         asyncio.create_task(traffic_count_panel.run()),
                          asyncio.create_task(traffic_count_upload.run()),
                          asyncio.create_task(weather_sensor.run()),
                          asyncio.create_task(temperature_upload.run()),

@@ -1,2 +1,0 @@
-wifi_ssid = 'REPLACE_WITH_YOUR_SSID'
-wifi_password = 'REPLACE_WITH_YOUR_PASSWORD'
