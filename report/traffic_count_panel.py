@@ -5,13 +5,14 @@ from util.actor import Actor
 
 
 class TrafficCountPanel(Actor):
-    def __init__(self, actor_id, i2c, traffic_counters, interval=1, verbose=False):
+    def __init__(self, actor_id, i2c, traffic_counters, multiplexer=None, interval=1, verbose=False):
         super().__init__(actor_id, interval, verbose)
         self._width = 128
         self._height = 64
         self._screen = SH1106_I2C(self._width, self._height, i2c)
         self._writer = Writer(self._screen, device.display.freesans35)
         self._i2c = i2c
+        self._multiplexer = multiplexer
         self._traffic_counters = traffic_counters
 
     async def work(self):
@@ -19,7 +20,11 @@ class TrafficCountPanel(Actor):
         east = self._traffic_counters[1].value()
         if self._verbose:
             self.log("<-- {:3d} / {:3d} -->".format(west, east))
+        if self._multiplexer:
+            self._multiplexer.ensure_channel()
         self.show_info_screen(west, east)
+        if self._multiplexer:
+            self._multiplexer.reset_channel()
 
     def show_info_screen(self, west, east):
         self._screen.fill(0)

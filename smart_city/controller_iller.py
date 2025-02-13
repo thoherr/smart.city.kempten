@@ -1,13 +1,18 @@
 # This is the third Raspi of our MOC of the City of Kempten
 # It implements the Illerufer (second baseplate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
+import gc
+
 from machine import Pin
 
 from device.driver.BME280 import BME280
 from device.driver.gy302 import GY302
 from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
+from device.i2c_multiplexer import I2cMultiplexer
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+gc.collect()
+
 from domain.environment.light import Light
 from domain.environment.weather import Weather
 from domain.parking.area import ParkingArea
@@ -16,7 +21,12 @@ from domain.traffic.count import TrafficCount
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
 from report.mqtt_upload import MqttUploadActor, MqttUpload
+gc.collect()
+
+from report.traffic_count_panel import TrafficCountPanel
 #from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
+gc.collect()
+
 from smart_city.controller_base import ControllerBase
 
 
@@ -26,9 +36,13 @@ class ControllerIller(ControllerBase):
         super().__init__(**kwargs)
 
         self._init_multiplexers()
+        gc.collect()
         self._init_parking()
+        gc.collect()
         self._init_waste()
+        gc.collect()
         self._init_traffic()
+        gc.collect()
         self._init_environment()
 
 #        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
@@ -87,9 +101,10 @@ class ControllerIller(ControllerBase):
         out_traffic_4 = TrafficCount("RH 4 auswärts", "ausgehend", Pin(27, Pin.IN), mqtt_traffic_4, verbose=True)
         self.actors.append(out_traffic_4)
 
-#        counters_4 = [out_traffic_4, in_traffic_4]
-#        traffic_count_panel = TrafficCountPanel("traffic", self.i2c0, counters_4, verbose=True)
-#        self.actors.append(traffic_count_panel)
+        counters_4 = [in_traffic_4, out_traffic_4]
+        traffic_count_panel = TrafficCountPanel("traffic", self.mux74.i2c, counters_4,
+                                                multiplexer=I2cMultiplexer(self.mux74, 0), verbose=True)
+        self.actors.append(traffic_count_panel)
 
         mqtt_traffic_5 = MqttUpload("verkehr/sck_verkehr_5", self.mqtt_client, verbose=True)
 
