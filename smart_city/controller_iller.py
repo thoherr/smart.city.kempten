@@ -119,11 +119,11 @@ class ControllerIller(ControllerBase):
         self.weather_upload = MqttUploadActor("umwelt", self.mqtt_client, self.weather.status, interval=30, verbose=True)
         self.actors.append(self.weather_upload)
 
-#        self.light = Light("light", MultiplexedI2cSensor(GY302, multiplexer=self.mux74, channel=3), interval=10)
-#        self.actors.append(self.light)
+        self.light = Light("light", MultiplexedI2cSensor(GY302, multiplexer=self.mux74, channel=3), interval=10)
+        self.actors.append(self.light)
 
-#        self.light_upload = MqttUploadActor("licht", self.mqtt_client, self.light.status, interval=10, verbose=True)
-#        self.actors.append(self.light_upload)
+        self.light_upload = MqttUploadActor("licht", self.mqtt_client, self.light.status, interval=10, verbose=True)
+        self.actors.append(self.light_upload)
 
     def _init_multiplexers(self):
         # Name includes address for better reference
