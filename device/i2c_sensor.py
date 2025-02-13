@@ -1,9 +1,6 @@
-from device.sensor import Sensor
 
-
-class I2cSensor(Sensor):
-    def __init__(self, location, device_class, i2c):
-        super().__init__(location)
+class I2cSensor:
+    def __init__(self, device_class, i2c):
         self._device = device_class(i2c=i2c)
 
     def reset_channel(self):

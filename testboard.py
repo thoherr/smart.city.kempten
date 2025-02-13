@@ -70,19 +70,19 @@ else:
         print('Dezimale Adresse:', i2c_dev, '| Hexadezimale Adresse:', hex(i2c_dev))
 
 multiplexer = TCA9548A(i2c1)
-#p0 = ParkingSpace("P0", MultiplexedI2cSensor("P0", VL53L0X, multiplexer, 0))
-#p4 = ParkingSpace("P4", MultiplexedI2cSensor("P4", VL53L0X, multiplexer, 4))
+#p0 = ParkingSpace("P0", MultiplexedI2cSensor(VL53L0X, multiplexer, 0))
+#p4 = ParkingSpace("P4", MultiplexedI2cSensor(VL53L0X, multiplexer, 4))
 #parking = ParkingArea("Rathaus", [p0, p4, p0, p4, p0, p4, p0, p4, p0, p4, p0])
 parking = ParkingArea("Rathaus", [])
 
-waste_sensor = I2cSensor("Müll", GY302, i2c1)
+waste_sensor = I2cSensor(GY302, i2c1)
 waste_container_1 = WasteContainer("Müll 1", waste_sensor)
 waste_container_2 = WasteContainer("Müll 2", waste_sensor)
 waste_container_3 = WasteContainer("Müll 3", waste_sensor)
 waste = WasteArea("Müll", [waste_container_1, waste_container_2, waste_container_3])
-light_sensor = Light("Fußgängerzone", I2cSensor("Light 1", GY302, i2c1))
+light_sensor = Light("Fußgängerzone", I2cSensor(GY302, i2c1))
 weather_sensor = Weather("Innenstadt",
-                         MultiplexedI2cSensor("Weather", BME280, multiplexer=multiplexer, channel=7), interval=5)
+                         MultiplexedI2cSensor(BME280, multiplexer=multiplexer, channel=7), interval=5)
 ky037 = KY037()
 noise_sensor = Noise("Strassenlärm", ky037)
 
@@ -117,7 +117,7 @@ async def main_loop():
         weather = "Weather at {:s}:\n  Temperature {:.2f} °C\n  Pressure {:.2f} hPa\n  Humidity {:.2f} %".format(
             weather_sensor.actor_id, weather_sensor.temperature(), weather_sensor.pressure(), weather_sensor.humidity())
         light = "Light at {:s} is {:.2f}".format(light_sensor.actor_id, light_sensor.light())
-        noise = "Noise at {:s} is {}".format(noise_sensor.location, noise_sensor.noise())
+        noise = "Noise is {}".format(noise_sensor.noise())
 
         print(waste_status)
         print(traffic_count)

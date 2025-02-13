@@ -18,7 +18,6 @@ class ControllerInnerCityTwo(ControllerBase):
         super().__init__(**kwargs)
         if self.debug:
             print("##### ControllerInnerCityTwo.__init__()")
-        self._location = "Innenstadt"
 
         l1 = TrafficLightColumn(9, 10, 11, 1)
         l2 = TrafficLightColumn(14, 13, 12, 0)

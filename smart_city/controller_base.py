@@ -55,8 +55,7 @@ class ControllerBase(object):
     async def create_tasks(self):
         if self.debug:
             print("##### create_tasks()")
-        tasks = []
-        tasks.append(asyncio.create_task(self.up()))
+        tasks = [asyncio.create_task(self.up())]
         for actor in self.actors:
             tasks.append(asyncio.create_task(actor.run()))
         return tasks
