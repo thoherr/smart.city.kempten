@@ -13,3 +13,6 @@ class Light(Actor):
 
     def light(self):
         return self._light
+
+    def status(self):
+        return { "Helligkeit": self._light }
