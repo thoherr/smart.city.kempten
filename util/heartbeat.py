@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import rp2
 from machine import Pin
@@ -14,13 +15,14 @@ class Heartbeat(Actor):
         self._interval = self._interval * (1.0 - self._ratio)
         self._on_time = self._interval * self._ratio
         self._counter = 0
+        self._check_bootsel = not 'Pico 2' in os.uname().machine
 
     async def work(self):
         self._led.on()
         self._counter = self._counter + 1
         if self._verbose:
             self.log(str(self._counter))
-        if rp2.bootsel_button() == 1:
+        if self._check_bootsel and rp2.bootsel_button() == 1:
             raise RuntimeError("User interrupt")
         await asyncio.sleep(self._on_time)
         self._led.off()
