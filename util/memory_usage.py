@@ -13,7 +13,7 @@ def memory():
     mem_free = gc.mem_free()
     mem_alloc = gc.mem_alloc()
     mem_total = mem_free + mem_alloc
-    percentage_free = f"{mem_free / mem_total * 100:.2f}%"
+    percentage_free = round(mem_free / mem_total * 100, 2)
     return mem_free, mem_alloc, mem_total, percentage_free
 
 def free(full=False):
@@ -21,4 +21,4 @@ def free(full=False):
     if not full:
         return percentage_free
     else:
-        return f"Total:{mem_total} Free:{mem_free} ({percentage_free})"
+        return f"Total:{mem_total} Free:{mem_free} ({percentage_free}%)"
