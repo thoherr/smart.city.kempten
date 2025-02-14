@@ -16,3 +16,8 @@ class Housekeeper(Actor):
         gc.collect()
         if self._verbose:
             self.log(memory_usage.free(True))
+
+    def status(self):
+        mem_free, mem_alloc, mem_total, percentage_free = memory_usage.memory()
+        return { "free": mem_free, "alloc": mem_alloc, "total": mem_total, "percentage": percentage_free,
+                 "flash": memory_usage.flash() }
