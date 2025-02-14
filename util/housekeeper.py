@@ -9,6 +9,7 @@ class Housekeeper(Actor):
         super().__init__(actor_id, interval, verbose)
         self._interval = interval
         self._verbose = verbose
+        gc.enable()
 
     async def work(self):
         if self._verbose:
