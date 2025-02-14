@@ -18,12 +18,18 @@ from domain.environment.weather import Weather
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.traffic.count import TrafficCount
+from domain.traffic.light.column import Column as TrafficLightColumn
+from domain.traffic.light.crossing import Crossing as TrafficLightCrossing
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
+gc.collect()
+
 from report.mqtt_upload import MqttUploadActor, MqttUpload
 gc.collect()
 
 from report.traffic_count_panel import TrafficCountPanel
+gc.collect()
+
 #from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 gc.collect()
 
@@ -94,6 +100,11 @@ class ControllerIller(ControllerBase):
         self.actors.append(self.parking_upload)
 
     def _init_traffic(self):
+        l1 = TrafficLightColumn(9, 10, 11, 1)
+        l2 = TrafficLightColumn(14, 13, 12, 0)
+
+        self.actors.append(TrafficLightCrossing("Illerufer", [l1, l2]))
+
         mqtt_traffic_4 = MqttUpload("verkehr/sck_verkehr_4", self.mqtt_client, verbose=True)
 
         in_traffic_4 = TrafficCount("RH 4 einwärts", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4, verbose=True)
