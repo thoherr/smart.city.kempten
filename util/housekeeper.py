@@ -20,5 +20,7 @@ class Housekeeper(Actor):
 
     def status(self):
         mem_free, mem_alloc, mem_total, percentage_free = memory_usage.memory()
+        if self._verbose:
+            self.log(f"mem_free={mem_free}, mem_alloc={mem_alloc}, mem_total={mem_total}, percentage_free={percentage_free}")
         return { "free": mem_free, "alloc": mem_alloc, "total": mem_total, "percentage": percentage_free,
                  "flash": memory_usage.flash() }
