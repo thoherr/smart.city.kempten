@@ -11,6 +11,8 @@ from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
 from device.i2c_multiplexer import I2cMultiplexer
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
+
 gc.collect()
 
 from domain.environment.light import Light
@@ -51,8 +53,9 @@ class ControllerIller(ControllerBase):
         gc.collect()
         self._init_environment()
 
-#        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
-#        self.actors.append(self.parking_panel_large)
+        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste,
+                                                          multiplexer=I2cMultiplexer(self.mux74, 2), verbose=False)
+        self.actors.append(self.parking_panel_large)
 
     def _init_waste(self):
         w1 = WasteContainer("Illerufer 1",

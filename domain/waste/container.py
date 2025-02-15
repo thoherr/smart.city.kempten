@@ -3,7 +3,7 @@ from util.actor import Actor
 
 
 class WasteContainer(Actor):
-    def __init__(self, actor_id: str, sensor, threshold=100, interval=1, verbose=False):
+    def __init__(self, actor_id: str, sensor, threshold=80, interval=1, verbose=False):
         Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
         self._sensor = sensor
         self._threshold = threshold

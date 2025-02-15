@@ -3,7 +3,7 @@ from util.actor import Actor
 
 
 class ParkingAreaPanel(Actor):
-    def __init__(self, i2c, parking_area : ParkingArea, interval=1, verbose=False):
+    def __init__(self, i2c, parking_area : ParkingArea, multiplexer=None, interval=1, verbose=False):
         super().__init__("ParkingAreaPanel {:s}".format(parking_area.location), interval, verbose)
         self._screen = None
         self._writer_small = None
@@ -11,6 +11,7 @@ class ParkingAreaPanel(Actor):
         self._width: int = -1
         self._status_y: int = -1
         self._i2c = i2c
+        self._multiplexer = multiplexer
         self._parking_area = parking_area
 
     async def work(self):
@@ -19,7 +20,11 @@ class ParkingAreaPanel(Actor):
         parking_status = "{:s}".format("FREI" if number_of_empty_spaces > 0 else "BELEGT")
         if self._verbose:
             self.log("{:1d} / {:1d}".format(number_of_empty_spaces, self._parking_area.number_of_spaces()))
+        if self._multiplexer:
+            self._multiplexer.ensure_channel()
         self.show_info_screen(number_of_empty_spaces, parking_lots_available, parking_status)
+        if self._multiplexer:
+            self._multiplexer.reset_channel()
 
     def show_info_screen(self, number_of_empty_spaces, parking_lots_available, parking_status):
         raise NotImplementedError("DisplayInfoPanel not implemented by child class")
