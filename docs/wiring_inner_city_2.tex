@@ -35,6 +35,10 @@
 \node [right, font=\tiny] at (P.pin 2) {I2C0 SCL};
 \node [right, font=\tiny] at (P.pin 4) {I2C1 SDA};
 \node [right, font=\tiny] at (P.pin 5) {I2C1 SCL};
+\node [right, font=\tiny] at (P.pin 6) {GP4};
+\node [right, font=\tiny] at (P.pin 7) {GP5};
+\node [right, font=\tiny] at (P.pin 9) {GP6};
+\node [right, font=\tiny] at (P.pin 10) {GP7};
 \node [right, font=\tiny] at (P.pin 12) {GP9};
 \node [right, font=\tiny] at (P.pin 13) {GND};
 \node [right, font=\tiny] at (P.pin 14) {GP10};
@@ -114,9 +118,19 @@
  \hallsensor{20-\x*1.5}{0}{TC_\x}
  }
 
-
 \draw [color=blue] (TC_1.pin 4) |-  (P.pin 32){};
 \draw [color=blue] (TC_2.pin 4) |- (P.pin 31){};
+
+\foreach \x in {3,...,6} {
+ \hallsensor{2-\x*1.5}{0}{TC_\x}
+ }
+
+\draw [color=blue] (TC_3.pin 4) |-  (P.pin 6){};
+\draw [color=blue] (TC_4.pin 4) |- (P.pin 7){};
+
+\draw [color=blue] (TC_5.pin 4) |-  (P.pin 9){};
+\draw [color=blue] (TC_6.pin 4) |- (P.pin 10){};
+
 
 \end{circuitikz}
 
