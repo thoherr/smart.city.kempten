@@ -34,9 +34,10 @@ class EnvironmentPanel(Actor):
         self._screen.fill(0)
 
         if self._counter % 2 == 0:
-            self.show_data(f"{temperature:.1f} C", f"{humidity:.1f} %")
+            # \xB0 is °, but in extended ASCII, not UTF
+            self.show_data(f"{temperature:.1f} \xB0""C", f"{humidity:.1f} %")
         else:
-            self.show_data(f"{pressure:.0f} hPa", f"{light:.0f} lux")
+            self.show_data(f"{pressure:.0f} hPa", f"{light:.0f} lx")
 
         self._counter = (self._counter + 1) % 2
 
