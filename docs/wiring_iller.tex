@@ -116,7 +116,7 @@
 
 \ctikzset{multipoles/dipchip/width=3}
 
-\draw (12,1) node[dipchip,
+\draw (22,1) node[dipchip,
  num pins=40,
  hide numbers,
  no topmark,
@@ -130,6 +130,9 @@
 \node [right, font=\tiny] at (P.pin 2) {I2C0 SCL};
 \node [right, font=\tiny] at (P.pin 4) {I2C1 SDA};
 \node [right, font=\tiny] at (P.pin 5) {I2C1 SCL};
+\node [left, font=\tiny] at (P.pin 31) {GP26};
+\node [left, font=\tiny] at (P.pin 32) {GP27};
+\node [left, font=\tiny] at (P.pin 34) {GP28};
 \node [left, font=\tiny] at (P.pin 40) {VBUS};
 \node [left, font=\tiny] at (P.pin 39) {VSYS};
 \node [left, font=\tiny] at (P.pin 38) {GND};
@@ -143,6 +146,70 @@
 
 \draw [color=orange] (M2.pin 3) -- ++(-0.5,0) |- (P.pin 4) -- (P.pin 4){};
 \draw [color=blue] (M2.pin 4) -- ++(-0.7,0) |- (P.pin 5) -- (P.pin 5){};
+
+\foreach \column in {1,...,4} {
+  \foreach \light in {1,...,3} {
+
+    \ifnum\light=1
+      \ifodd\column
+        \draw [color=red] (P.pin 12) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \else
+        \draw [color=red] (P.pin 19) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \fi
+      \draw [color=red] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+    \fi
+
+    \ifnum\light=2
+      \ifodd\column
+        \draw [color=yellow] (P.pin 14) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \else
+        \draw [color=yellow] (P.pin 17) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \fi
+       \draw [color=yellow] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+    \fi
+
+    \ifnum\light=3
+      \ifodd\column
+        \draw [color=green] (P.pin 15) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \else
+        \draw [color=green] (P.pin 16) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+      \fi
+       \draw [color=green] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+    \fi
+
+    \ifodd\column
+      \newcommand\ground{13}
+    \else
+      \newcommand\ground{18}
+    \fi
+    \draw (8+\column*2.5,-7-\light*1.5) to[empty led] (8.5+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
+    }
+}
+
+
+\newcommand\hallsensor[3]{
+ \ctikzset{multipoles/dipchip/width=0.8}
+ \draw (#1,#2) node[dipchip,
+ num pins=4,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4,
+ rotate=90](#3){$#3$};
+ \node [below, font=\tiny] at (#3.pin 4) {D};
+ \node [below, font=\tiny] at (#3.pin 3) {A};
+ %\node [above, font=\tiny] at (#3.pin 2) {GND};
+ %\node [above, font=\tiny] at (#3.pin 1) {VCC};
+}
+
+\foreach \x in {7,...,9} {
+ \hallsensor{15+\x*1.5}{0}{TC_\x}
+ }
+
+\draw [color=blue] (TC_7.pin 4) |-  (P.pin 31){};
+\draw [color=blue] (TC_8.pin 4) |- (P.pin 32){};
+\draw [color=blue] (TC_9.pin 4) |-  (P.pin 34){};
+
 
 \end{circuitikz}
 
