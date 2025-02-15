@@ -1,6 +1,7 @@
 # This is the third Raspi of our MOC of the City of Kempten
 # It implements the Illerufer (second baseplate), nearby the river, with a Parking Area (including display),
 # three waste containers and one traffic light
+# Due to memory use this code does not run on a Pico W, use a Pico 2 W instead
 import gc
 
 from machine import Pin
