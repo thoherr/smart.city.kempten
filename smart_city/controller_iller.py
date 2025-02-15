@@ -12,7 +12,6 @@ from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
 from device.i2c_multiplexer import I2cMultiplexer
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
-from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 
 gc.collect()
 
@@ -31,9 +30,8 @@ from report.mqtt_upload import MqttUploadActor, MqttUpload
 gc.collect()
 
 from report.traffic_count_panel import TrafficCountPanel
-gc.collect()
-
-#from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
+from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
+from report.environment_panel import EnvironmentPanel
 gc.collect()
 
 from smart_city.controller_base import ControllerBase
@@ -45,18 +43,14 @@ class ControllerIller(ControllerBase):
         super().__init__(**kwargs)
 
         self._init_multiplexers()
-        gc.collect()
         self._init_parking()
-        gc.collect()
         self._init_waste()
-        gc.collect()
         self._init_traffic()
-        gc.collect()
         self._init_environment()
 
-        self.parking_panel_large = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste,
-                                                          multiplexer=I2cMultiplexer(self.mux74, 2), verbose=False)
-        self.actors.append(self.parking_panel_large)
+        self.parking_panel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste,
+                                                    multiplexer=I2cMultiplexer(self.mux74, 2), verbose=False)
+        self.actors.append(self.parking_panel)
 
     def _init_waste(self):
         w1 = WasteContainer("Illerufer 1",
@@ -117,9 +111,9 @@ class ControllerIller(ControllerBase):
         self.actors.append(out_traffic_4)
 
         counters_4 = [in_traffic_4, out_traffic_4]
-        traffic_count_panel = TrafficCountPanel("traffic", self.mux74.i2c, counters_4,
+        self.traffic_count_panel = TrafficCountPanel("traffic", self.mux74.i2c, counters_4,
                                                 multiplexer=I2cMultiplexer(self.mux74, 0), verbose=True)
-        self.actors.append(traffic_count_panel)
+        self.actors.append(self.traffic_count_panel)
 
         mqtt_traffic_5 = MqttUpload("verkehr/sck_verkehr_5", self.mqtt_client, verbose=True)
 
@@ -139,6 +133,10 @@ class ControllerIller(ControllerBase):
 
         self.light_upload = MqttUploadActor("licht", self.mqtt_client, self.light.status, interval=10, verbose=True)
         self.actors.append(self.light_upload)
+
+        self.environment_panel = EnvironmentPanel("environment", self.mux74.i2c, self.weather, self.light,
+                                                multiplexer=I2cMultiplexer(self.mux74, 1), verbose=True)
+        self.actors.append(self.environment_panel)
 
     def _init_multiplexers(self):
         # Name includes address for better reference
