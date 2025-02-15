@@ -3,6 +3,7 @@
 # adapted from https://github.com/peterhinch/micropython-async/blob/master/v3/docs/TUTORIAL.md#224-a-typical-firmware-app
 
 import asyncio
+import os
 
 import rp2
 
@@ -23,8 +24,9 @@ async def main():
     tasks = controller.create_tasks()
     await asyncio.gather(tasks, controller.run_forever())
 
+has_bootsel = not 'Pico 2' in os.uname().machine
 
-if rp2.bootsel_button() == 0:
+if not has_bootsel or rp2.bootsel_button() == 0:
     try:
         asyncio.run(main())
     finally:
