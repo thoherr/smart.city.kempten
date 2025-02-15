@@ -10,15 +10,15 @@
 
 \ctikzset{multipoles/dipchip/width=3}
  \draw (5,6.25) node[dipchip,
- num pins=4,
+ num pins=8,
  hide numbers,
  no topmark,
  external pins width=0.0,
  external pad fraction=4](display){Display};
  \draw [color=red] (display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
  \draw [color=black] (display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
- \node [left, font=\tiny] at (display.pin 4) {SDA};
- \node [left, font=\tiny] at (display.pin 3) {SCL};
+ \node [left, font=\tiny] at (display.pin 8) {SDA};
+ \node [left, font=\tiny] at (display.pin 7) {SCL};
 
 \draw (12,1) node[dipchip,
  num pins=40,
@@ -91,8 +91,8 @@
     }
 }
 
-\draw [color=orange] (display.pin 4) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
-\draw [color=blue] (display.pin 3) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
+\draw [color=orange] (display.pin 8) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
+\draw [color=blue] (display.pin 7) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
 
 \newcommand\hallsensor[3]{
  \ctikzset{multipoles/dipchip/width=0.8}
