@@ -9,7 +9,7 @@
  \ctikzset{multipoles/external pins thickness=2}
 
 \ctikzset{multipoles/dipchip/width=3}
- \draw (5,6.25) node[dipchip,
+ \draw (6.5,5) node[dipchip,
  num pins=8,
  hide numbers,
  no topmark,
@@ -80,27 +80,27 @@
 
     \ifnum\light=1
       \ifodd\column
-        \draw [color=red] (P.pin 12) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 12) to[R=470\si{\ohm}, font=\tiny] ++(-1.5,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=red] (P.pin 19) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 19) to[R=470\si{\ohm}, font=\tiny] ++(-1.5,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
       \draw [color=red] (-3.25+\column*2.5-\light*0.25,-5-\light*.25) -- (-3.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (-3.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=2
       \ifodd\column
-        \draw [color=yellow] (P.pin 14) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 14) to[R=470\si{\ohm}, font=\tiny] ++(-1.5,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=yellow] (P.pin 17) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 17) to[R=470\si{\ohm}, font=\tiny] ++(-4.,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
        \draw [color=yellow] (-3.25+\column*2.5-\light*0.25,-5-\light*.25) -- (-3.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (-3.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=3
       \ifodd\column
-        \draw [color=green] (P.pin 15) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 15) to[R=680\si{\ohm}, font=\tiny] ++(-4.,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=green] (P.pin 16) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 16) to[R=680\si{\ohm}, font=\tiny] ++(-1.5,0) -| (-3.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
        \draw [color=green] (-3.25+\column*2.5-\light*0.25,-5-\light*.25) -- (-3.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (-3.25+\column*2.5,-7-\light*1.5);
     \fi
@@ -119,29 +119,29 @@
 
     \ifnum\light=1
       \ifodd\column
-        \draw [color=red] (P.pin 29) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 29) to[R=470\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=red] (P.pin 22) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 22) to[R=470\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-      \draw [color=red] (15.25+\column*2.5-\light*0.25,-5-\light*.25) -- (15.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (15.25+\column*2.5,-7-\light*1.5);
+      \draw [color=red] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=2
       \ifodd\column
-        \draw [color=yellow] (P.pin 27) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 27) to[R=470\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=yellow] (P.pin 24) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 24) to[R=470\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-       \draw [color=yellow] (15.25+\column*2.5-\light*0.25,-5-\light*.25) -- (15.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (15.25+\column*2.5,-7-\light*1.5);
+       \draw [color=yellow] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=3
       \ifodd\column
-        \draw [color=green] (P.pin 26) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 26) to[R=680\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=green] (P.pin 25) -| (15.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 25) to[R=680\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-       \draw [color=green] (15.25+\column*2.5-\light*0.25,-5-\light*.25) -- (15.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (15.25+\column*2.5,-7-\light*1.5);
+       \draw [color=green] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifodd\column
@@ -149,12 +149,12 @@
     \else
       \newcommand\ground{23}
     \fi
-    \draw (15.25+\column*2.5,-7-\light*1.5) to[empty led] (15.75+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
+    \draw (17.25+\column*2.5,-7-\light*1.5) to[empty led] (17.75+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
     }
 }
 
 
-\draw [color=orange] (display.pin 8) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
+\draw [color=orange] (display.pin 8) -- ++(1.2,0) |- (P.pin 1) -- (P.pin 1){};
 \draw [color=blue] (display.pin 7) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
 
 \newcommand\hallsensor[3]{
@@ -174,7 +174,7 @@
 
 
 \foreach \x in {1,...,2} {
- \hallsensor{28-\x*1.5}{0}{TC_\x}
+ \hallsensor{30-\x*1.5}{0}{TC_\x}
  }
 
 \draw [color=blue] (TC_1.pin 4) |-  (P.pin 32){};
