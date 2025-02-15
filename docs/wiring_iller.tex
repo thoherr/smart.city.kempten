@@ -8,18 +8,6 @@
  \ctikzset{multipoles/thickness=2}
  \ctikzset{multipoles/external pins thickness=2}
 
-\ctikzset{multipoles/dipchip/width=3}
- \draw (5,6) node[dipchip,
- num pins=8,
- hide numbers,
- no topmark,
- external pins width=0.0,
- external pad fraction=4](display){Display};
- \draw [color=red] (display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
- \draw [color=black] (display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
- \node [left, font=\tiny] at (display.pin 8) {SDA};
- \node [left, font=\tiny] at (display.pin 7) {SCL};
-
 \newcommand\multiplexer[4]{
  \ctikzset{multipoles/dipchip/width=2}
  \draw (#3,#4) node[dipchip,
@@ -116,7 +104,7 @@
 
 \ctikzset{multipoles/dipchip/width=3}
 
-\draw (22,1) node[dipchip,
+\draw (23,1) node[dipchip,
  num pins=40,
  hide numbers,
  no topmark,
@@ -138,9 +126,6 @@
 \node [left, font=\tiny] at (P.pin 38) {GND};
 \node [left, font=\tiny] at (P.pin 36) {3V3};
 
-\draw [color=orange] (display.pin 8) -- ++(1.6,0) |- (P.pin 1) -- (P.pin 1){};
-\draw [color=blue] (display.pin 7) -- ++(1.4,0) |- (P.pin 2) -- (P.pin 2){};
-
 \draw [color=orange] (M1.pin 3) -- ++(-0.5,0) |- (P.pin 4) -- (P.pin 4){};
 \draw [color=blue] (M1.pin 4) -- ++(-0.7,0) |- (P.pin 5) -- (P.pin 5){};
 
@@ -152,29 +137,29 @@
 
     \ifnum\light=1
       \ifodd\column
-        \draw [color=red] (P.pin 12) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 12) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=red] (P.pin 19) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 19) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-      \draw [color=red] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+      \draw [color=red] (7+\column*2.5-\light*0.25,-5-\light*.25) -- (7+\column*2.5-\light*0.25,-7-\light*1.5) -- (7+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=2
       \ifodd\column
-        \draw [color=yellow] (P.pin 14) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 14) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=yellow] (P.pin 17) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 17) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-       \draw [color=yellow] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+       \draw [color=yellow] (7+\column*2.5-\light*0.25,-5-\light*.25) -- (7+\column*2.5-\light*0.25,-7-\light*1.5) -- (7+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=3
       \ifodd\column
-        \draw [color=green] (P.pin 15) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 15) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=green] (P.pin 16) -| (8+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 16) -| (7+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
-       \draw [color=green] (8+\column*2.5-\light*0.25,-5-\light*.25) -- (8+\column*2.5-\light*0.25,-7-\light*1.5) -- (8+\column*2.5,-7-\light*1.5);
+       \draw [color=green] (7+\column*2.5-\light*0.25,-5-\light*.25) -- (7+\column*2.5-\light*0.25,-7-\light*1.5) -- (7+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifodd\column
@@ -182,7 +167,7 @@
     \else
       \newcommand\ground{18}
     \fi
-    \draw (8+\column*2.5,-7-\light*1.5) to[empty led] (8.5+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
+    \draw (7+\column*2.5,-7-\light*1.5) to[empty led] (7.5+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
     }
 }
 
@@ -203,13 +188,60 @@
 }
 
 \foreach \x in {7,...,9} {
- \hallsensor{15+\x*1.5}{0}{TC_\x}
+ \hallsensor{16+\x*1.5}{0}{TC_\x}
  }
 
 \draw [color=blue] (TC_7.pin 4) |-  (P.pin 31){};
 \draw [color=blue] (TC_8.pin 4) |- (P.pin 32){};
 \draw [color=blue] (TC_9.pin 4) |-  (P.pin 34){};
 
+\multiplexer{M3}{MUX 0x74}{22}{-10}
+
+\draw [color=orange] (M3.pin 3) -- ++(-0.5,0) |- (P.pin 1) -- (P.pin 1){};
+\draw [color=blue] (M3.pin 4) -- ++(-0.7,0) |- (P.pin 2) -- (P.pin 2){};
+
+\ctikzset{multipoles/dipchip/width=3}
+ \draw (16,-15) node[dipchip,
+ num pins=8,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4](traffic_display){Traffic Count};
+ \draw [color=red] (traffic_display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
+ \draw [color=black] (traffic_display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
+ \node [left, font=\tiny] at (traffic_display.pin 8) {SDA};
+ \node [left, font=\tiny] at (traffic_display.pin 7) {SCL};
+
+\draw [color=orange] (traffic_display.pin 8) -- ++(1.2,0) |- (M3.pin 9) -- (M3.pin 9){};
+\draw [color=blue] (traffic_display.pin 7) -- ++(1.0,0) |- (M3.pin 10) -- (M3.pin 10){};
+
+ \draw (16,-18) node[dipchip,
+ num pins=8,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4](env_display){Environment Data};
+ \draw [color=red] (env_display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
+ \draw [color=black] (env_display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
+ \node [left, font=\tiny] at (env_display.pin 8) {SDA};
+ \node [left, font=\tiny] at (env_display.pin 7) {SCL};
+
+\draw [color=orange] (env_display.pin 8) -- ++(1.8,0) |- (M3.pin 11) -- (M3.pin 11){};
+\draw [color=blue] (env_display.pin 7) -- ++(1.6,0) |- (M3.pin 12) -- (M3.pin 12){};
+
+ \draw (24,-16.5) node[dipchip,
+ num pins=8,
+ hide numbers,
+ no topmark,
+ external pins width=0.0,
+ external pad fraction=4](park_display){Parking + Waste};
+ \draw [color=red] (park_display.pin 1) -- ++(-1,0) node[vcc, font=\small]{USB Power};
+ \draw [color=black] (park_display.pin 2) -- ++(-1,0) node[ground, font=\small]{};
+ \node [left, font=\tiny] at (park_display.pin 8) {SDA};
+ \node [left, font=\tiny] at (park_display.pin 7) {SCL};
+
+\draw [color=orange] (park_display.pin 8) -- ++(0.4,0) |- (M3.pin 13) -- (M3.pin 13){};
+\draw [color=blue] (park_display.pin 7) -- ++(0.6,0) |- (M3.pin 14) -- (M3.pin 14){};
 
 \end{circuitikz}
 
