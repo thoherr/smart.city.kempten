@@ -6,8 +6,8 @@ from util.actor import Actor
 
 
 class TrafficCount(Actor):
-    def __init__(self, actor_id: str, direction: str, gpio_pin, mqtt_upload: MqttUpload = None, interval=0.05, verbose=False):
-        super().__init__(actor_id, interval, verbose)
+    def __init__(self, actor_id: str, direction: str, gpio_pin, mqtt_upload: MqttUpload = None, **kwargs):
+        super(TrafficCount, self).__init__(actor_id, **kwargs)
         self._counter: int = 0
         self._direction = direction
         self._gpio_pin = gpio_pin

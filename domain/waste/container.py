@@ -3,8 +3,8 @@ from util.actor import Actor
 
 
 class WasteContainer(Actor):
-    def __init__(self, actor_id: str, sensor, threshold=80, interval=1, verbose=False):
-        Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
+    def __init__(self, actor_id: str, sensor, threshold=80, **kwargs):
+        super(WasteContainer, self).__init__(actor_id, **kwargs)
         self._sensor = sensor
         self._threshold = threshold
         self._is_full = False

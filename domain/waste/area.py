@@ -5,8 +5,8 @@ from domain.waste.container import WasteContainer
 
 
 class WasteArea:
-    def __init__(self, id: str, containers: [WasteContainer]):
-        self.id = id
+    def __init__(self, wa_id: str, containers: [WasteContainer]):
+        self.id = wa_id
         self.containers = containers
 
     async def run(self):

@@ -7,8 +7,8 @@ from report.parking_area_panel import ParkingAreaPanel
 
 
 class ParkingAreaPanelSSD1306(ParkingAreaPanel):
-    def __init__(self, i2c, parking_area : ParkingArea, interval=1, verbose=False):
-        super().__init__(i2c, parking_area, interval, verbose)
+    def __init__(self, i2c, parking_area : ParkingArea, **kwargs):
+        super(ParkingAreaPanelSSD1306, self).__init__(i2c, parking_area, **kwargs)
 
         self._width = 128
         self._height = 32

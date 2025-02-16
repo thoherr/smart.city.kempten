@@ -14,8 +14,8 @@ class ParkingAreaPanelSH1106(ParkingAreaPanel):
     graphics_cycles = 2
     waste_cycles = 2
 
-    def __init__(self, i2c, parking_area: ParkingArea, waste_area: WasteArea, multiplexer=None, interval=1, verbose=False):
-        super().__init__(i2c, parking_area, multiplexer, interval, verbose)
+    def __init__(self, i2c, parking_area: ParkingArea, waste_area: WasteArea, **kwargs):
+        super(ParkingAreaPanelSH1106, self).__init__(i2c, parking_area, **kwargs)
         self._waste_containers = waste_area.containers
 
         self._width = 128

@@ -3,8 +3,8 @@ from util.actor import Actor
 
 
 class ParkingSpace(Actor):
-    def __init__(self, parking_space_id, sensor, empty_threshold=100, interval=1, verbose=False):
-        super().__init__(parking_space_id, interval=interval, verbose=verbose)
+    def __init__(self, actor_id, sensor, empty_threshold=100, **kwargs):
+        super(ParkingSpace, self).__init__(actor_id, **kwargs)
         self._sensor = sensor
         self._empty_threshold = empty_threshold
         self._is_empty = True

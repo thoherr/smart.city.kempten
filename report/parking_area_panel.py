@@ -3,8 +3,8 @@ from util.actor import Actor
 
 
 class ParkingAreaPanel(Actor):
-    def __init__(self, i2c, parking_area : ParkingArea, multiplexer=None, interval=1, verbose=False):
-        super().__init__("ParkingAreaPanel {:s}".format(parking_area.location), interval, verbose)
+    def __init__(self, i2c, parking_area : ParkingArea, multiplexer=None, **kwargs):
+        super(ParkingAreaPanel, self).__init__("ParkingAreaPanel {:s}".format(parking_area.location), **kwargs)
         self._screen = None
         self._writer_small = None
         self._writer_large = None

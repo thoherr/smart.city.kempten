@@ -5,8 +5,8 @@ from util.actor import Actor
 
 
 class TrafficCountPanel(Actor):
-    def __init__(self, actor_id, i2c, traffic_counters, multiplexer=None, interval=1, verbose=False):
-        super().__init__(actor_id, interval, verbose)
+    def __init__(self, actor_id, i2c, traffic_counters, multiplexer=None, **kwargs):
+        super(TrafficCountPanel, self).__init__(actor_id, **kwargs)
         self._width = 128
         self._height = 64
         self._screen = SH1106_I2C(self._width, self._height, i2c)

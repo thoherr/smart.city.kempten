@@ -5,8 +5,8 @@ from util.actor import Actor
 
 
 class EnvironmentPanel(Actor):
-    def __init__(self, actor_id, i2c, weather, light, multiplexer=None, interval=2, verbose=False):
-        super().__init__(actor_id, interval, verbose)
+    def __init__(self, actor_id, i2c, weather, light, multiplexer=None, **kwargs):
+        super(EnvironmentPanel, self).__init__(actor_id, **kwargs)
         self._width = 128
         self._height = 64
         self._screen = SH1106_I2C(self._width, self._height, i2c)

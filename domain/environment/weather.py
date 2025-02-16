@@ -2,8 +2,8 @@ from util.actor import Actor
 
 
 class Weather(Actor):
-    def __init__(self, actor_id, sensor, interval=10, verbose=False):
-        super().__init__(actor_id, interval=interval, verbose=verbose)
+    def __init__(self, actor_id, sensor, **kwargs):
+        super(Weather, self).__init__(actor_id, **kwargs)
         self._sensor = sensor
         self._temperature = 0
         self._pressure = 0

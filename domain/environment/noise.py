@@ -2,8 +2,8 @@ from util.actor import Actor
 
 
 class Noise(Actor):
-    def __init__(self, actor_id: str, analog_sensor, interval=interval, verbose=verbose):
-        Actor.__init__(self, actor_id)
+    def __init__(self, actor_id: str, analog_sensor, **kwargs):
+        super(Noise, self).__init__(self, actor_id, **kwargs)
         self._analog_sensor = analog_sensor
         self._noise = 0
 

@@ -3,8 +3,8 @@ from util.actor import Actor
 
 
 class Light(Actor):
-    def __init__(self, actor_id: str, sensor, interval=1, verbose=False):
-        Actor.__init__(self, actor_id, interval=interval, verbose=verbose)
+    def __init__(self, actor_id: str, sensor, **kwargs):
+        super(Light, self).__init__(actor_id, **kwargs)
         self._sensor = sensor
         self._light = 0
 
