@@ -27,6 +27,6 @@ class Weather(Actor):
         return self._humidity
 
     def status(self):
-        return { "Temperatur": self._temperature,
-                 "Luftdruck": self._pressure,
-                 "Luftfeuchte": self._humidity }
+        return { "temperatur": self._temperature,
+                 "luftdruck": self._pressure,
+                 "luftfeuchtigkeit": self._humidity }

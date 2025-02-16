@@ -17,6 +17,7 @@ gc.collect()
 
 from domain.environment.light import Light
 from domain.environment.weather import Weather
+from domain.environment import Environment
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.traffic.count import TrafficCount
@@ -125,18 +126,17 @@ class ControllerIller(ControllerBase):
                                MultiplexedI2cSensor(BME280, multiplexer=self.mux74, channel=3), interval=10)
         self.actors.append(self.weather)
 
-        self.weather_upload = MqttUploadActor("umwelt", self.mqtt_client, self.weather.status, interval=30, verbose=True)
-        self.actors.append(self.weather_upload)
-
         self.light = Light("light", MultiplexedI2cSensor(GY302, multiplexer=self.mux74, channel=3), interval=2)
         self.actors.append(self.light)
-
-        self.light_upload = MqttUploadActor("licht", self.mqtt_client, self.light.status, interval=10, verbose=True)
-        self.actors.append(self.light_upload)
 
         self.environment_panel = EnvironmentPanel("environment", self.mux74.i2c, self.weather, self.light,
                                                 multiplexer=I2cMultiplexer(self.mux74, 1), verbose=True)
         self.actors.append(self.environment_panel)
+
+        self.environment = Environment(self.weather, self.light)
+        self.env_upload = MqttUploadActor("sck_umwelt_1", self.mqtt_client, self.environment.status,
+                                          interval=30, verbose=True)
+        self.actors.append(self.env_upload)
 
     def _init_multiplexers(self):
         # Name includes address for better reference

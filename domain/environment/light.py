@@ -15,4 +15,4 @@ class Light(Actor):
         return self._light
 
     def status(self):
-        return { "Helligkeit": self._light }
+        return { "helligkeit": self._light }
