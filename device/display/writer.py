@@ -60,7 +60,7 @@ class Writer():
             s.text_col = col
         return s.text_row,  s.text_col
 
-    def __init__(self, device, font, verbose=True):
+    def __init__(self, device, font, verbose=False):
         self.devid = _get_id(device)
         self.device = device
         if self.devid not in Writer.state:
