@@ -42,5 +42,14 @@ The model contains three microcontrollers with different functionality, sensors 
     * 6 ToF sensors VL53L0X for parking spaces (via multiplexer)
     * 3 light sensors GY302 / BH1750 for waste containers (via multiplexer)
     * 3 5mm LED for light barrier of waste containers
-    * 6 magnetic hall sensors KY-024 for traffic count at main crossing
+    * 3 magnetic hall sensors KY-024 for traffic count at crossing
     * 3 OLED displays SH1106 for traffic count, parking area/smart waste and environmental data (via multiplexer)
+
+An USB connection of all controllers is available individually at the back side of the model via Micro-USB.
+
+This connection mainly provides the power for the controllers via USB.
+Power consumption is currently below 1 W per controller, therefore all controllers may be powered by a standard
+5V power adapter using y-cables.
+
+However, the USB connections can be used to directly access the controllers individually without the necessity
+of removing them from the model, e.g. to update and configure them.
