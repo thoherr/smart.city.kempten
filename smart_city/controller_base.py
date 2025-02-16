@@ -25,7 +25,7 @@ def print_i2c_info(i2c_id, i2c):
 class ControllerBase(object):
     def __init__(self, debug=False, **_kwargs):
         self.debug = debug
-        MQTTClient.DEBUG = True
+        #MQTTClient.DEBUG = True
         self.mqtt_client = MQTTClient(config)
 
         self.i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
@@ -38,8 +38,8 @@ class ControllerBase(object):
 
         self.actors = []
 
-        self.actors.append(Heartbeat(verbose=True))
-        self.actors.append(Housekeeper(verbose=True))
+        self.actors.append(Heartbeat())
+        self.actors.append(Housekeeper())
 
     def print_debug_log(self):
         pass

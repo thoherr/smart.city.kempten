@@ -22,29 +22,29 @@ class ControllerInnerCityOne(ControllerBase):
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Rathaus 1", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=5),
-                          empty_threshold=40, verbose=True)
+                          empty_threshold=40)
         p2 = ParkingSpace("Rathaus 2", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=4),
-                          empty_threshold=50, verbose=True)
+                          empty_threshold=50)
         p3 = ParkingSpace("Rathaus 3", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=3),
-                          empty_threshold=50, verbose=True)
+                          empty_threshold=50)
         p4 = ParkingSpace("Rathaus 4", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=2),
-                          empty_threshold=60, verbose=True)
+                          empty_threshold=60)
         p5 = ParkingSpace("Rathaus 5", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=1),
-                          empty_threshold=100, verbose=True)
+                          empty_threshold=100)
         p6 = ParkingSpace("Rathaus 6", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=0),
-                          empty_threshold=50, verbose=True)
+                          empty_threshold=50)
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
         p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=7),
-                          empty_threshold=65, verbose=True)
+                          empty_threshold=65)
         p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=1),
-                          empty_threshold=50, verbose=True)
+                          empty_threshold=50)
 
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
 
         self.parking_upload = MqttUploadActor("parkraum/sck_parkraum_1", self.mqtt_client, self.parking.status,
-                                              interval=3, verbose=True)
+                                              interval=3)
         self.actors.append(self.parking_upload)
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
@@ -60,9 +60,9 @@ class ControllerInnerCityOne(ControllerBase):
         self.actors.append(w3)
         self.waste = WasteArea("Rathaus", [w1, w2, w3])
 
-        self.parking_and_waste_infopanel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste, verbose=False)
+        self.parking_and_waste_infopanel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste)
         self.actors.append(self.parking_and_waste_infopanel)
 
         self.waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_1", self.mqtt_client, self.waste.status,
-                                            interval=3, verbose=True)
+                                            interval=3)
         self.actors.append(self.waste_upload)
