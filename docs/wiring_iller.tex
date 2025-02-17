@@ -229,6 +229,15 @@
 \draw [color=orange] (env_display.pin 8) -- ++(1.8,0) |- (M3.pin 11) -- (M3.pin 11){};
 \draw [color=blue] (env_display.pin 7) -- ++(1.6,0) |- (M3.pin 12) -- (M3.pin 12){};
 
+\foreach \x in {1,...,2} {
+ \sensor{27+\x*1.5}{-13}{E_\x}
+ }
+
+\draw [color=orange] (E_1.pin 4) |-  (M3.pin 15){};
+\draw [color=blue] (E_1.pin 3) |-  (M3.pin 16){};
+\draw [color=orange] (E_2.pin 4) |-  (M3.pin 15){};
+\draw [color=blue] (E_2.pin 3) |-  (M3.pin 16){};
+
  \draw (24,-16.5) node[dipchip,
  num pins=8,
  hide numbers,

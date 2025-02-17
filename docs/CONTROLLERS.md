@@ -43,6 +43,7 @@ The model contains three microcontrollers with different functionality, sensors 
     * 3 light sensors GY302 / BH1750 for waste containers (via multiplexer)
     * 3 5mm LED for light barrier of waste containers
     * 3 magnetic hall sensors KY-024 for traffic count at crossing
+    * 1 BME280 for temperature, pressure and humidity and 1 GY302 / BH1750 for light level (via multiplexer)
     * 3 OLED displays SH1106 for traffic count, parking area/smart waste and environmental data (via multiplexer)
 
 An USB connection of all controllers is available individually at the back side of the model via Micro-USB.

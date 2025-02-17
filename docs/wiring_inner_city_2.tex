@@ -119,35 +119,35 @@
 
     \ifnum\light=1
       \ifodd\column
-        \draw [color=red] (P.pin 29) to[R=390\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 22) to[R=390\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=red] (P.pin 22) to[R=680\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=red] (P.pin 29) to[R=680\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
       \draw [color=red] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=2
       \ifodd\column
-        \draw [color=yellow] (P.pin 27) to[R=390\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 24) to[R=390\si{\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=yellow] (P.pin 24) to[R=680\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=yellow] (P.pin 27) to[R=680\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
        \draw [color=yellow] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifnum\light=3
       \ifodd\column
-        \draw [color=green] (P.pin 26) to[R=680\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 25) to[R=680\si{\ohm}, font=\tiny] ++(4.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \else
-        \draw [color=green] (P.pin 25) to[R=1.5\si{\kilo\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
+        \draw [color=green] (P.pin 26) to[R=1\si{\kilo\ohm}, font=\tiny] ++(1.5,0) -| (17.25+\column*2.5-\light*0.25,-5-\light*.25);
       \fi
        \draw [color=green] (17.25+\column*2.5-\light*0.25,-5-\light*.25) -- (17.25+\column*2.5-\light*0.25,-7-\light*1.5) -- (17.25+\column*2.5,-7-\light*1.5);
     \fi
 
     \ifodd\column
-      \newcommand\ground{28}
-    \else
       \newcommand\ground{23}
+    \else
+      \newcommand\ground{28}
     \fi
     \draw (17.25+\column*2.5,-7-\light*1.5) to[empty led] (17.75+\column*2.5,-7-\light*1.5) -- ++(0.5,0) |- (P.pin \inteval\ground);
     }
