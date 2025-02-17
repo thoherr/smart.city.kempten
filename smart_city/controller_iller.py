@@ -129,7 +129,7 @@ class ControllerIller(ControllerBase):
         self.actors.append(self.environment_panel)
 
         self.environment = Environment(self.weather, self.light)
-        self.env_upload = MqttUploadActor("sck_umwelt_1", self.mqtt_client, self.environment.status,
+        self.env_upload = MqttUploadActor("umwelt/sck_umwelt_1", self.mqtt_client, self.environment.status,
                                           interval=30)
         self.actors.append(self.env_upload)
 
