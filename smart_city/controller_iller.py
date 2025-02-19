@@ -125,7 +125,7 @@ class ControllerIller(ControllerBase):
         self.actors.append(self.light)
 
         self.environment_panel = EnvironmentPanel("environment", self.mux74.i2c, self.weather, self.light,
-                                                multiplexer=I2cMultiplexer(self.mux74, 1))
+                                                multiplexer=I2cMultiplexer(self.mux74, 1), interval=4)
         self.actors.append(self.environment_panel)
 
         self.environment = Environment(self.weather, self.light)
