@@ -1,4 +1,6 @@
 # Sensor for traffic count, using a PIO (e.g. reed or hall driver)
+import asyncio
+
 from report.mqtt_upload import MqttUpload
 from util.actor import Actor
 
@@ -22,8 +24,10 @@ class TrafficCount(Actor):
                 if self._mqtt_upload:
                     data = {"richtung": self._direction, "summe": self._counter}
                     if self._verbose:
-                        self.log(f"mqtt_upload {data}")
+                        self.log(f"mqtt_upload {data} begin")
                     self._mqtt_upload.post_data(data)
+                    if self._verbose:
+                       self.log(f"mqtt_upload {data} end")
             self._old_value = new_value
 
     def value(self):

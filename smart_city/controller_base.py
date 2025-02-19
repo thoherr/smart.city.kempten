@@ -1,13 +1,13 @@
 import asyncio
-import gc
 
 from machine import Pin, I2C
+from ntptime import settime
 
-import setup_wlan_config as wlan_config
+from setup_mqtt_config import config
+from util.mqtt_as import MQTTClient
+
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
-from util.mqtt import connect_mqtt
-from util.wlan import initialize_wlan
 
 
 def print_i2c_info(i2c_id, i2c):
@@ -23,15 +23,10 @@ def print_i2c_info(i2c_id, i2c):
 
 
 class ControllerBase(object):
-    def __init__(self, debug=False, do_wlan_init=True, do_mqtt_init=True, **_kwargs):
+    def __init__(self, debug=False, **_kwargs):
         self.debug = debug
-        self.mqtt_client = None
-
-        if do_wlan_init:
-            self.init_wlan()
-            if do_mqtt_init:
-                gc.collect()
-                self.init_mqtt()
+        #MQTTClient.DEBUG = True
+        self.mqtt_client = MQTTClient(config)
 
         self.i2c0 = I2C(0, sda=Pin(0), scl=Pin(1))
         if self.debug:
@@ -46,29 +41,36 @@ class ControllerBase(object):
         self.actors.append(Heartbeat())
         self.actors.append(Housekeeper())
 
-    def init_mqtt(self):
-        self.mqtt_client = connect_mqtt(self.debug)
-        if self.mqtt_client and self.debug:
-            print("##### MQTT setup complete")
-
-    def init_wlan(self):
-        if self.debug:
-            print("##### WLAN and MQTT setup")
-        if initialize_wlan(wlan_config.wifi_ssid, wlan_config.wifi_password) and self.debug:
-            print("##### WLAN setup complete")
-
     def print_debug_log(self):
         pass
+
+    async def up(self):
+        while True:
+            await self.mqtt_client.up.wait()
+            self.mqtt_client.up.clear()
+            settime()
+            if self.debug:
+                print("##### MQTT broker up()")
 
     async def create_tasks(self):
         if self.debug:
             print("##### create_tasks()")
-        tasks = []
+        tasks = [asyncio.create_task(self.up())]
         for actor in self.actors:
             tasks.append(asyncio.create_task(actor.run()))
         return tasks
 
     async def run_forever(self):
+        if self.debug:
+            print("##### ControllerBase.run_forever()")
+        try:
+            await self.mqtt_client.connect()
+        except Exception as e:
+            print('Error connecting to MQTT:', e)
+            raise
+        if self.debug:
+            print("##### MQTT setup complete")
+
         while True:
             if self.debug:
                 self.print_debug_log()
