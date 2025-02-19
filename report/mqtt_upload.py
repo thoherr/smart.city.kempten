@@ -1,10 +1,9 @@
-import asyncio
 import json
 
 import utime
 
 import setup_mqtt_config as mqtt_config
-from util.mqtt_as import MQTTClient
+from report.umqtt.robust import MQTTClient
 from util.actor import Actor
 
 class MqttUpload:
@@ -22,13 +21,14 @@ class MqttUpload:
         msg = json.dumps({"id": self._mqtt_topic,
                           "timestamp": timestamp,
                           "payload": data})
-        asyncio.create_task(self._mqtt_client.publish(self._topic, msg, retain=False, qos=self._qos))
-        asyncio.sleep(0)
+        if self._verbose:
+            print(f"topic: {self._topic}, msg: {msg}")
+        self._mqtt_client.publish(self._topic, msg, retain=False, qos=self._qos)
 
 
 class MqttUploadActor(MqttUpload, Actor):
-    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, value_method, interval=2, verbose=False):
-        MqttUpload.__init__(self, mqtt_topic, mqtt_client, verbose=False)
+    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, value_method, interval=2, verbose=True):
+        MqttUpload.__init__(self, mqtt_topic, mqtt_client, verbose=verbose)
         Actor.__init__(self, mqtt_topic, interval=interval, verbose=verbose)
         self._value_method = value_method
         self._current_value = None

@@ -1,13 +1,7 @@
-from util.mqtt_as import config
-
-config["response_time"] = 10
-config["queue_len"] = 5
-
+mqtt_client_id = b'MQTT_CLIENT_ID'
+mqtt_server = b'MQTT_BROKER_URL'
+mqtt_use_ssl = False
+mqtt_port = 0
+mqtt_username = b'BROKER_USERNAME'
+mqtt_password = b'BROKER_PASSWORD'
 mqtt_topic_root = 'MQTT_TOPIC_ROOT'
-
-config["ssid"] = "WIFI_SSID"
-config["wifi_pw"] = "WIFI_PASSWORD"
-config["server"] = "MQTT_BROKER_URL"
-config["ssl"] = False
-config["user"] = "BROKER_USERNAME"
-config["password"] = "BROKER_PASSWORD"

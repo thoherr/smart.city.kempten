@@ -476,6 +476,7 @@ class MQTT_base:
     # qos == 1: coro blocks until wait_msg gets correct PID.
     # If WiFi fails completely subclass re-publishes with new PID.
     async def publish(self, topic, msg, retain, qos, properties=None):
+        print("++++++", topic, msg, retain, qos, properties)
         pid = next(self.newpid)
         if qos:
             self.rcv_pids.add(pid)
