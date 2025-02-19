@@ -9,27 +9,27 @@ from util.actor import Actor
 
 class MqttUpload:
 
-    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, qos: int = 0, verbose=False):
-        self._mqtt_topic = mqtt_topic
+    def __init__(self, _topic_path, mqtt_client: MQTTClient, qos: int = 0, verbose=False):
+        self._payload_id = _topic_path.rsplit('/', 1)[-1]
         self._verbose = verbose
-        self._topic = f"{mqtt_config.mqtt_topic_root}/{self._mqtt_topic}"
+        self._mqtt_topic = f"{mqtt_config.mqtt_topic_root}/{_topic_path}"
         self._mqtt_client = mqtt_client
         self._qos = qos
 
     def post_data(self, data):
         now = utime.gmtime()
         timestamp = f"{now[0]:4d}-{now[1]:02d}-{now[2]:02d}T{now[3]:02d}:{now[4]:02d}:{now[5]:02d}Z"
-        msg = json.dumps({"id": self._mqtt_topic,
+        msg = json.dumps({"id": self._payload_id,
                           "timestamp": timestamp,
                           "payload": data})
-        asyncio.create_task(self._mqtt_client.publish(self._topic, msg, retain=False, qos=self._qos))
+        asyncio.create_task(self._mqtt_client.publish(self._mqtt_topic, msg, retain=False, qos=self._qos))
         asyncio.sleep(0)
 
 
 class MqttUploadActor(MqttUpload, Actor):
-    def __init__(self, mqtt_topic, mqtt_client: MQTTClient, value_method, interval=2, verbose=False):
-        MqttUpload.__init__(self, mqtt_topic, mqtt_client, verbose=False)
-        Actor.__init__(self, mqtt_topic, interval=interval, verbose=verbose)
+    def __init__(self, _topic_path, mqtt_client: MQTTClient, value_method, interval=2, verbose=False):
+        MqttUpload.__init__(self, _topic_path, mqtt_client, verbose=False)
+        Actor.__init__(self, _topic_path, interval=interval, verbose=verbose)
         self._value_method = value_method
         self._current_value = None
 
