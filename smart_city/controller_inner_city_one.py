@@ -1,15 +1,22 @@
 # This is the first Raspi of our MOC of the City of Kempten
 # It implements the first controller at Innenstadt, around the Rathaus, with a Parking Area (including display)
 # and three waste containers
+import gc
 
 from device.driver.gy302 import GY302
 from device.driver.tca9548a import TCA9548A
 from device.driver.vl53l0x import VL53L0X
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
+
+gc.collect()
+
 from domain.parking.area import ParkingArea
 from domain.parking.space import ParkingSpace
 from domain.waste.area import WasteArea
 from domain.waste.container import WasteContainer
+
+gc.collect()
+
 from report.mqtt_upload import MqttUploadActor
 from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
@@ -40,6 +47,8 @@ class ControllerInnerCityOne(ControllerBase):
         p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=1),
                           empty_threshold=50)
 
+        gc.collect()
+
         self.parking = ParkingArea("Rathaus", [p1, p2, p3, p4, p5, p6, p7, p8])
         self.actors.append(self.parking)
 
@@ -48,6 +57,8 @@ class ControllerInnerCityOne(ControllerBase):
         self.actors.append(self.parking_upload)
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
+
+        gc.collect()
 
         w1 = WasteContainer("Rathaus 1",
                             MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=0))
@@ -59,6 +70,8 @@ class ControllerInnerCityOne(ControllerBase):
                             MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=2))
         self.actors.append(w3)
         self.waste = WasteArea("Rathaus", [w1, w2, w3])
+
+        gc.collect()
 
         self.parking_and_waste_infopanel = ParkingAreaPanelSH1106(self.i2c0, self.parking, self.waste)
         self.actors.append(self.parking_and_waste_infopanel)
