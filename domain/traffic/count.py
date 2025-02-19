@@ -22,7 +22,7 @@ class TrafficCount(Actor):
             if new_value == 1:  # only count rising value
                 self._counter += (new_value == 1)
                 if self._mqtt_upload:
-                    data = {"Richtung": self._direction, "Summe": self._counter}
+                    data = {"richtung": self._direction, "summe": self._counter}
                     if self._verbose:
                         self.log(f"mqtt_upload {data} begin")
                     self._mqtt_upload.post_data(data)
