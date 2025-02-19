@@ -101,9 +101,9 @@ class ControllerIller(ControllerBase):
 
         mqtt_traffic_4 = MqttUpload("verkehr/sck_verkehr_4", self.mqtt_client)
 
-        in_traffic_4 = TrafficCount("RH 4 eingehend", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4)
+        in_traffic_4 = TrafficCount("RH 4 eingehend", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4, interval=0.2)
         self.actors.append(in_traffic_4)
-        out_traffic_4 = TrafficCount("RH 4 ausgehend", "ausgehend", Pin(27, Pin.IN), mqtt_traffic_4)
+        out_traffic_4 = TrafficCount("RH 4 ausgehend", "ausgehend", Pin(27, Pin.IN), mqtt_traffic_4, interval=0.2)
         self.actors.append(out_traffic_4)
 
         counters_4 = [in_traffic_4, out_traffic_4]
@@ -113,7 +113,7 @@ class ControllerIller(ControllerBase):
 
         mqtt_traffic_5 = MqttUpload("verkehr/sck_verkehr_5", self.mqtt_client)
 
-        traffic_5 = TrafficCount("RH 5", "durchfahrt", Pin(28, Pin.IN), mqtt_traffic_5)
+        traffic_5 = TrafficCount("RH 5", "durchfahrt", Pin(28, Pin.IN), mqtt_traffic_5, interval=0.2)
         self.actors.append(traffic_5)
 
     def _init_environment(self):

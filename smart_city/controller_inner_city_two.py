@@ -31,9 +31,9 @@ class ControllerInnerCityTwo(ControllerBase):
 
         mqtt_traffic_1 = MqttUpload("verkehr/sck_verkehr_1", self.mqtt_client)
 
-        in_traffic_1 = TrafficCount("RH 1 eingehend", "eingehend", Pin(27, Pin.IN), mqtt_traffic_1)
+        in_traffic_1 = TrafficCount("RH 1 eingehend", "eingehend", Pin(27, Pin.IN), mqtt_traffic_1, interval=0.2)
         self.actors.append(in_traffic_1)
-        out_traffic_1 = TrafficCount("RH 1 ausgehend", "ausgehend", Pin(26, Pin.IN), mqtt_traffic_1)
+        out_traffic_1 = TrafficCount("RH 1 ausgehend", "ausgehend", Pin(26, Pin.IN), mqtt_traffic_1, interval=0.2)
         self.actors.append(out_traffic_1)
 
         counters_1 = [out_traffic_1, in_traffic_1]
@@ -42,15 +42,15 @@ class ControllerInnerCityTwo(ControllerBase):
 
         mqtt_traffic_2 = MqttUpload("verkehr/sck_verkehr_2", self.mqtt_client)
 
-        in_traffic_2 = TrafficCount("RH 2 eingehend", "eingehend", Pin(4, Pin.IN), mqtt_traffic_2)
+        in_traffic_2 = TrafficCount("RH 2 eingehend", "eingehend", Pin(4, Pin.IN), mqtt_traffic_2, interval=0.2)
         self.actors.append(in_traffic_2)
-        out_traffic_2 = TrafficCount("RH 2 ausgehend", "ausgehend", Pin(5, Pin.IN), mqtt_traffic_2)
+        out_traffic_2 = TrafficCount("RH 2 ausgehend", "ausgehend", Pin(5, Pin.IN), mqtt_traffic_2, interval=0.2)
         self.actors.append(out_traffic_2)
 
         mqtt_traffic_3 = MqttUpload("verkehr/sck_verkehr_3", self.mqtt_client)
 
-        in_traffic_3 = TrafficCount("RH 3 eingehend", "eingehend", Pin(6, Pin.IN), mqtt_traffic_3)
+        in_traffic_3 = TrafficCount("RH 3 eingehend", "eingehend", Pin(6, Pin.IN), mqtt_traffic_3, interval=0.2)
         self.actors.append(in_traffic_3)
-        out_traffic_3 = TrafficCount("RH 3 ausgehend", "ausgehend", Pin(7, Pin.IN), mqtt_traffic_3)
+        out_traffic_3 = TrafficCount("RH 3 ausgehend", "ausgehend", Pin(7, Pin.IN), mqtt_traffic_3, interval=0.2)
         self.actors.append(out_traffic_3)
 
