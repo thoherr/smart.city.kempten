@@ -27,7 +27,7 @@ class ControllerInnerCityTwo(ControllerBase):
         l3 = TrafficLightColumn(17, 18, 19, 1)
         l4 = TrafficLightColumn(22, 21, 20, 0)
 
-        self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4]))
+        self.actors.append(TrafficLightCrossing("Gerberstrasse", [l3, l4], initial_delay=9))
 
         mqtt_traffic_1 = MqttUpload("verkehr/sck_verkehr_1", self.mqtt_client)
 
