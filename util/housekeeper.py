@@ -1,6 +1,6 @@
 import gc
 
-from util import memory_usage
+from util import memory_usage, cpu_temperature
 from util.actor import Actor
 
 
@@ -20,7 +20,10 @@ class Housekeeper(Actor):
 
     def status(self):
         mem_free, mem_alloc, mem_total, percentage_free = memory_usage.memory()
+        flash = memory_usage.flash()
+        temperature = cpu_temperature.value()
         if self._verbose:
-            self.log(f"mem_free={mem_free}, mem_alloc={mem_alloc}, mem_total={mem_total}, percentage_free={percentage_free}")
+            self.log(f"mem_free={mem_free}, mem_alloc={mem_alloc}, mem_total={mem_total}, percentage_free={percentage_free}, flash={flash}")
         return { "free": mem_free, "alloc": mem_alloc, "total": mem_total, "percentage": percentage_free,
-                 "flash": memory_usage.flash() }
+                 "flash": flash,
+                 "temperature": temperature }
