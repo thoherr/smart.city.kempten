@@ -6,7 +6,6 @@ def flash():
     return (fs_stat[0] * fs_stat[3]) / 1048576
 
 def df():
-    fs_stat = os.statvfs('//')
     return f"{flash()} MB"
 
 def memory():
