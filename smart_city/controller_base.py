@@ -3,6 +3,7 @@ import asyncio
 from machine import Pin, I2C
 from ntptime import settime
 
+from report.mqtt_upload import MqttUploadActor
 from setup_mqtt_config import config
 from util.mqtt_as import MQTTClient
 
@@ -23,7 +24,8 @@ def print_i2c_info(i2c_id, i2c):
 
 
 class ControllerBase(object):
-    def __init__(self, debug=False, **_kwargs):
+    def __init__(self, number=None, debug=False, **_kwargs):
+        self.number = number
         self.debug = debug
         MQTTClient.DEBUG = self.debug
         self.mqtt_client = MQTTClient(config)
@@ -39,7 +41,10 @@ class ControllerBase(object):
         self.actors = []
 
         self.actors.append(Heartbeat(verbose=self.debug))
-        self.actors.append(Housekeeper(verbose=self.debug))
+        self.housekeeper = Housekeeper(verbose=self.debug)
+        self.actors.append(self.housekeeper)
+        health_upload = MqttUploadActor(f"health_check/sck_health_check_{self.number}", self.mqtt_client, self.housekeeper.status, interval=300)
+        self.actors.append(health_upload)
 
     def print_debug_log(self):
         pass
