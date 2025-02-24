@@ -57,13 +57,19 @@ class ControllerIller(ControllerBase):
 
     def _init_waste(self):
         w1 = WasteContainer("Illerufer 1",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=3), interval=SMART_WASTE_CHECK_INTERVAL)
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=3),
+                            interval=SMART_WASTE_CHECK_INTERVAL,
+                            verbose=WASTE_SENSOR_VERBOSITY)
         self.actors.append(w1)
         w2 = WasteContainer("Illerufer 2",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=2), interval=SMART_WASTE_CHECK_INTERVAL)
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=2),
+                            interval=SMART_WASTE_CHECK_INTERVAL,
+                            verbose=WASTE_SENSOR_VERBOSITY)
         self.actors.append(w2)
         w3 = WasteContainer("Illerufer 3",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=1), interval=SMART_WASTE_CHECK_INTERVAL)
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=1),
+                            interval=SMART_WASTE_CHECK_INTERVAL,
+                            verbose=WASTE_SENSOR_VERBOSITY)
         self.actors.append(w3)
         self.waste = WasteArea("Iller", [w1, w2, w3])
 
@@ -74,27 +80,27 @@ class ControllerIller(ControllerBase):
         p1 = ParkingSpace("Illerufer 1",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=5),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=110)
+                          empty_threshold=110, verbose=PARK_SENSOR_VERBOSITY)
         p2 = ParkingSpace("Illerufer 2",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=4),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=50)
+                          empty_threshold=50, verbose=PARK_SENSOR_VERBOSITY)
         p3 = ParkingSpace("Illerufer 3",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=3),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=65)
+                          empty_threshold=65, verbose=PARK_SENSOR_VERBOSITY)
         p4 = ParkingSpace("Illerufer 4",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=2),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=53)
+                          empty_threshold=53, verbose=PARK_SENSOR_VERBOSITY)
         p5 = ParkingSpace("Illerufer 5",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=1),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=45)
+                          empty_threshold=45, verbose=PARK_SENSOR_VERBOSITY)
         p6 = ParkingSpace("Illerufer 6",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=0),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=58)
+                          empty_threshold=58, verbose=PARK_SENSOR_VERBOSITY)
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
