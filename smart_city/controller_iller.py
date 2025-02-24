@@ -13,6 +13,8 @@ from device.driver.vl53l0x import VL53L0X
 from device.i2c_multiplexer import I2cMultiplexer
 from device.multiplexed_i2c_sensor import MultiplexedI2cSensor
 
+from setup_values import *
+
 gc.collect()
 
 from domain.environment.light import Light
@@ -55,42 +57,48 @@ class ControllerIller(ControllerBase):
 
     def _init_waste(self):
         w1 = WasteContainer("Illerufer 1",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=3))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=3), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w1)
         w2 = WasteContainer("Illerufer 2",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=2))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=2), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w2)
         w3 = WasteContainer("Illerufer 3",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=1))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux72, channel=1), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w3)
         self.waste = WasteArea("Iller", [w1, w2, w3])
 
-        self.waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_2", self.mqtt_client, self.waste.status, interval=3)
+        self.waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_2", self.mqtt_client, self.waste.status, interval=SMART_WASTE_MQTT_INTERVAL)
         self.actors.append(self.waste_upload)
 
     def _init_parking(self):
         p1 = ParkingSpace("Illerufer 1",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=5),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=110)
         p2 = ParkingSpace("Illerufer 2",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=4),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=50)
         p3 = ParkingSpace("Illerufer 3",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=3),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=68)
         p4 = ParkingSpace("Illerufer 4",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=2),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=55)
         p5 = ParkingSpace("Illerufer 5",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=1),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=50)
         p6 = ParkingSpace("Illerufer 6",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=0),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=60)
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
-        self.parking_upload = MqttUploadActor("parkraum/sck_parkraum_2", self.mqtt_client, self.parking.status, interval=3)
+        self.parking_upload = MqttUploadActor("parkraum/sck_parkraum_2", self.mqtt_client, self.parking.status, interval=PARKRAUM_MQTT_INTERVAL)
         self.actors.append(self.parking_upload)
 
     def _init_traffic(self):
@@ -101,9 +109,9 @@ class ControllerIller(ControllerBase):
 
         mqtt_traffic_4 = MqttUpload("verkehr/sck_verkehr_4", self.mqtt_client)
 
-        in_traffic_4 = TrafficCount("RH 4 eingehend", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4, interval=0.2)
+        in_traffic_4 = TrafficCount("RH 4 eingehend", "eingehend", Pin(26, Pin.IN), mqtt_traffic_4, interval=TRAFFIC_COUNT_CHECK_INTERVAL)
         self.actors.append(in_traffic_4)
-        out_traffic_4 = TrafficCount("RH 4 ausgehend", "ausgehend", Pin(27, Pin.IN), mqtt_traffic_4, interval=0.2)
+        out_traffic_4 = TrafficCount("RH 4 ausgehend", "ausgehend", Pin(27, Pin.IN), mqtt_traffic_4, interval=TRAFFIC_COUNT_CHECK_INTERVAL)
         self.actors.append(out_traffic_4)
 
         counters_4 = [in_traffic_4, out_traffic_4]
@@ -113,24 +121,24 @@ class ControllerIller(ControllerBase):
 
         mqtt_traffic_5 = MqttUpload("verkehr/sck_verkehr_5", self.mqtt_client)
 
-        traffic_5 = TrafficCount("RH 5", "durchfahrt", Pin(28, Pin.IN), mqtt_traffic_5, interval=0.2)
+        traffic_5 = TrafficCount("RH 5", "durchfahrt", Pin(28, Pin.IN), mqtt_traffic_5, interval=TRAFFIC_COUNT_CHECK_INTERVAL)
         self.actors.append(traffic_5)
 
     def _init_environment(self):
         self.weather = Weather("weather",
-                               MultiplexedI2cSensor(BME280, multiplexer=self.mux74, channel=3), interval=10)
+                               MultiplexedI2cSensor(BME280, multiplexer=self.mux74, channel=3), interval=ENVIRONMENT_CHECK_INTERVAL)
         self.actors.append(self.weather)
 
-        self.light = Light("light", MultiplexedI2cSensor(GY302, multiplexer=self.mux74, channel=3), interval=2)
+        self.light = Light("light", MultiplexedI2cSensor(GY302, multiplexer=self.mux74, channel=3), interval=ENVIRONMENT_CHECK_INTERVAL)
         self.actors.append(self.light)
 
         self.environment_panel = EnvironmentPanel("environment", self.mux74.i2c, self.weather, self.light,
-                                                multiplexer=I2cMultiplexer(self.mux74, 1), interval=4)
+                                                multiplexer=I2cMultiplexer(self.mux74, 1), interval=ENVIRONMENT_CHECK_INTERVAL)
         self.actors.append(self.environment_panel)
 
         self.environment = Environment(self.weather, self.light)
         self.env_upload = MqttUploadActor("umwelt/sck_umwelt_1", self.mqtt_client, self.environment.status,
-                                          interval=30)
+                                          interval=ENVIRONMENT_MQTT_INTERVAL)
         self.actors.append(self.env_upload)
 
     def _init_multiplexers(self):

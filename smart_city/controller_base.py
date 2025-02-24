@@ -10,6 +10,8 @@ from util.mqtt_as import MQTTClient
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
 
+from setup_values import *
+
 
 def print_i2c_info(i2c_id, i2c):
     print(f"##### Scan I2C Bus {i2c_id}...")
@@ -43,7 +45,7 @@ class ControllerBase(object):
         self.actors.append(Heartbeat(verbose=self.debug))
         self.housekeeper = Housekeeper(verbose=self.debug)
         self.actors.append(self.housekeeper)
-        health_upload = MqttUploadActor(f"health_check/sck_health_check_{self.number}", self.mqtt_client, self.housekeeper.status, interval=300)
+        health_upload = MqttUploadActor(f"health_check/sck_health_check_{self.number}", self.mqtt_client, self.housekeeper.status, interval=HEALTH_CHECK_MQTT_INTERVAL)
         self.actors.append(health_upload)
 
     def print_debug_log(self):

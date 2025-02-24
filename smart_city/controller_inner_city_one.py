@@ -21,6 +21,7 @@ from report.mqtt_upload import MqttUploadActor
 from report.parking_area_panel_sh1106 import ParkingAreaPanelSH1106
 from smart_city.controller_base import ControllerBase
 
+from setup_values import *
 
 class ControllerInnerCityOne(ControllerBase):
 
@@ -29,22 +30,29 @@ class ControllerInnerCityOne(ControllerBase):
 
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Rathaus 1", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=5),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=40, verbose=True)
         p2 = ParkingSpace("Rathaus 2", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=4),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=50, verbose=True)
         p3 = ParkingSpace("Rathaus 3", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=3),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=40, verbose=True)
         p4 = ParkingSpace("Rathaus 4", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=2),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=52, verbose=True)
         p5 = ParkingSpace("Rathaus 5", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=1),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=95, verbose=True)
         p6 = ParkingSpace("Rathaus 6", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=0),
                           empty_threshold=40, verbose=True)
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
         p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=7),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=53, verbose=True)
         p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=1),
+                          interval=PARKING_SPACE_CHECK_INTERVAL,
                           empty_threshold=53, verbose=True)
 
         gc.collect()
@@ -53,7 +61,7 @@ class ControllerInnerCityOne(ControllerBase):
         self.actors.append(self.parking)
 
         self.parking_upload = MqttUploadActor("parkraum/sck_parkraum_1", self.mqtt_client, self.parking.status,
-                                              interval=3)
+                                              interval=PARKRAUM_MQTT_INTERVAL)
         self.actors.append(self.parking_upload)
 
         self.mux3 = TCA9548A(self.i2c1, address=0x72)
@@ -61,13 +69,13 @@ class ControllerInnerCityOne(ControllerBase):
         gc.collect()
 
         w1 = WasteContainer("Rathaus 1",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=0))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=0), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w1)
         w2 = WasteContainer("Rathaus 2",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=1))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=1), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w2)
         w3 = WasteContainer("Rathaus 3",
-                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=2))
+                            MultiplexedI2cSensor(GY302, multiplexer=self.mux3, channel=2), interval=SMART_WASTE_CHECK_INTERVAL)
         self.actors.append(w3)
         self.waste = WasteArea("Rathaus", [w1, w2, w3])
 
@@ -77,5 +85,5 @@ class ControllerInnerCityOne(ControllerBase):
         self.actors.append(self.parking_and_waste_infopanel)
 
         self.waste_upload = MqttUploadActor("smart_waste/sck_smart_waste_1", self.mqtt_client, self.waste.status,
-                                            interval=3)
+                                            interval=SMART_WASTE_MQTT_INTERVAL)
         self.actors.append(self.waste_upload)
