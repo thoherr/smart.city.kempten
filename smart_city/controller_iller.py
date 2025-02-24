@@ -82,19 +82,19 @@ class ControllerIller(ControllerBase):
         p3 = ParkingSpace("Illerufer 3",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=3),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=68)
+                          empty_threshold=65)
         p4 = ParkingSpace("Illerufer 4",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=2),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=55)
+                          empty_threshold=53)
         p5 = ParkingSpace("Illerufer 5",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=1),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=50)
+                          empty_threshold=45)
         p6 = ParkingSpace("Illerufer 6",
                           MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux70, channel=0),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=60)
+                          empty_threshold=58)
         self.parking = ParkingArea("Illerufer", [p1, p2, p3, p4, p5, p6])
         self.actors.append(self.parking)
 
