@@ -23,8 +23,11 @@ class Housekeeper(Actor):
     def status(self):
         flash = memory_usage.flash()
         temperature = cpu_temperature.value()
+        status = { "free": self.mem_free, "alloc": self.mem_alloc, "total": self.mem_total, "percentage": self.percentage_free,
+                 "flash": flash,
+                 "temperature": temperature }
         if self._verbose:
-            self.log(f"mem_free={self.mem_free}, mem_alloc={self.mem_alloc}, mem_total={self.mem_total}, percentage_free={self.percentage_free}, flash={flash}")
+            self.log(f"STATUS {status}")
         return { "free": self.mem_free, "alloc": self.mem_alloc, "total": self.mem_total, "percentage": self.percentage_free,
                  "flash": flash,
                  "temperature": temperature }
