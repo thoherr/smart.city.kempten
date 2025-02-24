@@ -31,29 +31,29 @@ class ControllerInnerCityOne(ControllerBase):
         self.mux1 = TCA9548A(self.i2c1, address=0x70)
         p1 = ParkingSpace("Rathaus 1", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=5),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=40, verbose=True)
+                          empty_threshold=40)
         p2 = ParkingSpace("Rathaus 2", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=4),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=50, verbose=True)
+                          empty_threshold=50)
         p3 = ParkingSpace("Rathaus 3", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=3),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=40, verbose=True)
+                          empty_threshold=52)
         p4 = ParkingSpace("Rathaus 4", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=2),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=52, verbose=True)
+                          empty_threshold=60)
         p5 = ParkingSpace("Rathaus 5", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=1),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=95, verbose=True)
+                          empty_threshold=95)
         p6 = ParkingSpace("Rathaus 6", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux1, channel=0),
-                          empty_threshold=40, verbose=True)
+                          empty_threshold=40)
 
         self.mux2 = TCA9548A(self.i2c1, address=0x71)
         p7 = ParkingSpace("Rathaus 7", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=7),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=53, verbose=True)
+                          empty_threshold=70)
         p8 = ParkingSpace("Rathaus 8", MultiplexedI2cSensor(VL53L0X, multiplexer=self.mux2, channel=1),
                           interval=PARKING_SPACE_CHECK_INTERVAL,
-                          empty_threshold=53, verbose=True)
+                          empty_threshold=53)
 
         gc.collect()
 
