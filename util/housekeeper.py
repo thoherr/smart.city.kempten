@@ -10,20 +10,21 @@ class Housekeeper(Actor):
         self._interval = interval
         self._verbose = verbose
         gc.enable()
+        self.mem_free, self.mem_alloc, self.mem_total, self.percentage_free = memory_usage.memory()
 
     async def work(self):
         if self._verbose:
             self.log(memory_usage.free(True))
         gc.collect()
+        self.mem_free, self.mem_alloc, self.mem_total, self.percentage_free = memory_usage.memory()
         if self._verbose:
             self.log(memory_usage.free(True))
 
     def status(self):
-        mem_free, mem_alloc, mem_total, percentage_free = memory_usage.memory()
         flash = memory_usage.flash()
         temperature = cpu_temperature.value()
         if self._verbose:
-            self.log(f"mem_free={mem_free}, mem_alloc={mem_alloc}, mem_total={mem_total}, percentage_free={percentage_free}, flash={flash}")
-        return { "free": mem_free, "alloc": mem_alloc, "total": mem_total, "percentage": percentage_free,
+            self.log(f"mem_free={self.mem_free}, mem_alloc={self.mem_alloc}, mem_total={self.mem_total}, percentage_free={self.percentage_free}, flash={flash}")
+        return { "free": self.mem_free, "alloc": self.mem_alloc, "total": self.mem_total, "percentage": self.percentage_free,
                  "flash": flash,
                  "temperature": temperature }
