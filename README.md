@@ -15,7 +15,7 @@ distribute the functionality to more devices.
 
 The entry point of the application is [main.py](main.py).
 
-The file [setup_controller_number.py](setup_controller_number.py) specifies which of the three controller code bases
+The file [setup_controller_number.py](setup_values.py) specifies which of the three controller code bases
 should run on the current device.
 Network settings, especially for the MQTT server, are configured in [setup_mqtt_config.py](setup_mqtt_config.py).
 See corresponding template files.
