@@ -8,7 +8,7 @@ The model contains three microcontrollers with different functionality, sensors 
   * MQTT upload of parking and smart waste data
   * wiring documented in [wiring_inner_city_1.pdf](wiring_inner_city_1.pdf)
   * hardware used
-    * Raspberry Pico W
+    * Raspberry Pico 2 W
     * 3 multiplexers TCA9548A (two for parking spaces and one for waste containers)
     * 8 ToF sensors VL53L0X for parking spaces (via two multiplexers)
     * 3 light sensors GY302 / BH1750 for waste containers (via multiplexer)
