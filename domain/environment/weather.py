@@ -12,7 +12,7 @@ class Weather(Actor):
     async def work(self):
         # TODO: Despite our default structure, the BME280 driver has three property methods instead of a value method
         self._sensor.ensure_channel()
-        self._temperature = self._sensor.get_device().temperature
+        self._temperature = self._sensor.get_device().temperature + 1.5
         self._pressure = self._sensor.get_device().pressure
         self._humidity = self._sensor.get_device().humidity
         self._sensor.reset_channel()
