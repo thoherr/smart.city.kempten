@@ -1,7 +1,7 @@
 # smart.city.kempten
 
 This repository contains the source code for a couple of microcontrollers,
-sensors and other ICs implementing a digital twin of the City of Kempten (Allgäu)
+sensors and other ICs implementing a digital twin of the [Smart City Kempten (Allgäu)](https://smartes.kempten.de/)
 as a LEGO model.
 
 The model was built by Marius Herrmann (https://steponabrick.com,
@@ -15,8 +15,10 @@ distribute the functionality to more devices.
 
 The entry point of the application is [main.py](main.py).
 
-The file [setup_controller_number.py](setup_values.py) specifies which of the three controller code bases
-should run on the current device.
+The file [setup_values.py](setup_values.py) specifies which of the three controller code bases
+should run on the current device by setting a `controller_number`.
+Furthermore it specifies the values of some timing variables and verbosity flags.
+
 Network settings, especially for the MQTT server, are configured in [setup_mqtt_config.py](setup_mqtt_config.py).
 See corresponding template files.
 
