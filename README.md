@@ -4,7 +4,7 @@
 [english version below](#english)
 
 Dieses Repository enthält den Sourcecode für die Mikrocontroller, Sensoren und weitere Bauteile, die einen
-Digitalen Zwilling der [Smart City Kempten (Allgäu)](https://smartes.kempten.de/) in Form eines LEGO :registered: Modells.
+Digitalen Zwilling der [Smart City Kempten (Allgäu)](https://smartes.kempten.de/) in Form eines LEGO<sup>®</sup> Modells.
 
 Das Modell ist im Zukunftslabor in Kempten ausgestellt und dient dort der Veranschaulichung der Sensorik im Rahmen
 des Smart City Projektes, siehe Bild unten.
@@ -25,7 +25,7 @@ um die im Sourcecode verwendeten Begriffe nahtlos verwenden zu können.*
 
 This repository contains the source code for a couple of microcontrollers,
 sensors and other ICs implementing a digital twin of the [Smart City Kempten (Allgäu)](https://smartes.kempten.de/)
-as a LEGO :registered: model.
+as a LEGO<sup>®</sup> model.
 
 The model ist at exhibition at the "Zukunftslabor" in Kempten to visualize sensor technoligy, see picture above.
 
