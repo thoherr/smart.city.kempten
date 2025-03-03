@@ -1,7 +1,6 @@
 import asyncio
 
 from machine import Pin, I2C
-from ntptime import settime
 
 from report.mqtt_upload import MqttUploadActor
 from setup_mqtt_config import config
@@ -9,6 +8,7 @@ from util.mqtt_as import MQTTClient
 
 from util.heartbeat import Heartbeat
 from util.housekeeper import Housekeeper
+from util.ntp_time_actor import NtpTimeActor
 
 from setup_values import *
 
@@ -47,15 +47,23 @@ class ControllerBase(object):
         self.actors.append(self.housekeeper)
         health_upload = MqttUploadActor(f"health_check/sck_health_check_{self.number}", self.mqtt_client, self.housekeeper.status, interval=HEALTH_CHECK_MQTT_INTERVAL)
         self.actors.append(health_upload)
+        self.ntp_time = NtpTimeActor(verbose=setup_values.NTP_TIME_VERBOSITY)
+        self.actors.append(self.ntp_time)
 
     def print_debug_log(self):
         pass
 
     async def up(self):
         while True:
+            if self.debug:
+                print("##### ControllerBase waits for MQTT broker up()")
             await self.mqtt_client.up.wait()
             self.mqtt_client.up.clear()
-            settime()
+            if self.debug:
+                print("##### ControllerBase calls settime()")
+            self.ntp_time.set_time()
+            if self.debug:
+                print("##### ControllerBase called settime()")
             if self.debug:
                 print("##### MQTT broker up()")
 
