@@ -1,5 +1,6 @@
 # This specifies on which controller (PICO board) we are running
 controller_number = 1
+debug = False
 
 ENVIRONMENT_CHECK_INTERVAL = 30
 PARKING_SPACE_CHECK_INTERVAL = 1.1
