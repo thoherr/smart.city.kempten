@@ -1,13 +1,14 @@
 from time import gmtime
 import ntptime
 
+import setup_values
 from util.actor import Actor
 
-ntptime.timeout = 2
+ntptime.timeout = setup_values.NTP_TIMEOUT
 
 
 class NtpTimeActor(Actor):
-    def __init__(self, actor_id="NtpTimeActor", interval=300, verbose=False):
+    def __init__(self, actor_id="NtpTimeActor", interval=setup_values.NTP_QUERY_INTERVAL, verbose=False):
         super().__init__(actor_id, interval=interval, verbose=verbose, debug=verbose)
 
     def set_time(self):
