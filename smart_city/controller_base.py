@@ -41,8 +41,8 @@ class ControllerBase(object):
 
         self.actors = []
 
-        self.actors.append(Heartbeat(verbose=self.debug))
-        self.housekeeper = Housekeeper(verbose=self.debug)
+        self.actors.append(Heartbeat())
+        self.housekeeper = Housekeeper()
         self.actors.append(self.housekeeper)
         health_upload = MqttUploadActor(f"health_check/sck_health_check_{self.number}", self.mqtt_client,
                                         self.housekeeper.status, interval=setup_values.HEALTH_CHECK_MQTT_INTERVAL)
