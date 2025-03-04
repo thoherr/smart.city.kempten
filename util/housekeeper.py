@@ -29,6 +29,4 @@ class Housekeeper(Actor):
                  "temperature": temperature }
         if self._verbose:
             self.log(f"STATUS {status}")
-        return { "free": self.mem_free, "alloc": self.mem_alloc, "total": self.mem_total, "percentage": self.percentage_free,
-                 "flash": flash,
-                 "temperature": temperature }
+        return status
