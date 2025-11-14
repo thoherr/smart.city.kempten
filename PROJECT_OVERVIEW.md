@@ -8,6 +8,6 @@ The model is equipped with various real sensors and actuators embedded throughou
 
 The system runs on three Raspberry Pico W/2W microcontrollers (small, low-cost boards running MicroPython), with each controller managing a different section of the city: one handles the town hall area with parking and waste management, another controls the traffic lights and counts vehicles at the main intersection, and the third manages the Iller riverside area with parking, waste, traffic, and environmental sensors. All sensors communicate with the microcontrollers via the I2C protocol, using multiplexer chips to connect multiple sensors to the limited number of available pins.
 
-**Target Platform**: MicroPython on Raspberry Pico W and Pico 2 W
+**Target Platform**: MicroPython on Raspberry Pico W and Pico 2 W  
 **Language**: Python (MicroPython variant)
 
